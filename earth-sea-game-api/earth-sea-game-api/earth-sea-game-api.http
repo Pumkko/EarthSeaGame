@@ -1,0 +1,6 @@
+@earth_sea_game_api_HostAddress = http://localhost:5171
+
+GET {{earth_sea_game_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
