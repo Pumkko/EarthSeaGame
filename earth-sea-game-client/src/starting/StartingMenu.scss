@@ -1,0 +1,40 @@
+.starting-menu-container {
+    height: 100vh;
+    background-image: url('/clemenceau_cv.webp');
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .game-title {
+        font-family: 'ModernAntiqua';
+        font-size: 6rem;
+        color: white;
+    }
+}
+
+.starting-menu-buttons {
+    display: flex;
+
+    button {
+        margin-left: 2rem;
+
+        font: {
+            size: 1.2rem;
+            weight: bold;
+        }
+
+        font-family: 'ModernAntiqua';
+
+        padding: {
+            left: 2rem;
+            right: 2rem;
+            top: 1rem;
+            bottom: 1rem;
+        }
+
+    }
+}
