@@ -11,6 +11,9 @@ dependencies:
   '@microsoft/signalr':
     specifier: ^8.0.0
     version: 8.0.0
+  '@solidjs/router':
+    specifier: ^0.13.0
+    version: 0.13.0(solid-js@1.8.15)
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -788,6 +791,14 @@ packages:
     resolution: {integrity: sha512-CqAwKb2T5Vi72+rhebSsqNZ9o67buYRdEJrIFzRXz3U59QqezuuxPsyzTSVCacwS5Pf109VRsgCJQoxKRoECZQ==}
     peerDependencies:
       solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.8.15
+    dev: false
+
+  /@solidjs/router@0.13.0(solid-js@1.8.15):
+    resolution: {integrity: sha512-YHLbFv9J53+iG4yVrh0vVdYiyXPTk892UyZ1jiMPsUXn2dYkX4552N+8SjvlKWWsmNmYxaoefM6jZn1YtVIUUg==}
+    peerDependencies:
+      solid-js: ^1.8.6
     dependencies:
       solid-js: 1.8.15
     dev: false
