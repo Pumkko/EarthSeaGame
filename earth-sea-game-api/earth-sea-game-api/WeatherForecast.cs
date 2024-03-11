@@ -1,4 +1,4 @@
-namespace earth_sea_game_api
+namespace EarthSeaGameApi
 {
     public class WeatherForecast
     {

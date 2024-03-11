@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
-namespace earth_sea_game_api.Controllers
+namespace EarthSeaGameApi.Controllers
 {
     [Authorize]
     [ApiController]
