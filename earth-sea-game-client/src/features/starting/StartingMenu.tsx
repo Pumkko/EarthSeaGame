@@ -9,7 +9,7 @@ export default function StartingMenu() {
     const navigate = useNavigate();
 
     return <div class="starting-menu-container">
-        <p class='game-title'>Between Earth and Sea</p>
+        <h1 class='game-title'>Between Earth and Sea</h1>
         <div class='starting-menu-buttons'>
             <Button variant={'secondary'} onclick={() => {
                 navigate(Routes.newGame);
