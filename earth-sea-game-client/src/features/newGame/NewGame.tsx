@@ -1,4 +1,3 @@
-import './NewGame.scss'
 import { createForm } from '@tanstack/solid-form'
 
 export default function NewGame() {
@@ -14,11 +13,11 @@ export default function NewGame() {
     }))
 
     return (
-        <div class='new-game-container'>
-            <h1 class='title'>Start New Game</h1>
+        <div class='h-screen flex flex-col items-center bg-redoutable_slbn bg-cover '>
+            <h1 class='text-8xl text-black'>Start New Game</h1>
             <form.Provider>
                 <form 
-                    class='new-game-form'
+                    class='flex flex-col w-1/2 text-xl font-bold'
                     onSubmit={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -39,7 +38,7 @@ export default function NewGame() {
                             )}
                         />
                     </div>
-                    <button type="submit">Submit</button>
+                    <button class='mt-4' type="submit">Submit</button>
                 </form>
             </form.Provider>
         </div>

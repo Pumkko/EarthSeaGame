@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'clemenceau_cv': "url('/clemenceau_cv.webp')",
+        'redoutable_slbn': "url('/redoutable_slbn.webp')"
+      }
+    },
   },
   plugins: [],
 }
