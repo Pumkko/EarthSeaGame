@@ -10,30 +10,8 @@
     flex-direction: column;
 
     .game-title {
-        font-family: 'ModernAntiqua';
         font-size: 6rem;
         color: white;
     }
 }
 
-.starting-menu-buttons {
-    display: flex;
-
-    button {
-        margin-left: 2rem;
-
-        font: {
-            size: 1.2rem;
-            weight: bold;
-            family: 'ModernAntiqua'
-        }
-
-        padding: {
-            left: 2rem;
-            right: 2rem;
-            top: 1rem;
-            bottom: 1rem;
-        }
-
-    }
-}

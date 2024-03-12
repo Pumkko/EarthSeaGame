@@ -1,8 +1,5 @@
-import { Input } from '~/components/ui/input'
 import './NewGame.scss'
-import { Label } from '~/components/ui/label'
 import { createForm } from '@tanstack/solid-form'
-import { Button } from '~/components/ui/button'
 
 export default function NewGame() {
 
@@ -32,7 +29,7 @@ export default function NewGame() {
                         <form.Field
                             name="lobbyName"
                             children={(field) => (
-                                <Input
+                                <input
                                     name={field().name}
                                     value={field().state.value}
                                     onBlur={field().handleBlur}
@@ -42,7 +39,7 @@ export default function NewGame() {
                             )}
                         />
                     </div>
-                    <Button type="submit">Submit</Button>
+                    <button type="submit">Submit</button>
                 </form>
             </form.Provider>
         </div>

@@ -8,21 +8,18 @@
     align-items: center;
 
     .title {
-        font-family: 'ModernAntiqua';
         font-size: 6rem;
         color: black;
     }
 
     .new-game-form {
         display: flex;
-        justify-content: center;
         flex-direction: column;
         width: 50%;
 
         font: {
             size: 1.2rem;
             weight: bold;
-            family: 'ModernAntiqua'
         }
 
         button {
