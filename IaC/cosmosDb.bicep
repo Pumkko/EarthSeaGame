@@ -39,7 +39,7 @@ resource gameLobbyContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/
       defaultTtl: 86400 
       partitionKey: {
         paths: [
-          '/lobbyName'
+          '/gameMaster'
         ]
         kind: 'Hash'
       }

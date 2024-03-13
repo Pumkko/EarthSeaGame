@@ -8,21 +8,18 @@ using Azure.Identity;
 using System.Configuration;
 using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Inputs;
+using System.ComponentModel;
+using Microsoft.Azure.Cosmos.Linq;
 
 namespace EarthSeaGameApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameLobbyController(IConfiguration configuration) : ControllerBase
+    public class GameLobbyController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<GameLobby> Get()
-        {
-            return [];
-        }
+        private readonly Microsoft.Azure.Cosmos.Container gameLobbyContainer;
 
-        [HttpPost]
-        public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobby gameLobbyToCreate)
+        public GameLobbyController(IConfiguration configuration)
         {
             var databaseConfig = configuration.GetSection(CosmosDbConfig.ConfigKey).Get<CosmosDbConfig>();
             if (databaseConfig == null)
@@ -36,15 +33,39 @@ namespace EarthSeaGameApi.Controllers
                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
                }).Build();
 
-            var database = cosmosClient.GetDatabase(databaseConfig.DatabaseName);
-            var container = database.GetContainer(databaseConfig.ContainerName);
+            gameLobbyContainer = cosmosClient.GetContainer(databaseConfig.DatabaseName, databaseConfig.ContainerName);
+        }
 
+
+        [HttpGet("my")]
+        public async Task<IEnumerable<GameLobby>> GetMyLobbies()
+        { 
+            using var setIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
+                                .Where(g => g.GameMaster == "Pumkko")
+                                .ToFeedIterator();
+
+
+            var myGames = new List<GameLobby>();
+
+            while (setIterator.HasMoreResults)
+            {
+                var currentPage = await setIterator.ReadNextAsync();
+                myGames.AddRange(currentPage);
+            }
+
+            return myGames;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobby gameLobbyToCreate)
+        {
             var gameLobbyModel = new GameLobby()
             {
                 Id = Guid.NewGuid(),
-                LobbyName = gameLobbyToCreate.LobbyName
+                LobbyName = gameLobbyToCreate.LobbyName,
+                GameMaster = "Pumkko",
             };
-            var response = await container.UpsertItemAsync(gameLobbyModel, new PartitionKey(gameLobbyModel.LobbyName));
+            var response = await gameLobbyContainer.CreateItemAsync(gameLobbyModel, new PartitionKey(gameLobbyModel.GameMaster));
             return Ok(response.Resource);
 
 

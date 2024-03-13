@@ -1,3 +1,3 @@
 export type CreateLobbyInput = {
-  readonly createGameLobby: string;
+  readonly lobbyName: string;
 };

@@ -1,1 +1,1 @@
-export default function Lobby() { }
+export default function Lobby() {}
