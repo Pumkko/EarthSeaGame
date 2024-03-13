@@ -18,7 +18,7 @@ namespace EarthSeaGameApi.Controllers
         [HttpGet]
         public IEnumerable<GameLobby> Get()
         {
-            return new List<GameLobby>();
+            return [];
         }
 
         [HttpPost]

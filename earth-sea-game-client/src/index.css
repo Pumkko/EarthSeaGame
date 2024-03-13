@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
-  font-family: 'ModernAntiqua', 'Courier New', Courier, monospace;
+  font-family: "ModernAntiqua", "Courier New", Courier, monospace;
 }
