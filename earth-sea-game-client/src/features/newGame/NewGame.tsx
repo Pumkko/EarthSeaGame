@@ -49,7 +49,7 @@ export default function NewGame() {
             />
           </div>
           <button
-            class="flex justify-center mt-4 w-1/2 py-2 self-center rounded bg-black text-white opacity-80 hover:opacity-100 duration-500"
+            class="flex justify-center mt-4 w-1/2 py-2 self-center rounded border-2 border-white bg-black text-white opacity-80 hover:opacity-100 duration-500"
             type="submit"
           >
             <Show when={createLobby.isPending}>

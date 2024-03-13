@@ -12,6 +12,7 @@ const root = document.getElementById("root");
 
 const NewGame = lazy(() => import("./features/newGame/NewGame"));
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
+const Games = lazy(() => import ("./features/games/Games"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +30,7 @@ render(
       <Router>
         <Route path={Routes.startingMenu} component={StartingMenu}></Route>
         <Route path={Routes.newGame} component={NewGame}></Route>
+        <Route path={Routes.games} component={Games}/>
       </Router>
     </QueryClientProvider>
   ),
