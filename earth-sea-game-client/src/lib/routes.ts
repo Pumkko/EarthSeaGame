@@ -1,7 +1,7 @@
 const Routes = {
-  newGameLobby: "/createGameLobby",
+  createGameLobby: "/createGameLobby",
   startingMenu: "/",
-  lobbies: "/gameLobbies",
+  myLobby: "/myLobby",
 };
 
 export default Routes;

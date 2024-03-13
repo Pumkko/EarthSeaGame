@@ -43,6 +43,15 @@ resource gameLobbyContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/
         ]
         kind: 'Hash'
       }
+      uniqueKeyPolicy: {
+        uniqueKeys: [
+           {
+             paths: [
+              '/gameMaster'
+             ]
+           }
+        ]
+      }
     }
   }
 }

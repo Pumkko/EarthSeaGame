@@ -38,21 +38,20 @@ namespace EarthSeaGameApi.Controllers
 
 
         [HttpGet("my")]
-        public async Task<IEnumerable<GameLobby>> GetMyLobbies()
-        { 
+        public async Task<IActionResult> GetMyLobby()
+        {
             using var setIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
                                 .Where(g => g.GameMaster == "Pumkko")
                                 .ToFeedIterator();
 
-            var myGames = new List<GameLobby>();
-
-            while (setIterator.HasMoreResults)
+            if (!setIterator.HasMoreResults)
             {
-                var currentPage = await setIterator.ReadNextAsync();
-                myGames.AddRange(currentPage);
+                return NoContent();
             }
 
-            return myGames;
+            var currentPage = await setIterator.ReadNextAsync();
+            var myLobby = currentPage.SingleOrDefault();
+            return Ok(myLobby);
         }
 
         [HttpPost]

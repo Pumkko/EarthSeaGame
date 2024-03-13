@@ -3,8 +3,8 @@ import axios from "axios";
 import { For, Match, Switch } from "solid-js";
 import { GameLobby } from "../../schemas/GameLobbySchema";
 
-export default function Lobbies() {
-  const query = createQuery<GameLobby[]>(() => ({
+export default function Lobby() {
+  const query = createQuery<GameLobby>(() => ({
     queryKey: ["lobbies"],
     queryFn: async () => {
       const targetUrl = new URL(
@@ -21,9 +21,7 @@ export default function Lobbies() {
       <div class="flex">
         <Switch>
           <Match when={query.isSuccess}>
-            <For each={query.data}>
-              {(lobby) => <p class="text-white">{lobby.lobbyName}</p>}
-            </For>
+            <p class="text-white">{query.data?.lobbyName}</p>
           </Match>
         </Switch>
       </div>
