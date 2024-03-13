@@ -6,12 +6,12 @@ export default function StartingMenu() {
   const navigate = useNavigate();
 
   const onStartNewGame = () => {
-    navigate(Routes.newGame);
+    navigate(Routes.newGameLobby);
   };
 
   const onJoinGame = () => {
-    navigate(Routes.games);
-  }
+    navigate(Routes.lobbies);
+  };
 
   return (
     <div class="bg-cover h-screen flex items-center p-8 justify-between flex-col bg-clemenceau_cv">

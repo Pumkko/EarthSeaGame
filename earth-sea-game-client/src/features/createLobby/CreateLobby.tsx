@@ -1,7 +1,7 @@
 import { createForm } from "@tanstack/solid-form";
 import { createMutation } from "@tanstack/solid-query";
 import { CreateLobbyInput } from "./CreateLobbyInput";
-import { Show } from "solid-js";
+import { For, Show } from "solid-js";
 import axios from "axios";
 
 export default function NewGame() {
@@ -21,40 +21,53 @@ export default function NewGame() {
     },
   }));
 
+  //
   return (
     <div class="h-screen flex flex-col items-center bg-redoutable_slbn bg-cover ">
-      <h1 class="text-9xl text-black m-8">Start New Game</h1>
+      <h1 class="text-9xl text-white m-8">Start New Game</h1>
       <form.Provider>
         <form
-          class="flex flex-col w-1/2 text-xl font-bold"
+          class="flex items items-center flex-col w-1/2 text-xl font-bold"
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();
             void form.handleSubmit();
           }}
         >
-          <div class="flex justify-center">
-            <form.Field
-              name="lobbyName"
-              children={(field) => (
+          <form.Field
+            name="lobbyName"
+            validators={{
+              onChange: ({ value }) =>
+                value === "" ? "Lobby name can not be empty" : undefined,
+            }}
+            children={(field) => (
+              <>
                 <input
-                  class="rounded p-2 w-1/2 "
+                  class={`rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
                   name={field().name}
                   value={field().state.value}
                   onBlur={field().handleBlur}
                   onInput={(e) => field().handleChange(e.target.value)}
                   placeholder="Lobby Name"
                 />
-              )}
-            />
-          </div>
+
+                <For each={field().state.meta.errors}>
+                  {(error) => (
+                    <em class="text-red-800" role="alert">
+                      {error}
+                    </em>
+                  )}
+                </For>
+              </>
+            )}
+          />
           <button
-            class="flex justify-center mt-4 w-1/2 py-2 self-center rounded border-2 border-white bg-black text-white opacity-80 hover:opacity-100 duration-500"
+            class="text-black flex justify-center bg-opacity-75 bg-white py-2 px-8 mt-2 rounded border-2 border-white text-2xl w-1/2 hover:bg-opacity-100 duration-500"
             type="submit"
           >
             <Show when={createLobby.isPending}>
               <svg
-                class="animate-spin ml-1 mr-3 h-7 w-7  text-white"
+                class="animate-spin ml-1 mr-3 h-7 w-7 text-black"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"

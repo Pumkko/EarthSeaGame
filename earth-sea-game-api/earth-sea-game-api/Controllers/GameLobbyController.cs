@@ -44,7 +44,6 @@ namespace EarthSeaGameApi.Controllers
                                 .Where(g => g.GameMaster == "Pumkko")
                                 .ToFeedIterator();
 
-
             var myGames = new List<GameLobby>();
 
             while (setIterator.HasMoreResults)

@@ -10,9 +10,9 @@ import { EnvironmentSchema } from "./lib/Environment";
 
 const root = document.getElementById("root");
 
-const NewGame = lazy(() => import("./features/newGame/NewGame"));
+const NewGame = lazy(() => import("./features/createLobby/CreateLobby"));
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
-const Games = lazy(() => import ("./features/games/Games"));
+const Games = lazy(() => import("./features/lobby/lobbies"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,8 +29,8 @@ render(
     <QueryClientProvider client={queryClient}>
       <Router>
         <Route path={Routes.startingMenu} component={StartingMenu}></Route>
-        <Route path={Routes.newGame} component={NewGame}></Route>
-        <Route path={Routes.games} component={Games}/>
+        <Route path={Routes.newGameLobby} component={NewGame}></Route>
+        <Route path={Routes.lobbies} component={Games} />
       </Router>
     </QueryClientProvider>
   ),

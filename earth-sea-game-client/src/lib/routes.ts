@@ -1,7 +1,7 @@
 const Routes = {
-  newGame: "/newGame",
+  newGameLobby: "/createGameLobby",
   startingMenu: "/",
-  games: '/games'
+  lobbies: "/gameLobbies",
 };
 
 export default Routes;
