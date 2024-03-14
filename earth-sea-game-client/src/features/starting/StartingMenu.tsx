@@ -14,7 +14,9 @@ export default function StartingMenu() {
     }));
     const onCreateOrManageLobby = () => {
         if (!!query.data) {
-            navigate(Routes.myLobby.root);
+            navigate(Routes.myLobby.root, {
+                state: query.data,
+            });
         } else {
             navigate(Routes.createLobby);
         }
