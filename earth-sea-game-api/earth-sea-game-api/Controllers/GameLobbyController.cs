@@ -62,6 +62,9 @@ namespace EarthSeaGameApi.Controllers
                 Id = Guid.NewGuid(),
                 LobbyName = gameLobbyToCreate.LobbyName,
                 GameMaster = "Pumkko",
+                EarthNationInviteCode = Guid.NewGuid(),
+                EasternIslandInviteCode = Guid.NewGuid(),
+                SeaNationInviteCode = Guid.NewGuid()
             };
             var response = await gameLobbyContainer.CreateItemAsync(gameLobbyModel, new PartitionKey(gameLobbyModel.GameMaster));
             return Ok(response.Resource);
