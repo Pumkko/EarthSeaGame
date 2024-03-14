@@ -39,7 +39,7 @@ render(
                     )}
                 />
                 <Route path={Routes.myLobby.root} component={ManageLobbyRoot}>
-                    <Route path={Routes.myLobby.option} component={ManageLobbyOptions}></Route>
+                    <Route path={Routes.myLobby.home} component={ManageLobbyOptions}></Route>
                     <Route path={Routes.myLobby.spyChat} component={ManageLobbySpyChat}></Route>
                     <Route path={Routes.myLobby.teamsChat} component={ManageLobbyTeamsChat}></Route>
                 </Route>
