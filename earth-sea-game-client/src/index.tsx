@@ -14,9 +14,9 @@ const root = document.getElementById("root");
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
 const CreateLobby = lazy(() => import("./features/lobby/createLobby/CreateLobby"));
 const ManageLobbyRoot = lazy(() => import("./features/lobby/manageLobby/ManageLobby"));
-const ManageLobbySpyChat = lazy(() => import("./features/lobby/manageLobby/SpyChat"));
-const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/TeamsChat"));
-const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/Options"));
+const ManageLobbySpyChat = lazy(() => import("./features/lobby/manageLobby/tabs/SpyChat"));
+const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/tabs/TeamsChat"));
+const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/tabs/Options"));
 const AppError = lazy(() => import("./features/error/AppError"));
 
 queryClient.prefetchQuery({
