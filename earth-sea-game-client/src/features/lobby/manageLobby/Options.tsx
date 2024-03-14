@@ -1,3 +1,3 @@
 export default function ManageLobbyOptions() {
-  return <div>Option</div>;
+    return <div>Option</div>;
 }

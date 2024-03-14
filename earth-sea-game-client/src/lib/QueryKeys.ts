@@ -1,3 +1,3 @@
 export const QueryKeys = {
-  lobby: ["lobby"],
+    lobby: ["lobby"],
 };

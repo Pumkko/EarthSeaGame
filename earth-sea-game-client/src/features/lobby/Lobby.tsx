@@ -6,19 +6,19 @@ import ManageLobby from "./manageLobby/ManageLobby";
 import { QueryKeys } from "@lib/QueryKeys";
 import { GameLobby, GameLobbySchema } from "@lib/schemas/GameLobbySchema";
 export default function Lobby() {
-  const query = createQuery<GameLobby | null>(() => ({
-    queryKey: QueryKeys.lobby,
-  }));
+    const query = createQuery<GameLobby | null>(() => ({
+        queryKey: QueryKeys.lobby,
+    }));
 
-  return (
-    <div class="h-screen bg-rocket bg-cover bg-center">
-      <Switch>
-        <Match when={query.isSuccess}>
-          <Show when={!!query.data} fallback={<CreateLobby />}>
-            <ManageLobby lobby={query.data!}></ManageLobby>
-          </Show>
-        </Match>
-      </Switch>
-    </div>
-  );
+    return (
+        <div class="h-screen bg-rocket bg-cover bg-center">
+            <Switch>
+                <Match when={query.isSuccess}>
+                    <Show when={!!query.data} fallback={<CreateLobby />}>
+                        <ManageLobby lobby={query.data!}></ManageLobby>
+                    </Show>
+                </Match>
+            </Switch>
+        </div>
+    );
 }

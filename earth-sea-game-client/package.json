@@ -1,32 +1,32 @@
 {
-  "name": "earth-sea-game-client",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@microsoft/signalr": "^8.0.0",
-    "@solidjs/router": "^0.13.0",
-    "@tanstack/solid-form": "^0.13.7",
-    "@tanstack/solid-query": "^5.28.0",
-    "@tanstack/zod-form-adapter": "^0.13.7",
-    "autoprefixer": "^10.4.18",
-    "axios": "^1.6.7",
-    "postcss": "^8.4.35",
-    "sass": "^1.71.1",
-    "solid-js": "^1.8.15",
-    "tailwindcss": "^3.4.1",
-    "vite-tsconfig-paths": "^4.3.2",
-    "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "prettier": "^3.2.5",
-    "typescript": "^5.2.2",
-    "vite": "^5.1.6",
-    "vite-plugin-solid": "^2.10.1"
-  }
+    "name": "earth-sea-game-client",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@microsoft/signalr": "^8.0.0",
+        "@solidjs/router": "^0.13.0",
+        "@tanstack/solid-form": "^0.13.7",
+        "@tanstack/solid-query": "^5.28.0",
+        "@tanstack/zod-form-adapter": "^0.13.7",
+        "autoprefixer": "^10.4.18",
+        "axios": "^1.6.7",
+        "postcss": "^8.4.35",
+        "sass": "^1.71.1",
+        "solid-js": "^1.8.15",
+        "tailwindcss": "^3.4.1",
+        "vite-tsconfig-paths": "^4.3.2",
+        "zod": "^3.22.4"
+    },
+    "devDependencies": {
+        "prettier": "^3.2.5",
+        "typescript": "^5.2.2",
+        "vite": "^5.1.6",
+        "vite-plugin-solid": "^2.10.1"
+    }
 }
