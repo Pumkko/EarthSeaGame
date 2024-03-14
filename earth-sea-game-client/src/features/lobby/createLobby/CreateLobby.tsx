@@ -34,7 +34,7 @@ export default function CreateLobby() {
 
   return (
     <div class="flex flex-col w-full items-center">
-      <h2 class="text-white text-4xl">Could not find a Lobby - Create One !</h2>
+      <h1 class="text-9xl text-white mt-2">Create a Lobby</h1>
       <form.Provider>
         <form
           class="flex flex-col items-center w-full text-xl font-bold"
