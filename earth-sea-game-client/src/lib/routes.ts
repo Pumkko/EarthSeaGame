@@ -1,5 +1,4 @@
 const Routes = {
-  createGameLobby: "/createGameLobby",
   startingMenu: "/",
   myLobby: "/myLobby",
 };

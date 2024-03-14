@@ -10,7 +10,6 @@ import { EnvironmentSchema } from "./lib/Environment";
 
 const root = document.getElementById("root");
 
-const NewGame = lazy(() => import("./features/createLobby/CreateLobby"));
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
 const Games = lazy(() => import("./features/lobby/Lobby"));
 
@@ -29,7 +28,6 @@ render(
     <QueryClientProvider client={queryClient}>
       <Router>
         <Route path={Routes.startingMenu} component={StartingMenu}></Route>
-        <Route path={Routes.createGameLobby} component={NewGame}></Route>
         <Route path={Routes.myLobby} component={Games} />
       </Router>
     </QueryClientProvider>
