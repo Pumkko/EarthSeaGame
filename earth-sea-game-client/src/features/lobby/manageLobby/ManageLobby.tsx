@@ -1,46 +1,19 @@
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
-import ManageLobbyAnchor from "./ManageLobbyAnchor";
-import { Show, createSignal } from "solid-js";
-import SpyChat from "./SpyChat";
-import TeamsChat from "./TeamsChat";
+import { A, RouteSectionProps } from "@solidjs/router";
+import Routes from "@lib/Routes";
 
 export interface ManageLobbyProps {
   lobby: GameLobby;
 }
 
-export default function ManageLobby(props: ManageLobbyProps) {
-  const [displayTeamsChat, setDisplayTeamsChat] = createSignal(true);
-
+export default function ManageLobby(props: RouteSectionProps) {
   return (
-    <>
-      <div class="text-2xl text-white border-b border-gray-200">
-        <ul class="flex justify-center">
-          <li class="m-2">
-            <ManageLobbyAnchor
-              isActive={displayTeamsChat()}
-              onclick={() => {
-                setDisplayTeamsChat(true);
-              }}
-            >
-              Team Chat
-            </ManageLobbyAnchor>
-          </li>
-          <li class="m-2">
-            <ManageLobbyAnchor
-              isActive={!displayTeamsChat()}
-              onclick={() => {
-                setDisplayTeamsChat(false);
-              }}
-            >
-              Spy Chat
-            </ManageLobbyAnchor>
-          </li>
-        </ul>
-      </div>
-
-      <Show when={displayTeamsChat()} fallback={<SpyChat />}>
-        <TeamsChat />
-      </Show>
-    </>
+    <div class="h-screen bg-cover bg-center bg-rocket">
+      Hello from root
+      <A href={Routes.myLobby.root}>Option</A>
+      <A href={Routes.myLobby.spyChat}>SpyChat</A>
+      <A href={Routes.myLobby.teamsChat}>TeamsChat</A>
+      {props.children}
+    </div>
   );
 }

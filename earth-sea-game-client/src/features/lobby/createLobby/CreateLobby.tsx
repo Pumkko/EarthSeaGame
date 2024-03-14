@@ -1,24 +1,26 @@
 import { createForm } from "@tanstack/solid-form";
-import { createMutation, useQueryClient } from "@tanstack/solid-query";
+import { createMutation } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
-import { QueryKeys } from "@lib/QueryKeys";
+import { useNavigate } from "@solidjs/router";
+import Routes from "@lib/Routes";
+import { GameLobby } from "@lib/schemas/GameLobbySchema";
 
 type CreateLobbyInput = {
   readonly lobbyName: string;
 };
 
 export default function CreateLobby() {
-  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const createLobby = createMutation(() => ({
     mutationFn: async (lobby: CreateLobbyInput) => {
       const targetUrl = new URL("GameLobby", import.meta.env.VITE_API_ROOT_URL);
-      return axios.post(targetUrl.href, lobby);
+      return axios.post<GameLobby>(targetUrl.href, lobby);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: QueryKeys.lobby,
+    onSuccess: (response) => {
+      navigate(Routes.myLobby.root, {
+        state: response.data,
       });
     },
   }));
@@ -33,11 +35,11 @@ export default function CreateLobby() {
   }));
 
   return (
-    <div class="flex flex-col w-full items-center">
-      <h1 class="text-9xl text-white mt-2">Create a Lobby</h1>
+    <div class="h-screen flex flex-col items-center bg-submarine bg-cover ">
+      <h1 class="text-9xl text-white m-8">Create Lobby</h1>
       <form.Provider>
         <form
-          class="flex flex-col items-center w-full text-xl font-bold"
+          class="flex items items-center flex-col w-1/2 text-xl font-bold"
           onSubmit={(e) => {
             e.preventDefault();
             e.stopPropagation();

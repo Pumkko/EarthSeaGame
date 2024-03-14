@@ -5,7 +5,7 @@ export default {
     extend: {
       backgroundImage: {
         clemenceau_cv: "url('/clemenceau_cv.webp')",
-        redoutable_slbn: "url('/submarine.webp')",
+        submarine: "url('/submarine.webp')",
         rocket: "url('/rocket.webp')",
       },
     },
