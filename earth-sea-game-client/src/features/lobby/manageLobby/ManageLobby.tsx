@@ -5,5 +5,5 @@ export interface ManageLobbyProps {
 }
 
 export default function ManageLobby(props: ManageLobbyProps) {
-  return <div>{props.lobby.lobbyName}</div>;
+  return <div class="text-white">{props.lobby.lobbyName}</div>;
 }
