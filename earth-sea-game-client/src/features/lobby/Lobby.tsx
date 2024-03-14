@@ -1,9 +1,10 @@
 import { createQuery } from "@tanstack/solid-query";
 import axios from "axios";
-import { Match, Show, Switch, createEffect } from "solid-js";
-import { GameLobby } from "../../schemas/GameLobbySchema";
+import { Match, Show, Switch } from "solid-js";
 import CreateLobby from "./createLobby/CreateLobby";
-import { QueryKeys } from "../../lib/QueryKeys";
+import ManageLobby from "./manageLobby/ManageLobby";
+import { QueryKeys } from "@lib/QueryKeys";
+import { GameLobby, GameLobbySchema } from "@lib/schemas/GameLobbySchema";
 export default function Lobby() {
   const query = createQuery<GameLobby | null>(() => ({
     queryKey: QueryKeys.lobby,
@@ -16,13 +17,15 @@ export default function Lobby() {
       if (response.status === 204) {
         return null;
       }
+
+      const parseResult = GameLobbySchema.safeParse(response.data);
+      if (!parseResult.success) {
+        throw parseResult.error;
+      }
+
       return response.data;
     },
   }));
-
-  createEffect(() => {
-    console.log("data", query.data);
-  });
 
   return (
     <div class="h-screen bg-rocket bg-cover bg-center flex items-center flex-col">
@@ -30,7 +33,7 @@ export default function Lobby() {
       <Switch>
         <Match when={query.isSuccess}>
           <Show when={!!query.data} fallback={<CreateLobby />}>
-            <p class="text-white">{query.data?.lobbyName}</p>
+            <ManageLobby lobby={query.data!}></ManageLobby>
           </Show>
         </Match>
       </Switch>

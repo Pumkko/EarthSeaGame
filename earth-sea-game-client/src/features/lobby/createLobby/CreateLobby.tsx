@@ -1,9 +1,12 @@
 import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { CreateLobbyInput } from "./CreateLobbyInput";
 import { For, Show } from "solid-js";
 import axios from "axios";
-import { QueryKeys } from "../../../lib/QueryKeys";
+import { QueryKeys } from "@lib/QueryKeys";
+
+type CreateLobbyInput = {
+  readonly lobbyName: string;
+};
 
 export default function CreateLobby() {
   const queryClient = useQueryClient();

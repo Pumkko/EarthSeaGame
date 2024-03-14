@@ -2,21 +2,30 @@
 import { render } from "solid-js/web";
 
 import "./index.css";
-import { lazy } from "solid-js";
+import { ErrorBoundary, lazy } from "solid-js";
 import { Router, Route } from "@solidjs/router";
-import Routes from "./lib/Routes";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { EnvironmentSchema } from "./lib/Environment";
+import { EnvironmentSchema } from "@lib/schemas/Environment";
+import Routes from "@lib/Routes";
+import { ZodError } from "zod";
 
 const root = document.getElementById("root");
 
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
-const Games = lazy(() => import("./features/lobby/Lobby"));
+const Lobby = lazy(() => import("./features/lobby/Lobby"));
+const AppError = lazy(() => import("./features/error/AppError"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      throwOnError: true,
+      retry(failureCount, error) {
+        if (error instanceof ZodError) {
+          return false;
+        }
+        return failureCount < 2;
+      },
     },
   },
 });
@@ -28,7 +37,15 @@ render(
     <QueryClientProvider client={queryClient}>
       <Router>
         <Route path={Routes.startingMenu} component={StartingMenu}></Route>
-        <Route path={Routes.myLobby} component={Games} />
+        <Route
+          path={Routes.myLobby}
+          component={() => (
+            <ErrorBoundary fallback={AppError}>
+              <Lobby />
+            </ErrorBoundary>
+          )}
+        />
+        <Route path={Routes.error} component={AppError} />
       </Router>
     </QueryClientProvider>
   ),
