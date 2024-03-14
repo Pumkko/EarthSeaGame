@@ -28,7 +28,7 @@ export default function Lobby() {
   }));
 
   return (
-    <div class="h-screen bg-rocket bg-cover bg-center flex items-center flex-col">
+    <div class="h-screen bg-rocket bg-cover bg-center">
       <Switch>
         <Match when={query.isSuccess}>
           <Show when={!!query.data} fallback={<CreateLobby />}>
