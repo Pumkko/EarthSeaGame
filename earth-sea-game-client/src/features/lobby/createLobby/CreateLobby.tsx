@@ -1,10 +1,11 @@
 import { createForm } from "@tanstack/solid-form";
-import { createMutation } from "@tanstack/solid-query";
+import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
 import { useNavigate } from "@solidjs/router";
 import Routes from "@lib/Routes";
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
+import { QueryKeys } from "@lib/QueryKeys";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -12,6 +13,7 @@ type CreateLobbyInput = {
 
 export default function CreateLobby() {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
 
     const createLobby = createMutation(() => ({
         mutationFn: async (lobby: CreateLobbyInput) => {
@@ -19,6 +21,10 @@ export default function CreateLobby() {
             return axios.post<GameLobby>(targetUrl.href, lobby);
         },
         onSuccess: (response) => {
+            queryClient.removeQueries({
+                queryKey: QueryKeys.lobby,
+            });
+
             navigate(Routes.myLobby.root, {
                 state: response.data,
             });

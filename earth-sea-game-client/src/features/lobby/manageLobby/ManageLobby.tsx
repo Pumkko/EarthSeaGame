@@ -8,11 +8,17 @@ export interface ManageLobbyProps {
 
 export default function ManageLobby(props: RouteSectionProps) {
     return (
-        <div class="h-screen bg-cover bg-center bg-rocket">
+        <div class="h-screen bg-cover bg-center bg-rocket text-white">
             Hello from root
-            <A href={Routes.myLobby.root}>Option</A>
-            <A href={Routes.myLobby.spyChat}>SpyChat</A>
-            <A href={Routes.myLobby.teamsChat}>TeamsChat</A>
+            <A replace={true} href={Routes.myLobby.root}>
+                Option
+            </A>
+            <A replace={true} href={Routes.myLobby.spyChat}>
+                SpyChat
+            </A>
+            <A replace={true} href={Routes.myLobby.teamsChat}>
+                TeamsChat
+            </A>
             {props.children}
         </div>
     );
