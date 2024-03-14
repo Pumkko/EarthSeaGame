@@ -8,23 +8,6 @@ import { GameLobby, GameLobbySchema } from "@lib/schemas/GameLobbySchema";
 export default function Lobby() {
   const query = createQuery<GameLobby | null>(() => ({
     queryKey: QueryKeys.lobby,
-    queryFn: async () => {
-      const targetUrl = new URL(
-        "GameLobby/my",
-        import.meta.env.VITE_API_ROOT_URL,
-      );
-      const response = await axios.get<GameLobby>(targetUrl.href);
-      if (response.status === 204) {
-        return null;
-      }
-
-      const parseResult = GameLobbySchema.safeParse(response.data);
-      if (!parseResult.success) {
-        throw parseResult.error;
-      }
-
-      return response.data;
-    },
   }));
 
   return (

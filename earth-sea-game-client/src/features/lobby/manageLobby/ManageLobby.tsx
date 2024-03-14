@@ -1,6 +1,6 @@
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import ManageLobbyAnchor from "./ManageLobbyAnchor";
-import { Match, Show, Switch, createSignal } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import SpyChat from "./SpyChat";
 import TeamsChat from "./TeamsChat";
 

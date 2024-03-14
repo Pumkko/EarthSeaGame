@@ -4,10 +4,11 @@ import { render } from "solid-js/web";
 import "./index.css";
 import { ErrorBoundary, lazy } from "solid-js";
 import { Router, Route } from "@solidjs/router";
-import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { QueryClientProvider } from "@tanstack/solid-query";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
 import Routes from "@lib/Routes";
-import { ZodError } from "zod";
+import { queryClient } from "@lib/QueryClient";
+import { QueryKeys } from "@lib/QueryKeys";
 
 const root = document.getElementById("root");
 
@@ -15,19 +16,8 @@ const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
 const Lobby = lazy(() => import("./features/lobby/Lobby"));
 const AppError = lazy(() => import("./features/error/AppError"));
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      throwOnError: true,
-      retry(failureCount, error) {
-        if (error instanceof ZodError) {
-          return false;
-        }
-        return failureCount < 2;
-      },
-    },
-  },
+queryClient.prefetchQuery({
+  queryKey: QueryKeys.lobby,
 });
 
 EnvironmentSchema.parse(import.meta.env);
