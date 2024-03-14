@@ -6,7 +6,7 @@ import { ErrorBoundary, lazy } from "solid-js";
 import { Router, Route } from "@solidjs/router";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
-import Routes from "@lib/Routes";
+import Routes from "@lib/Routesd";
 import { ZodError } from "zod";
 
 const root = document.getElementById("root");

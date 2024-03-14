@@ -1,6 +1,6 @@
 import { useNavigate } from "@solidjs/router";
 import StartingMenuButton from "./components/StartingMenuButton";
-import Routes from "@lib/Routes";
+import Routes from "@lib/Routesd";
 
 export default function StartingMenu() {
   const navigate = useNavigate();
