@@ -8,7 +8,6 @@ import { QueryClientProvider } from "@tanstack/solid-query";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
 import Routes from "@lib/Routes";
 import { queryClient } from "@lib/QueryClient";
-import { QueryKeys } from "@lib/QueryKeys";
 const root = document.getElementById("root");
 
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));

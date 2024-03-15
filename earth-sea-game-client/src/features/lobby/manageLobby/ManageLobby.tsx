@@ -2,9 +2,6 @@ import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { RouteSectionProps } from "@solidjs/router";
 import Routes from "@lib/Routes";
 import ManageLobbyAnchor from "./ManageLobbyAnchor";
-import { QueryKeys } from "@lib/QueryKeys";
-import { createQuery } from "@tanstack/solid-query";
-
 export interface ManageLobbyProps {
     lobby: GameLobby;
 }

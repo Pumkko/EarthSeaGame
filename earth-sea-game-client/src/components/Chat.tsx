@@ -4,7 +4,7 @@ import ChatMessage from "./ChatMessage";
 import { ChatContext } from "./ChatContext";
 
 export default function Chat() {
-    const [messages, setMessages] = createSignal<ChatMessageModel[]>([
+    const [messages] = createSignal<ChatMessageModel[]>([
         {
             content: "Hello",
             date: new Date(),
