@@ -1,5 +1,5 @@
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
-import { A, RouteSectionProps, useLocation } from "@solidjs/router";
+import { RouteSectionProps, useLocation } from "@solidjs/router";
 import Routes from "@lib/Routes";
 import ManageLobbyAnchor from "./ManageLobbyAnchor";
 
