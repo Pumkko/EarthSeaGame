@@ -25,7 +25,7 @@ render(
     () => (
         <QueryClientProvider client={queryClient}>
             <Router>
-                <Route path={Routes.startingMenu} component={StartingMenu}></Route>
+                <Route path={Routes.startingMenu} component={StartingMenu} />
                 <Route
                     path={Routes.createLobby}
                     component={() => (
@@ -35,9 +35,9 @@ render(
                     )}
                 />
                 <Route path={Routes.myLobby.root} component={ManageLobbyRoot}>
-                    <Route path={Routes.myLobby.home} component={ManageLobbyOptions}></Route>
-                    <Route path={Routes.myLobby.spyChat} component={ManageLobbySpyChat}></Route>
-                    <Route path={Routes.myLobby.teamsChat} component={ManageLobbyTeamsChat}></Route>
+                    <Route path={Routes.myLobby.home} component={ManageLobbyOptions} />
+                    <Route path={Routes.myLobby.spyChat} component={ManageLobbySpyChat} />
+                    <Route path={Routes.myLobby.teamsChat} component={ManageLobbyTeamsChat} />
                 </Route>
 
                 <Route path="*404" component={() => <div>Not Found</div>} />

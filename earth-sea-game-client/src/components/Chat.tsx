@@ -28,10 +28,10 @@ export default function Chat() {
                         currentUser: "Referee",
                     }}
                 >
-                    <For each={messages()}>{(message) => <ChatMessage message={message}></ChatMessage>}</For>
+                    <For each={messages()}>{(message) => <ChatMessage message={message} />}</For>
                 </ChatContext.Provider>
             </div>
-            <input class="text-black border-2 border-black p-2 mt-2"></input>
+            <input class="text-black border-2 border-black p-2 mt-2" />
         </div>
     );
 }
