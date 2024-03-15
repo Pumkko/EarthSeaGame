@@ -31,7 +31,7 @@ export default function Chat() {
                     <For each={messages()}>{(message) => <ChatMessage message={message}></ChatMessage>}</For>
                 </ChatContext.Provider>
             </div>
-            <input class="text-black border-2 border-black p-2"></input>
+            <input class="text-black border-2 border-black p-2 mt-2"></input>
         </div>
     );
 }

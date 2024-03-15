@@ -9,9 +9,10 @@ interface ChatMessageProps {
 export default function ChatMessage(props: ChatMessageProps) {
     const context = useContext(ChatContext);
 
+    const isSenderMe = () => context?.currentUser === props.message.sender;
+
     return (
-        <div class={`${context?.currentUser === props.message.sender ? "self-end" : "self-start"}`}>
-            <div>{props.message.sender} says</div>
+        <div class={`${isSenderMe() ? "self-end" : "self-start"} bg-white text-black bg-opacity-75 px-4 py-2 mx-2 rounded`}>
             <div>{props.message.content}</div>
         </div>
     );
