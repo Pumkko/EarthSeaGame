@@ -4,7 +4,7 @@ export const ChatMessageSenderSchema = z.enum(["Referee", "EarthNation", "SeaNat
 
 export const ChatMessageSchema = z.object({
     sender: ChatMessageSenderSchema,
-    recipient: z.string(),
+    recipient: ChatMessageSenderSchema,
     date: z.date(),
     content: z.string(),
 });
