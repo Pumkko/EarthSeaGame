@@ -1,7 +1,7 @@
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
-import { RouteSectionProps } from "@solidjs/router";
 import Routes from "@lib/Routes";
 import ManageLobbyAnchor from "./ManageLobbyAnchor";
+import { RouteSectionProps } from "@solidjs/router";
 export interface ManageLobbyProps {
     lobby: GameLobby;
 }
@@ -14,7 +14,7 @@ export default function ManageLobby(props: RouteSectionProps) {
                 <ManageLobbyAnchor href={Routes.myLobby.spyChat}>SpyChat</ManageLobbyAnchor>
                 <ManageLobbyAnchor href={Routes.myLobby.teamsChat}>TeamsChat</ManageLobbyAnchor>
             </div>
-            <div class="flex-grow">{props.children}</div>
+            <div class="overflow-auto flex-grow">{props.children}</div>
         </div>
     );
 }
