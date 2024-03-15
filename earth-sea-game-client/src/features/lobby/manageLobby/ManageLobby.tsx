@@ -11,19 +11,15 @@ export default function ManageLobby(props: RouteSectionProps) {
     const { state } = useLocation<GameLobby>();
 
     return (
-        <div class="h-screen bg-cover bg-center bg-rocket text-white">
+        <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">
             <div class="flex justify-center p-4 text-2xl border-b-2 ">
                 <ManageLobbyAnchor href={Routes.myLobby.root} state={state}>
                     Option
                 </ManageLobbyAnchor>
-                <ManageLobbyAnchor href={Routes.myLobby.spyChat} state={state}>
-                    SpyChat
-                </ManageLobbyAnchor>
-                <ManageLobbyAnchor href={Routes.myLobby.teamsChat} state={state}>
-                    TeamsChat
-                </ManageLobbyAnchor>
+                <ManageLobbyAnchor href={Routes.myLobby.spyChat}>SpyChat</ManageLobbyAnchor>
+                <ManageLobbyAnchor href={Routes.myLobby.teamsChat}>TeamsChat</ManageLobbyAnchor>
             </div>
-            {props.children}
+            <div class="flex-grow">{props.children}</div>
         </div>
     );
 }
