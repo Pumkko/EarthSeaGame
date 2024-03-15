@@ -21,13 +21,8 @@ export default function CreateLobby() {
             return axios.post<GameLobby>(targetUrl.href, lobby);
         },
         onSuccess: (response) => {
-            queryClient.removeQueries({
-                queryKey: QueryKeys.lobby,
-            });
-
-            navigate(Routes.myLobby.root, {
-                state: response.data,
-            });
+            queryClient.setQueryData(QueryKeys.lobby, response.data);
+            navigate(Routes.myLobby.root);
         },
     }));
 

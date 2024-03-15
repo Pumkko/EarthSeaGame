@@ -19,10 +19,6 @@ const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/tab
 const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/tabs/Options"));
 const AppError = lazy(() => import("./features/error/AppError"));
 
-queryClient.prefetchQuery({
-    queryKey: QueryKeys.lobby,
-});
-
 EnvironmentSchema.parse(import.meta.env);
 
 render(
