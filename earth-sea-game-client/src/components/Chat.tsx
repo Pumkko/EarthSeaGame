@@ -76,14 +76,16 @@ export default function Chat() {
     return (
         <div class="flex flex-col overflow-auto">
             <h1>Earth Nation</h1>
-            <ChatContext.Provider
-                value={{
-                    currentUser: "Referee",
-                }}
-            >
-                <For each={messages()}>{(message) => <ChatMessage message={message} />}</For>
-            </ChatContext.Provider>
-            <input class="text-black border-2 border-black p-2" />
+            <div class="flex flex-col flex-grow justify-end">
+                <ChatContext.Provider
+                    value={{
+                        currentUser: "Referee",
+                    }}
+                >
+                    <For each={messages()}>{(message) => <ChatMessage message={message} />}</For>
+                </ChatContext.Provider>
+            </div>
+            <input class="text-black border-2 rounded border-black m-2 p-2" />
         </div>
     );
 }
