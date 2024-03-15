@@ -75,7 +75,7 @@ export default function Chat() {
 
     return (
         <div class="flex flex-col overflow-auto">
-            <h1>Earth Nation</h1>
+            <h1 class="self-center">Earth Nation</h1>
             <div class="flex flex-col flex-grow justify-end">
                 <ChatContext.Provider
                     value={{
