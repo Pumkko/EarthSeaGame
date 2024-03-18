@@ -6,6 +6,7 @@ import { useNavigate } from "@solidjs/router";
 import Routes from "@lib/Routes";
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
+import PageTitle from "@components/PageTitle";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -37,7 +38,7 @@ export default function CreateLobby() {
 
     return (
         <div class="h-screen flex flex-col items-center bg-submarine bg-cover ">
-            <h1 class="text-9xl text-white m-8">Create Lobby</h1>
+            <PageTitle>Create Lobby</PageTitle>
             <form.Provider>
                 <form
                     class="flex items items-center flex-col w-1/2 text-xl font-bold"
@@ -84,7 +85,7 @@ export default function CreateLobby() {
                                     class="opacity-75"
                                     fill="currentColor"
                                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                 />
+                                />
                             </svg>
                         </Show>
                         Submit

@@ -17,6 +17,7 @@ const ManageLobbySpyChat = lazy(() => import("./features/lobby/manageLobby/tabs/
 const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/tabs/TeamsChat"));
 const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/tabs/Options"));
 const AppError = lazy(() => import("./features/error/AppError"));
+const JoinLobby = lazy(() => import("./features/lobby/joinLobby/JoinLobby"));
 
 EnvironmentSchema.parse(import.meta.env);
 
@@ -33,6 +34,9 @@ render(
                         </ErrorBoundary>
                     )}
                 />
+
+                <Route path={Routes.joinLobby} component={JoinLobby} />
+
                 <Route path={Routes.myLobby.root} component={ManageLobbyRoot}>
                     <Route path={Routes.myLobby.home} component={ManageLobbyOptions} />
                     <Route path={Routes.myLobby.spyChat} component={ManageLobbySpyChat} />

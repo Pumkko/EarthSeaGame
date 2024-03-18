@@ -1,5 +1,6 @@
 const Routes = {
     startingMenu: "/",
+    joinLobby: "/lobby/join",
     myLobby: {
         root: "/lobby/my",
         home: "/",

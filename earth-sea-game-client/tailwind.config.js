@@ -7,6 +7,7 @@ export default {
                 clemenceau_cv: "url('/clemenceau_cv.webp')",
                 submarine: "url('/submarine.webp')",
                 rocket: "url('/rocket.webp')",
+                aircraft: "url('./aircraft.webp')",
             },
         },
     },
