@@ -1,9 +1,9 @@
 import FormFieldError from "@components/FormFieldErrror";
 import { For } from "solid-js";
-import { createJoinLobbyForm } from "./JoinLobbyFormFactory";
+import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
 import { z } from "zod";
 interface PickNationFieldProps {
-    form: ReturnType<typeof createJoinLobbyForm>;
+    form: ReturnType<typeof createJoinLobbyForm>["form"];
 }
 
 const possibleNationsSchema = z.enum(["EarthNation", "SeaNation", "EasternIsland"], {

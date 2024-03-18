@@ -1,4 +1,5 @@
 import { createForm } from "@tanstack/solid-form";
+import { createMutation } from "@tanstack/solid-query";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 
 type JoinLobbyInput = {
@@ -8,12 +9,23 @@ type JoinLobbyInput = {
 };
 
 export function createJoinLobbyForm() {
-    return createForm(() => ({
+    const joinLobby = createMutation(() => ({
+        mutationFn: async (value: unknown) => {
+            alert(value);
+        },
+    }));
+
+    const form = createForm(() => ({
         defaultValues: {
             gameMasterName: "",
             nation: "Unset",
             inviteCode: "",
         } satisfies JoinLobbyInput,
         validatorAdapter: zodValidator,
+        onSubmit: async ({ value }) => {
+            return joinLobby.mutateAsync(value);
+        },
     }));
+
+    return { joinLobby, form };
 }

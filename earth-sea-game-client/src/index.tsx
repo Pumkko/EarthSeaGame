@@ -17,7 +17,7 @@ const ManageLobbySpyChat = lazy(() => import("./features/lobby/manageLobby/tabs/
 const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/tabs/TeamsChat"));
 const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/tabs/Options"));
 const AppError = lazy(() => import("./features/error/AppError"));
-const JoinLobby = lazy(() => import("./features/lobby/joinLobby/JoinLobby"));
+const JoinLobby = lazy(() => import("./features/lobby/joinLobby/JoinLobbyForm"));
 
 EnvironmentSchema.parse(import.meta.env);
 

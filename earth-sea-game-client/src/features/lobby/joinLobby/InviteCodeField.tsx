@@ -1,24 +1,23 @@
-import { For } from "solid-js";
-import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
-import { z } from "zod";
 import FormFieldError from "@components/FormFieldErrror";
-
-interface GameMasterFieldProps {
+import { For } from "solid-js";
+import { z } from "zod";
+import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
+interface InviteCodeFieldProps {
     form: ReturnType<typeof createJoinLobbyForm>["form"];
 }
 
-export default function GameMasterField(props: GameMasterFieldProps) {
+export default function InviteCodeField(props: InviteCodeFieldProps) {
     return (
         <props.form.Field
-            name="gameMasterName"
+            name="inviteCode"
             validators={{
-                onChange: z.string().min(1, "Game Master can not be empty"),
+                onChange: z.string().uuid("Invite code must be a valid UUID"),
             }}
             children={(field) => {
                 return (
                     <>
                         <label class="text-white" for={field().name}>
-                            Game Master
+                            Invite Code
                         </label>
                         <input
                             class={`rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
