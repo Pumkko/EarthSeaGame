@@ -8,6 +8,8 @@ import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
 import FormFieldError from "@components/FormFieldErrror";
+import { z } from "zod";
+import { zodValidator } from "@tanstack/zod-form-adapter";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -35,6 +37,7 @@ export default function CreateLobby() {
         onSubmit: async ({ value }) => {
             return createLobby.mutateAsync(value);
         },
+        validatorAdapter: zodValidator,
     }));
 
     return (
@@ -52,7 +55,7 @@ export default function CreateLobby() {
                     <form.Field
                         name="lobbyName"
                         validators={{
-                            onChange: ({ value }) => (value === "" ? "Lobby name can not be empty" : undefined),
+                            onChange: z.string().min(1, "Game Master name can not be empty"),
                         }}
                         children={(field) => (
                             <>
