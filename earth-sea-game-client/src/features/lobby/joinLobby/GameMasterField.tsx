@@ -12,7 +12,7 @@ export default function GameMasterField(props: GameMasterFieldProps) {
         <props.form.Field
             name="gameMasterName"
             validators={{
-                onChange: z.string().min(1, "Game Master name can not be empty"),
+                onChange: z.string().min(1, "Game Master can not be empty"),
             }}
             children={(field) => {
                 return (
