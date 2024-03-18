@@ -1,3 +1,4 @@
+import { signalRConnection } from "@lib/SignalR";
 import { createForm } from "@tanstack/solid-form";
 import { createMutation } from "@tanstack/solid-query";
 import { zodValidator } from "@tanstack/zod-form-adapter";
@@ -10,8 +11,8 @@ type JoinLobbyInput = {
 
 export function createJoinLobbyForm() {
     const joinLobby = createMutation(() => ({
-        mutationFn: async (value: unknown) => {
-            alert(value);
+        mutationFn: async (value: JoinLobbyInput) => {
+            signalRConnection.send("JoinLobby", value);
         },
     }));
 

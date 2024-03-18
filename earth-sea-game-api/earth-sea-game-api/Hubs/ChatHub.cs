@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using EarthSeaGameApi.Inputs;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace EarthSeaGameApi.Hubs
 {
@@ -24,5 +26,11 @@ namespace EarthSeaGameApi.Hubs
         public Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
                     .SendAsync("echo", name, $"{message} (echo from server)");
+
+        public Task JoinLobby([FromBody] JoinLobby joinLobby)
+        {
+            return Clients.Client(Context.ConnectionId)
+                .SendAsync("joinLobby", "Done");
+        }
     }
 }
