@@ -7,6 +7,7 @@ import Routes from "@lib/Routes";
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
+import FormFieldError from "@components/FormFieldErrror";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -64,13 +65,7 @@ export default function CreateLobby() {
                                     placeholder="Lobby Name"
                                 />
 
-                                <For each={field().state.meta.errors}>
-                                    {(error) => (
-                                        <em class="text-red-400" role="alert">
-                                            {error}
-                                        </em>
-                                    )}
-                                </For>
+                                <For each={field().state.meta.errors}>{(error) => <FormFieldError error={error} />}</For>
                             </>
                         )}
                     />
