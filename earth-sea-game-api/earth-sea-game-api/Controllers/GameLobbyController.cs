@@ -15,6 +15,10 @@ using Azure.Security.KeyVault.Keys;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System;
+using Azure.Security.KeyVault.Keys.Cryptography;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 
 namespace EarthSeaGameApi.Controllers
 {
@@ -87,26 +91,29 @@ namespace EarthSeaGameApi.Controllers
 
         [HttpPost]
         [Route("join")]
-        public ActionResult JoinLobby([FromBody] JoinLobby joinLobby)
+        public async Task<ActionResult> JoinLobby([FromBody] JoinLobby joinLobby)
         {
             try
             {
-                var factoryProvider = new CustomCryptoProviderFactory();
-                var cred = new SigningCredentials(new RsaSecurityKey(RSA.Create()), SecurityAlgorithms.RsaSha256)
+                var claims = new[]
                 {
-                    CryptoProviderFactory = factoryProvider
-                };
-                var jwtTokenDescriptor = new SecurityTokenDescriptor()
-                {
-                    Issuer = "https://localhost:7071",
-                    Audience = "http://localhost:5173",
-                    SigningCredentials = cred,
+                    new Claim(JwtRegisteredClaimNames.Iss,"https://localhost:7071"),
+                    new Claim(JwtRegisteredClaimNames.Aud, "http://localhost:5173"),
+                    new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.Now.AddSeconds(10).ToUnixTimeSeconds().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                var jwtHandler = new JwtSecurityTokenHandler();
-                var token = jwtHandler.CreateJwtSecurityToken(jwtTokenDescriptor);
-                var tokenString = jwtHandler.WriteToken(token);
+                var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
+                var payload = JsonSerializer.Serialize(new JwtPayload(claims));
+                var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
 
+
+                var cryptoClient = new CryptographyClient(new Uri("https://earth-sea-game-kv.vault.azure.net/keys/earth-sea-game-kv-key"), new DefaultAzureCredential());
+
+                var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
+                var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;
+
+                var token = $"{headerAndPayload}.{Base64UrlEncoder.Encode(signature)}";
                 return Ok(token);
             }
             catch(Exception e)
