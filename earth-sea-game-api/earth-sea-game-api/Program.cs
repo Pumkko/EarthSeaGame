@@ -28,6 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidIssuer = "https://localhost:7071",
         ValidAudience = "http://localhost:5173",
         IssuerSigningKey = new RsaSecurityKey(signingKey),
+        ValidateLifetime = true,
     };
 });
 

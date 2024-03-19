@@ -95,16 +95,10 @@ namespace EarthSeaGameApi.Controllers
         {
             try
             {
-                var claims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Iss,"https://localhost:7071"),
-                    new Claim(JwtRegisteredClaimNames.Aud, "http://localhost:5173"),
-                    new Claim(JwtRegisteredClaimNames.Exp, DateTimeOffset.Now.AddSeconds(10).ToUnixTimeSeconds().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
+                var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", [], DateTime.UtcNow, DateTime.UtcNow.AddSeconds(10));
 
                 var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
-                var payload = JsonSerializer.Serialize(new JwtPayload(claims));
+                var payload = JsonSerializer.Serialize(jwt.Payload);
                 var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
 
 
