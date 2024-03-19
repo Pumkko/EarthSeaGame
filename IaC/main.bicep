@@ -21,3 +21,11 @@ module cosmosDb 'cosmosDb.bicep' = {
     location: location
   }
 }
+
+module keyVault 'keyVault.bicep' = {
+  scope: resourceGroup
+  name: 'keyVaultModule'
+  params: {
+    location: location
+  }
+}

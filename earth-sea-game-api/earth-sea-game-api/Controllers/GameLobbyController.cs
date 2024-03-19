@@ -10,6 +10,11 @@ using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Inputs;
 using System.ComponentModel;
 using Microsoft.Azure.Cosmos.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using Azure.Security.KeyVault.Keys;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
+using System;
 
 namespace EarthSeaGameApi.Controllers
 {
@@ -70,6 +75,46 @@ namespace EarthSeaGameApi.Controllers
             return Ok(response.Resource);
 
 
+        }
+
+        [HttpGet]
+        [Route("test")]
+        [Authorize]
+        public ActionResult Test()
+        {
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("join")]
+        public ActionResult JoinLobby([FromBody] JoinLobby joinLobby)
+        {
+            try
+            {
+                var factoryProvider = new CustomCryptoProviderFactory();
+                var cred = new SigningCredentials(new RsaSecurityKey(RSA.Create()), SecurityAlgorithms.RsaSha256)
+                {
+                    CryptoProviderFactory = factoryProvider
+                };
+                var jwtTokenDescriptor = new SecurityTokenDescriptor()
+                {
+                    Issuer = "https://localhost:7071",
+                    Audience = "http://localhost:5173",
+                    SigningCredentials = cred,
+                };
+
+                var jwtHandler = new JwtSecurityTokenHandler();
+                var token = jwtHandler.CreateJwtSecurityToken(jwtTokenDescriptor);
+                var tokenString = jwtHandler.WriteToken(token);
+
+                return Ok(token);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return Ok();
         }
     }
 }
