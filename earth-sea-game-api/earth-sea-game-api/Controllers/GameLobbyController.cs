@@ -93,29 +93,19 @@ namespace EarthSeaGameApi.Controllers
         [Route("join")]
         public async Task<ActionResult> JoinLobby([FromBody] JoinLobby joinLobby)
         {
-            try
-            {
-                var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", [], DateTime.UtcNow, DateTime.UtcNow.AddSeconds(10));
+            var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", [], DateTime.UtcNow, DateTime.UtcNow.AddSeconds(30));
 
-                var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
-                var payload = JsonSerializer.Serialize(jwt.Payload);
-                var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
+            var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
+            var payload = JsonSerializer.Serialize(jwt.Payload);
+            var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
 
+            var cryptoClient = new CryptographyClient(new Uri("https://earth-sea-game-kv.vault.azure.net/keys/earth-sea-game-kv-key"), new DefaultAzureCredential());
 
-                var cryptoClient = new CryptographyClient(new Uri("https://earth-sea-game-kv.vault.azure.net/keys/earth-sea-game-kv-key"), new DefaultAzureCredential());
+            var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
+            var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;
 
-                var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
-                var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;
-
-                var token = $"{headerAndPayload}.{Base64UrlEncoder.Encode(signature)}";
-                return Ok(token);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return Ok();
+            var token = $"{headerAndPayload}.{Base64UrlEncoder.Encode(signature)}";
+            return Ok(token);
         }
     }
 }
