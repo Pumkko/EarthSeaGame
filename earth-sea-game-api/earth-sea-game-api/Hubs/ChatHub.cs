@@ -27,7 +27,7 @@ namespace EarthSeaGameApi.Hubs
             Clients.Client(Context.ConnectionId)
                     .SendAsync("echo", name, $"{message} (echo from server)");
 
-        public Task JoinLobby([FromBody] JoinLobby joinLobby)
+        public Task JoinLobby([FromBody] JoinLobbyInput joinLobby)
         {
             return Clients.Client(Context.ConnectionId)
                 .SendAsync("joinLobby", "Done");

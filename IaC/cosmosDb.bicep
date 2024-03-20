@@ -10,6 +10,9 @@ resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15'= {
   location: location
   properties: {
     databaseAccountOfferType: 'Standard' 
+    consistencyPolicy: {
+      defaultConsistencyLevel:  'Strong'
+    }
     locations: [
       {
         locationName: 'East Us'

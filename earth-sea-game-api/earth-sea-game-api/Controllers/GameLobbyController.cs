@@ -19,6 +19,7 @@ using Azure.Security.KeyVault.Keys.Cryptography;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Azure;
 
 namespace EarthSeaGameApi.Controllers
 {
@@ -46,7 +47,8 @@ namespace EarthSeaGameApi.Controllers
         }
 
 
-        [HttpGet("my")]
+        [HttpGet]
+        [Route("my")]
         public async Task<IActionResult> GetMyLobby()
         {
             using var setIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
@@ -64,16 +66,35 @@ namespace EarthSeaGameApi.Controllers
         }
 
         [HttpPost]
+        [Route("my")]
         public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobby gameLobbyToCreate)
         {
             var gameLobbyModel = new GameLobby()
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 LobbyName = gameLobbyToCreate.LobbyName,
                 GameMaster = "Pumkko",
-                EarthNationInviteCode = Guid.NewGuid(),
-                EasternIslandInviteCode = Guid.NewGuid(),
-                SeaNationInviteCode = Guid.NewGuid()
+                EarthNation = new Nation()
+                {
+                    InviteCode = Guid.NewGuid(),
+                    Name = ENation.EarthNation,
+                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
+                    InviteCodeAlreadyUsed = false
+                },
+                SeaNation = new Nation()
+                {
+                    InviteCode = Guid.NewGuid(),
+                    Name = ENation.SeaNation,
+                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
+                    InviteCodeAlreadyUsed = false
+                },
+                EasternIsland = new Nation()
+                {
+                    InviteCode = Guid.NewGuid(),
+                    Name = ENation.EasternIsland,
+                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
+                    InviteCodeAlreadyUsed = false
+                }
             };
             var response = await gameLobbyContainer.CreateItemAsync(gameLobbyModel, new PartitionKey(gameLobbyModel.GameMaster));
             return Ok(response.Resource);
@@ -89,11 +110,69 @@ namespace EarthSeaGameApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// I will split that function into smaller chunks one day but that day is not today
+        /// </summary>
+        /// <param name="joinLobbyInput"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("join")]
-        public async Task<ActionResult> JoinLobby([FromBody] JoinLobby joinLobby)
+        public async Task<ActionResult> JoinLobby([FromBody] JoinLobbyInput joinLobbyInput)
         {
-            var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", [], DateTime.UtcNow, DateTime.UtcNow.AddSeconds(30));
+            using var getLobbyIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
+                   .Where(g => g.GameMaster == joinLobbyInput.GameMasterName)
+                   .ToFeedIterator();
+
+            if (!getLobbyIterator.HasMoreResults)
+            {
+                return Unauthorized();
+            }
+
+            var currentPage = await getLobbyIterator.ReadNextAsync();
+            var gameMasterLobby = currentPage.SingleOrDefault();
+
+            if (gameMasterLobby == null)
+            {
+                return Unauthorized();
+            }
+
+            var lobbyNationToJoin = joinLobbyInput.Nation switch
+            {
+                ENation.SeaNation => gameMasterLobby.SeaNation,
+                ENation.EarthNation => gameMasterLobby.EarthNation,
+                ENation.EasternIsland => gameMasterLobby.EasternIsland,
+                _ => throw new Exception("Unknown Nation in input yet input passed model validation")
+            };
+
+            if (lobbyNationToJoin.InviteCode == joinLobbyInput.InviteCode && !lobbyNationToJoin.InviteCodeAlreadyUsed)
+            {
+                var expiringDate = lobbyNationToJoin.InviteCodeCreationDate.Add(Nation.InviteCodeLifeTime);
+                if (DateTimeOffset.UtcNow > expiringDate)
+                {
+                    return Unauthorized();
+                }
+            }
+            else
+            {
+                return Unauthorized();
+            }
+
+            var inviteCodeAlreadyUsedPropCamelCase = JsonNamingPolicy.CamelCase.ConvertName(nameof(Nation.InviteCodeAlreadyUsed));
+            var path = JsonNamingPolicy.CamelCase.ConvertName($"/{joinLobbyInput.Nation}/{inviteCodeAlreadyUsedPropCamelCase}");
+            var patchOperations = new List<PatchOperation>()
+            {
+                PatchOperation.Add(path, true)
+            };
+            await gameLobbyContainer.PatchItemAsync<GameLobby>(gameMasterLobby.Id, new PartitionKey(gameMasterLobby.GameMaster), patchOperations);
+
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMasterLobby.GameMaster}:{lobbyNationToJoin.Name}")
+            };
+
+            var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
 
             var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
             var payload = JsonSerializer.Serialize(jwt.Payload);
@@ -103,8 +182,8 @@ namespace EarthSeaGameApi.Controllers
 
             var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
             var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;
-
             var token = $"{headerAndPayload}.{Base64UrlEncoder.Encode(signature)}";
+
             return Ok(token);
         }
     }
