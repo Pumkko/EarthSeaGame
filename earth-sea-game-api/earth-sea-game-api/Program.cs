@@ -1,6 +1,7 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Keys;
 using EarthSeaGameApi.Hubs;
+using EarthSeaGameApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -42,6 +43,9 @@ builder.Services.AddCors(corsSetup =>
         policy.AllowCredentials();
     });
 });
+
+builder.Services.AddScoped<IGameLobbyService, GameLobbyService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services
     .AddSignalR()

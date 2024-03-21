@@ -20,48 +20,24 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Azure;
+using EarthSeaGameApi.Services;
 
 namespace EarthSeaGameApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameLobbyController : ControllerBase
+    public class GameLobbyController(IGameLobbyService gameLobbyService, IJwtService jwtService) : ControllerBase
     {
-        private readonly Microsoft.Azure.Cosmos.Container gameLobbyContainer;
-
-        public GameLobbyController(IConfiguration configuration)
-        {
-            var databaseConfig = configuration.GetSection(CosmosDbConfig.ConfigKey).Get<CosmosDbConfig>();
-            if (databaseConfig == null)
-            {
-                throw new Exception("Bad configuration CosmosDbConfig");
-            }
-
-            var cosmosClient = new CosmosClientBuilder(databaseConfig.DatabaseConnectionString)
-               .WithSerializerOptions(new CosmosSerializationOptions()
-               {
-                   PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
-               }).Build();
-
-            gameLobbyContainer = cosmosClient.GetContainer(databaseConfig.DatabaseName, databaseConfig.ContainerName);
-        }
-
-
         [HttpGet]
         [Route("my")]
         public async Task<IActionResult> GetMyLobby()
         {
-            using var setIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
-                                .Where(g => g.GameMaster == "Pumkko")
-                                .ToFeedIterator();
-
-            if (!setIterator.HasMoreResults)
+            var myLobby = await gameLobbyService.GetLobbyForGameMasterAsync("Pumkko");
+            if(myLobby == null)
             {
                 return NoContent();
             }
 
-            var currentPage = await setIterator.ReadNextAsync();
-            var myLobby = currentPage.SingleOrDefault();
             return Ok(myLobby);
         }
 
@@ -69,37 +45,8 @@ namespace EarthSeaGameApi.Controllers
         [Route("my")]
         public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobby gameLobbyToCreate)
         {
-            var gameLobbyModel = new GameLobby()
-            {
-                Id = Guid.NewGuid().ToString(),
-                LobbyName = gameLobbyToCreate.LobbyName,
-                GameMaster = "Pumkko",
-                EarthNation = new Nation()
-                {
-                    InviteCode = Guid.NewGuid(),
-                    Name = ENation.EarthNation,
-                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
-                    InviteCodeAlreadyUsed = false
-                },
-                SeaNation = new Nation()
-                {
-                    InviteCode = Guid.NewGuid(),
-                    Name = ENation.SeaNation,
-                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
-                    InviteCodeAlreadyUsed = false
-                },
-                EasternIsland = new Nation()
-                {
-                    InviteCode = Guid.NewGuid(),
-                    Name = ENation.EasternIsland,
-                    InviteCodeCreationDate = DateTimeOffset.UtcNow,
-                    InviteCodeAlreadyUsed = false
-                }
-            };
-            var response = await gameLobbyContainer.CreateItemAsync(gameLobbyModel, new PartitionKey(gameLobbyModel.GameMaster));
-            return Ok(response.Resource);
-
-
+            var createdLobby = await gameLobbyService.CreateLobbyForGameMasterAsync(gameLobbyToCreate, "Pumkko");
+            return Ok(createdLobby);
         }
 
         [HttpGet]
@@ -110,27 +57,11 @@ namespace EarthSeaGameApi.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// I will split that function into smaller chunks one day but that day is not today
-        /// </summary>
-        /// <param name="joinLobbyInput"></param>
-        /// <returns></returns>
         [HttpPost]
         [Route("join")]
         public async Task<ActionResult> JoinLobby([FromBody] JoinLobbyInput joinLobbyInput)
         {
-            using var getLobbyIterator = gameLobbyContainer.GetItemLinqQueryable<GameLobby>()
-                   .Where(g => g.GameMaster == joinLobbyInput.GameMasterName)
-                   .ToFeedIterator();
-
-            if (!getLobbyIterator.HasMoreResults)
-            {
-                return Unauthorized();
-            }
-
-            var currentPage = await getLobbyIterator.ReadNextAsync();
-            var gameMasterLobby = currentPage.SingleOrDefault();
-
+            var gameMasterLobby = await gameLobbyService.GetLobbyForGameMasterAsync(joinLobbyInput.GameMasterName);
             if (gameMasterLobby == null)
             {
                 return Unauthorized();
@@ -157,33 +88,8 @@ namespace EarthSeaGameApi.Controllers
                 return Unauthorized();
             }
 
-            var inviteCodeAlreadyUsedPropCamelCase = JsonNamingPolicy.CamelCase.ConvertName(nameof(Nation.InviteCodeAlreadyUsed));
-            var path = JsonNamingPolicy.CamelCase.ConvertName($"/{joinLobbyInput.Nation}/{inviteCodeAlreadyUsedPropCamelCase}");
-            var patchOperations = new List<PatchOperation>()
-            {
-                PatchOperation.Add(path, true)
-            };
-            await gameLobbyContainer.PatchItemAsync<GameLobby>(gameMasterLobby.Id, new PartitionKey(gameMasterLobby.GameMaster), patchOperations);
-
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMasterLobby.GameMaster}:{lobbyNationToJoin.Name}")
-            };
-
-            var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
-
-            var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
-            var payload = JsonSerializer.Serialize(jwt.Payload);
-            var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
-
-            var cryptoClient = new CryptographyClient(new Uri("https://earth-sea-game-kv.vault.azure.net/keys/earth-sea-game-kv-key"), new DefaultAzureCredential());
-
-            var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
-            var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;
-            var token = $"{headerAndPayload}.{Base64UrlEncoder.Encode(signature)}";
-
+            await gameLobbyService.JoinLobbyAsync(lobbyNationToJoin.Name, gameMasterLobby.Id, gameMasterLobby.GameMaster);
+            var token = await jwtService.GenerateTokenForGameAsync(gameMasterLobby.GameMaster, lobbyNationToJoin.Name);
             return Ok(token);
         }
     }

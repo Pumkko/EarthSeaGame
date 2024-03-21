@@ -3,9 +3,9 @@
 
     public static class ENation
     {
-        public const string EarthNation = "earthNation";
-        public const string SeaNation = "seaNation";
-        public const string EasternIsland = "easternIsland";
+        public const string EarthNation = "EarthNation";
+        public const string SeaNation = "SeaNation";
+        public const string EasternIsland = "EasternIsland";
     }
 
     public class Nation
