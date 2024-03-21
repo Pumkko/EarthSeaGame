@@ -1,9 +1,11 @@
 ﻿using EarthSeaGameApi.Inputs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EarthSeaGameApi.Hubs
-{ 
+{
+    [Authorize]
     public class ChatHub : Hub
     {
         private const string EARTH_SEA_GROUP = "EarthSeaGroup";

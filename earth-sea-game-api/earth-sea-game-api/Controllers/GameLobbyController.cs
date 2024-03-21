@@ -1,25 +1,7 @@
 using EarthSeaGameApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos.Fluent;
-using Microsoft.Azure.Cosmos;
-using Microsoft.Identity.Web.Resource;
-using Azure.Identity;
-using System.Configuration;
-using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Inputs;
-using System.ComponentModel;
-using Microsoft.Azure.Cosmos.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using Azure.Security.KeyVault.Keys;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using System;
-using Azure.Security.KeyVault.Keys.Cryptography;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
-using Microsoft.Extensions.Azure;
 using EarthSeaGameApi.Services;
 
 namespace EarthSeaGameApi.Controllers
@@ -47,14 +29,6 @@ namespace EarthSeaGameApi.Controllers
         {
             var createdLobby = await gameLobbyService.CreateLobbyForGameMasterAsync(gameLobbyToCreate, "Pumkko");
             return Ok(createdLobby);
-        }
-
-        [HttpGet]
-        [Route("test")]
-        [Authorize]
-        public ActionResult Test()
-        {
-            return Ok();
         }
 
         [HttpPost]

@@ -14,9 +14,10 @@ namespace EarthSeaGameApi.Services
         public async Task<string> GenerateTokenForGameAsync(string gameMaster, string nation)
         {
             var claims = new[]
-                       {
+            {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMaster}:{nation}")
+                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMaster}:{nation}"),
+                new Claim(JwtRegisteredClaimNames.Name, $"{gameMaster}:{nation}")
             };
 
             var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));

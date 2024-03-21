@@ -1,10 +1,11 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Keys;
+using EarthSeaGameApi;
 using EarthSeaGameApi.Hubs;
 using EarthSeaGameApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         IssuerSigningKey = new RsaSecurityKey(signingKey),
         ValidateLifetime = true,
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            // If the request is for our hub...
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/hubs/chat")))
+            {
+                // Read the token out of the query string
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddCors(corsSetup =>
@@ -51,6 +70,8 @@ builder.Services
     .AddSignalR()
     .AddAzureSignalR();
 
+builder.Services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -61,16 +82,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("SIGNALR_POLICY");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors("SIGNALR_POLICY");
-app.UseAuthorization();
 
 app.MapControllers();
 
 
-app.MapHub<ChatHub>("/chat");
+app.MapHub<ChatHub>("/hubs/chat");
 
 app.Run();
