@@ -10,9 +10,9 @@ export default function ManageLobbyOptions() {
     return (
         <div>
             <h1>Invite your friends</h1>
-            <div>Earth Nation Code : {query.data?.earthNationInviteCode}</div>
-            <div>Sea Nation Code : {query.data?.seaNationInviteCode}</div>
-            <div>Eastern Island C ode : {query.data?.easternIslandInviteCode}</div>
+            <div>Earth Nation Code : {query.data?.earthNation.inviteCode}</div>
+            <div>Sea Nation Code : {query.data?.seaNation.inviteCode}</div>
+            <div>Eastern Island Code : {query.data?.easternIsland.inviteCode}</div>
         </div>
     );
 }
