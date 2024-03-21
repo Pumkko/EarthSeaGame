@@ -1,10 +1,12 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Keys;
 using EarthSeaGameApi;
+using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Hubs;
 using EarthSeaGameApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,41 +18,43 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    var kvUri = new Uri("https://earth-sea-game-kv.vault.azure.net/");
-
-    var credentials = new DefaultAzureCredential();
-    var keyClient = new KeyClient(kvUri, credentials);
-    var key = keyClient.GetKey("earth-sea-game-kv-key");
-    var signingKey = key.Value.Key.ToRSA();
-
-    options.TokenValidationParameters = new TokenValidationParameters()
+builder.Services.AddAuthentication()
+    .AddJwtBearer(AppAuthenticationScheme.EarthSeaGameBearer, options =>
     {
-        ValidIssuer = "https://localhost:7071",
-        ValidAudience = "http://localhost:5173",
-        IssuerSigningKey = new RsaSecurityKey(signingKey),
-        ValidateLifetime = true,
-    };
+        var kvUri = new Uri("https://earth-sea-game-kv.vault.azure.net/");
 
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = context =>
+        var credentials = new DefaultAzureCredential();
+        var keyClient = new KeyClient(kvUri, credentials);
+        var key = keyClient.GetKey("earth-sea-game-kv-key");
+        var signingKey = key.Value.Key.ToRSA();
+
+        options.TokenValidationParameters = new TokenValidationParameters()
         {
-            var accessToken = context.Request.Query["access_token"];
+            ValidIssuer = "https://localhost:7071",
+            ValidAudience = "http://localhost:5173",
+            IssuerSigningKey = new RsaSecurityKey(signingKey),
+            ValidateLifetime = true,
+        };
 
-            // If the request is for our hub...
-            var path = context.HttpContext.Request.Path;
-            if (!string.IsNullOrEmpty(accessToken) &&
-                (path.StartsWithSegments("/hubs/chat")))
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
             {
-                // Read the token out of the query string
-                context.Token = accessToken;
+                var accessToken = context.Request.Query["access_token"];
+
+                // If the request is for our hub...
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    (path.StartsWithSegments("/hubs/chat")))
+                {
+                    // Read the token out of the query string
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
             }
-            return Task.CompletedTask;
-        }
-    };
-});
+        };
+    })
+    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"), jwtBearerScheme: AppAuthenticationScheme.AzureAdBearer);
 
 builder.Services.AddCors(corsSetup =>
 {

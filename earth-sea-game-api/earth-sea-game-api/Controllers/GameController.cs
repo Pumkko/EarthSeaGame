@@ -5,36 +5,25 @@ using EarthSeaGameApi.Inputs;
 using EarthSeaGameApi.Services;
 using Microsoft.AspNetCore.SignalR;
 using EarthSeaGameApi.Hubs;
+using System.Diagnostics.CodeAnalysis;
+using EarthSeaGameApi.Configs;
 
 namespace EarthSeaGameApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class GameLobbyController(IGameLobbyService gameLobbyService, IJwtService jwtService, IHubContext<ChatHub> hubContext) : ControllerBase
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = AppAuthenticationScheme.EarthSeaGameBearer)]
+    public class GameController(IGameLobbyService gameLobbyService, IJwtService jwtService) : ControllerBase
     {
         [HttpGet]
-        [Route("my")]
-        public async Task<IActionResult> GetMyLobby()
+        public IActionResult Ping()
         {
-            var myLobby = await gameLobbyService.GetLobbyForGameMasterAsync("Pumkko");
-            if(myLobby == null)
-            {
-                return NoContent();
-            }
-
-            return Ok(myLobby);
+            return Ok();
         }
 
         [HttpPost]
-        [Route("my")]
-        public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobby gameLobbyToCreate)
-        {
-            var createdLobby = await gameLobbyService.CreateLobbyForGameMasterAsync(gameLobbyToCreate, "Pumkko");
-            return Ok(createdLobby);
-        }
-
-        [HttpPost]
-        [Route("join")]
+        [Route("lobby/join")]
+        [AllowAnonymous]
         public async Task<ActionResult> JoinLobby([FromBody] JoinLobbyInput joinLobbyInput)
         {
             var gameMasterLobby = await gameLobbyService.GetLobbyForGameMasterAsync(joinLobbyInput.GameMasterName);

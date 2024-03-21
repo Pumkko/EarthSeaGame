@@ -1,4 +1,4 @@
-﻿namespace EarthSeaGameApi.Services
+﻿namespace EarthSeaGameApi.Configs
 {
     public struct AppClaims
     {
