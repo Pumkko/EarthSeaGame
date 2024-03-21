@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EarthSeaGameApi.Inputs;
 using EarthSeaGameApi.Services;
+using Microsoft.AspNetCore.SignalR;
+using EarthSeaGameApi.Hubs;
 
 namespace EarthSeaGameApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameLobbyController(IGameLobbyService gameLobbyService, IJwtService jwtService) : ControllerBase
+    public class GameLobbyController(IGameLobbyService gameLobbyService, IJwtService jwtService, IHubContext<ChatHub> hubContext) : ControllerBase
     {
         [HttpGet]
         [Route("my")]
@@ -61,6 +63,7 @@ namespace EarthSeaGameApi.Controllers
             {
                 return Unauthorized();
             }
+
 
             await gameLobbyService.JoinLobbyAsync(lobbyNationToJoin.Name, gameMasterLobby.Id, gameMasterLobby.GameMaster);
             var token = await jwtService.GenerateTokenForGameAsync(gameMasterLobby.GameMaster, lobbyNationToJoin.Name);

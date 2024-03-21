@@ -17,7 +17,10 @@ namespace EarthSeaGameApi.Services
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Sub, $"{gameMaster}:{nation}"),
-                new Claim(JwtRegisteredClaimNames.Name, $"{gameMaster}:{nation}")
+                new Claim(JwtRegisteredClaimNames.Name, $"{gameMaster}:{nation}"),
+                new Claim (AppClaims.GameMasterName, gameMaster),
+                new Claim(AppClaims.Nation, nation),
+                new Claim(AppClaims.IsGameMaster, "false")
             };
 
             var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
