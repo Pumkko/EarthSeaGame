@@ -35,7 +35,7 @@ namespace EarthSeaGameApi.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 LobbyName = gameLobbyToCreate.LobbyName,
-                GameMaster = "Pumkko",
+                GameMaster = gameMasterName,
                 EarthNation = new Nation()
                 {
                     InviteCode = Guid.NewGuid(),

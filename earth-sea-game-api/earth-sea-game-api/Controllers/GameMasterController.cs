@@ -28,13 +28,20 @@ namespace EarthSeaGameApi.Controllers
                 return NoContent();
             }
 
-            return Ok(myLobby);
+            var gameMasterToken = await jwtService.GenerateTokenForGameMasterAsync(connectedUser);
+
+            var output = new GameMasterLobbyOutput()
+            {
+                AccessToken = gameMasterToken,
+                GameLobby = myLobby
+            };
+
+            return Ok(output);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateNewLobby([FromBody] CreateGameLobbyInput gameLobbyToCreate)
         {
-
             var connectedUser = User.Claims.SingleOrDefault(c => c.Type == ClaimValueTypes.Email)?.Value;
             if (connectedUser == null)
             {
@@ -44,10 +51,10 @@ namespace EarthSeaGameApi.Controllers
             var createdLobby = await gameLobbyService.CreateLobbyForGameMasterAsync(gameLobbyToCreate, connectedUser);
             var gameMasterToken = await jwtService.GenerateTokenForGameMasterAsync(connectedUser);
 
-            var output = new CreateGameLobbyOutput()
+            var output = new GameMasterLobbyOutput()
             {
                 AccessToken = gameMasterToken,
-                CreatedGameLobby = createdLobby
+                GameLobby = createdLobby
             };
 
             return Ok(output);
