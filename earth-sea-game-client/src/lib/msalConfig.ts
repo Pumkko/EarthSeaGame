@@ -1,8 +1,4 @@
-import { Configuration, EventType, LogLevel, PublicClientApplication } from "@azure/msal-browser";
-
-export function loggerCallback(_: LogLevel, message: string) {
-    console.log(message);
-}
+import { Configuration, PublicClientApplication } from "@azure/msal-browser";
 
 export const msalConfig: Configuration = {
     auth: {
@@ -20,17 +16,9 @@ export const loginRequest = {
     scopes: [import.meta.env.VITE_AZURE_AD_API_SCOPE],
 };
 
-export const msalInstance = new PublicClientApplication(msalConfig);
+export const MsalSessionKey = {
+    accessToken: "msal:access_token",
+    idToken: "msal:id_token",
+};
 
-msalInstance.addEventCallback((event) => {
-    if (
-        (event.eventType === EventType.LOGIN_SUCCESS ||
-            event.eventType === EventType.ACQUIRE_TOKEN_SUCCESS ||
-            event.eventType === EventType.SSO_SILENT_SUCCESS) &&
-        event.payload !== null &&
-        "account" in event.payload &&
-        event.payload.account
-    ) {
-        msalInstance.setActiveAccount(event.payload.account);
-    }
-});
+export const msalInstance = new PublicClientApplication(msalConfig);

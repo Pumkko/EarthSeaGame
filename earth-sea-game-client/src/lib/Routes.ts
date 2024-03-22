@@ -1,13 +1,12 @@
 const Routes = {
     startingMenu: "/",
     joinLobby: "/lobby/join",
-    myLobby: {
+    manageLobby: {
         root: "/lobby/my",
-        home: "/",
+        option: "/",
         spyChat: "chat/spy",
         teamsChat: "chat/teams",
     },
-    createLobby: "/lobby/create",
     error: "/error/app",
 };
 

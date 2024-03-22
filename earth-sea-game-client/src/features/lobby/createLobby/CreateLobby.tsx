@@ -2,31 +2,37 @@ import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
-import { useNavigate } from "@solidjs/router";
-import Routes from "@lib/Routes";
 import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
 import FormFieldError from "@components/FormFieldErrror";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-form-adapter";
+import { loginRequest, msalInstance } from "@lib/msalConfig";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
 };
 
 export default function CreateLobby() {
-    const navigate = useNavigate();
     const queryClient = useQueryClient();
 
     const createLobby = createMutation(() => ({
         mutationFn: async (lobby: CreateLobbyInput) => {
-            const targetUrl = new URL("GameLobby", import.meta.env.VITE_API_ROOT_URL);
-            return axios.post<GameLobby>(targetUrl.href, lobby);
+            const silentLogin = await msalInstance.acquireTokenSilent(loginRequest);
+            const token = silentLogin.accessToken;
+
+            const targetUrl = new URL("api/game/my", import.meta.env.VITE_API_ROOT_URL);
+            return axios.post<GameLobby>(targetUrl.href, lobby, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         },
-        onSuccess: (response) => {
-            queryClient.setQueryData(QueryKeys.lobby, response.data);
-            navigate(Routes.myLobby.root);
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: QueryKeys.lobby,
+            });
         },
     }));
 
@@ -41,7 +47,7 @@ export default function CreateLobby() {
     }));
 
     return (
-        <div class="h-screen flex flex-col items-center bg-submarine bg-cover ">
+        <div class="flex flex-col items-center">
             <PageTitle>Create Lobby</PageTitle>
             <form.Provider>
                 <form
@@ -60,7 +66,7 @@ export default function CreateLobby() {
                         children={(field) => (
                             <>
                                 <input
-                                    class={`rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
+                                    class={`text-black rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
                                     name={field().name}
                                     value={field().state.value}
                                     onBlur={field().handleBlur}

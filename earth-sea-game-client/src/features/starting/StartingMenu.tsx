@@ -2,22 +2,19 @@ import { useNavigate } from "@solidjs/router";
 import StartingMenuButton from "./components/StartingMenuButton";
 import Routes from "@lib/Routes";
 import PageTitle from "@components/PageTitle";
-import { msalInstance, loginRequest } from "@lib/msalConfig";
+import { msalInstance, loginRequest, MsalSessionKey } from "@lib/msalConfig";
 
 export default function StartingMenu() {
     const navigate = useNavigate();
-
     const onCreateOrManageLobby = async () => {
-        await msalInstance.initialize();
         msalInstance
             .loginPopup(loginRequest)
             .then((loginResponse) => {
-                console.log("id_token acquired at: " + new Date().toString());
-                console.log(loginResponse);
+                sessionStorage.setItem(MsalSessionKey.accessToken, loginResponse.accessToken);
+                sessionStorage.setItem(MsalSessionKey.idToken, loginResponse.idToken);
 
-                if (msalInstance.getActiveAccount()) {
-                    console.log("Alles gut");
-                }
+                msalInstance.setActiveAccount(loginResponse.account);
+                navigate(Routes.manageLobby.root);
             })
             .catch((error) => {
                 console.log(error);

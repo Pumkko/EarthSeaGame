@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 import { QueryKeys } from "./QueryKeys";
 import axios from "axios";
 import { GameLobby, GameLobbySchema } from "./schemas/GameLobbySchema";
+import { loginRequest, msalInstance } from "./msalConfig";
 
 export const queryClient = new QueryClient({
     defaultOptions: {
@@ -23,8 +24,15 @@ queryClient.setQueryDefaults(QueryKeys.lobby, {
     staleTime: 2 * 60 * 60 * 1000,
     gcTime: 2 * 60 * 60 * 1000,
     queryFn: async () => {
-        const targetUrl = new URL("GameLobby/my", import.meta.env.VITE_API_ROOT_URL);
-        const response = await axios.get<GameLobby>(targetUrl.href);
+        const silentLogin = await msalInstance.acquireTokenSilent(loginRequest);
+        const token = silentLogin.accessToken;
+
+        const targetUrl = new URL("api/game/my", import.meta.env.VITE_API_ROOT_URL);
+        const response = await axios.get<GameLobby>(targetUrl.href, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         if (response.status === 204) {
             return null;
         }
