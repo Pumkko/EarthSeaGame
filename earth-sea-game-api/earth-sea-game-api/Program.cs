@@ -18,7 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(AppAuthenticationScheme.EarthSeaGameBearer)
     .AddJwtBearer(AppAuthenticationScheme.EarthSeaGameBearer, options =>
     {
         var kvUri = new Uri("https://earth-sea-game-kv.vault.azure.net/");

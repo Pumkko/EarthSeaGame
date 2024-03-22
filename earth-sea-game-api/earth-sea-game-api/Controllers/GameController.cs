@@ -9,7 +9,7 @@ namespace EarthSeaGameApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = AppAuthenticationScheme.EarthSeaGameBearer)]
+    [Authorize]
     public class GameController(IGameLobbyService gameLobbyService, IJwtService jwtService) : ControllerBase
     {
         [HttpGet]
