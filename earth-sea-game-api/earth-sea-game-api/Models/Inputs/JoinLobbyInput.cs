@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace EarthSeaGameApi.Inputs
+namespace EarthSeaGameApi.Models.Inputs
 {
     public class JoinLobbyInput
     {

@@ -3,8 +3,8 @@ using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Azure.Cosmos;
 using EarthSeaGameApi.Models;
 using Microsoft.Azure.Cosmos.Linq;
-using EarthSeaGameApi.Inputs;
 using System.Text.Json;
+using EarthSeaGameApi.Models.Inputs;
 
 namespace EarthSeaGameApi.Services
 {
@@ -29,7 +29,7 @@ namespace EarthSeaGameApi.Services
             gameLobbyContainer = cosmosClient.GetContainer(databaseConfig.DatabaseName, databaseConfig.ContainerName);
         }
 
-        public async Task<GameLobby> CreateLobbyForGameMasterAsync(CreateGameLobby gameLobbyToCreate, string gameMasterName)
+        public async Task<GameLobby> CreateLobbyForGameMasterAsync(CreateGameLobbyInput gameLobbyToCreate, string gameMasterName)
         {
             var gameLobbyModel = new GameLobby()
             {

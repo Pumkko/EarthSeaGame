@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 import { QueryKeys } from "./QueryKeys";
 import axios from "axios";
 import { GameLobby, GameLobbySchema } from "./schemas/GameLobbySchema";
-import { loginRequest, msalInstance } from "./msalConfig";
+import { loginRequest, msalInstance } from "./MsalConfig";
 
 export const queryClient = new QueryClient({
     defaultOptions: {

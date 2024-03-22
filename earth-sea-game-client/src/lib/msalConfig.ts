@@ -16,9 +16,4 @@ export const loginRequest = {
     scopes: [import.meta.env.VITE_AZURE_AD_API_SCOPE],
 };
 
-export const MsalSessionKey = {
-    accessToken: "msal:access_token",
-    idToken: "msal:id_token",
-};
-
 export const msalInstance = new PublicClientApplication(msalConfig);

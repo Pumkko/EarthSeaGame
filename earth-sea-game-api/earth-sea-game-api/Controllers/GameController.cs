@@ -1,12 +1,9 @@
 using EarthSeaGameApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using EarthSeaGameApi.Inputs;
 using EarthSeaGameApi.Services;
-using Microsoft.AspNetCore.SignalR;
-using EarthSeaGameApi.Hubs;
-using System.Diagnostics.CodeAnalysis;
 using EarthSeaGameApi.Configs;
+using EarthSeaGameApi.Models.Inputs;
 
 namespace EarthSeaGameApi.Controllers
 {

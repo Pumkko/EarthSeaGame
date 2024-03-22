@@ -2,13 +2,14 @@ import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
-import { GameLobby } from "@lib/schemas/GameLobbySchema";
+import { CreatedGameLobby } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
 import FormFieldError from "@components/FormFieldErrror";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { loginRequest, msalInstance } from "@lib/msalConfig";
+import { loginRequest, msalInstance } from "@lib/MsalConfig";
+import { TokenSessionKeys } from "@lib/Config";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -23,13 +24,14 @@ export default function CreateLobby() {
             const token = silentLogin.accessToken;
 
             const targetUrl = new URL("api/game/my", import.meta.env.VITE_API_ROOT_URL);
-            return axios.post<GameLobby>(targetUrl.href, lobby, {
+            return axios.post<CreatedGameLobby>(targetUrl.href, lobby, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
         },
-        onSuccess: () => {
+        onSuccess: (response) => {
+            sessionStorage.setItem(TokenSessionKeys.earthSeaGameToken, response.data.accessToken);
             queryClient.invalidateQueries({
                 queryKey: QueryKeys.lobby,
             });

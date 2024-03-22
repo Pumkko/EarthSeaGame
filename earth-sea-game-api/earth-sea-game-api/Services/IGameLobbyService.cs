@@ -1,5 +1,5 @@
-﻿using EarthSeaGameApi.Inputs;
-using EarthSeaGameApi.Models;
+﻿using EarthSeaGameApi.Models;
+using EarthSeaGameApi.Models.Inputs;
 
 namespace EarthSeaGameApi.Services
 {
@@ -8,7 +8,7 @@ namespace EarthSeaGameApi.Services
         public Task<GameLobby?> GetLobbyForGameMasterAsync(string gameMasterName);
 
 
-        public Task<GameLobby> CreateLobbyForGameMasterAsync(CreateGameLobby gameLobbyToCreate, string gameMasterName);
+        public Task<GameLobby> CreateLobbyForGameMasterAsync(CreateGameLobbyInput gameLobbyToCreate, string gameMasterName);
 
         /// <summary>
         /// Join the given lobby Id, invalidate the invite code for the given nation

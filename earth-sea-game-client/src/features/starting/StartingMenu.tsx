@@ -2,7 +2,8 @@ import { useNavigate } from "@solidjs/router";
 import StartingMenuButton from "./components/StartingMenuButton";
 import Routes from "@lib/Routes";
 import PageTitle from "@components/PageTitle";
-import { msalInstance, loginRequest, MsalSessionKey } from "@lib/msalConfig";
+import { msalInstance, loginRequest } from "@lib/MsalConfig";
+import { TokenSessionKeys } from "@lib/Config";
 
 export default function StartingMenu() {
     const navigate = useNavigate();
@@ -10,8 +11,8 @@ export default function StartingMenu() {
         msalInstance
             .loginPopup(loginRequest)
             .then((loginResponse) => {
-                sessionStorage.setItem(MsalSessionKey.accessToken, loginResponse.accessToken);
-                sessionStorage.setItem(MsalSessionKey.idToken, loginResponse.idToken);
+                sessionStorage.setItem(TokenSessionKeys.msalAccessToken, loginResponse.accessToken);
+                sessionStorage.setItem(TokenSessionKeys.msalIdToken, loginResponse.idToken);
 
                 msalInstance.setActiveAccount(loginResponse.account);
                 navigate(Routes.manageLobby.root);

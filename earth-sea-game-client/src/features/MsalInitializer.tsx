@@ -1,4 +1,4 @@
-import { msalInstance } from "@lib/msalConfig";
+import { msalInstance } from "@lib/MsalConfig";
 import { JSXElement, Show, Suspense, createResource } from "solid-js";
 
 export default function MsalInitializer(props: { children: JSXElement }) {

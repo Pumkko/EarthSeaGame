@@ -1,10 +1,9 @@
 ﻿using EarthSeaGameApi.Configs;
-using EarthSeaGameApi.Inputs;
 using EarthSeaGameApi.Models;
+using EarthSeaGameApi.Models.Inputs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Azure.Cosmos;
 using System.Security.Claims;
 
 namespace EarthSeaGameApi.Hubs
@@ -23,7 +22,6 @@ namespace EarthSeaGameApi.Hubs
         public Task JoinEarthThirdNationGroup() => Groups.AddToGroupAsync(Context.ConnectionId, EARTH_EASTERN_GROUP);
 
         public Task JoinSeaThirdNationGroup() => Groups.AddToGroupAsync(Context.ConnectionId, SEA_EASTERN_GROUP);
-
 
         public override async Task OnConnectedAsync()
         {

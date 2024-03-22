@@ -1,6 +1,7 @@
 ﻿using Azure.Identity;
 using Azure.Security.KeyVault.Keys.Cryptography;
 using EarthSeaGameApi.Configs;
+using EarthSeaGameApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,7 +13,7 @@ namespace EarthSeaGameApi.Services
 {
     public class JwtService : IJwtService
     {
-        public async Task<string> GenerateTokenForGameAsync(string gameMaster, string nation)
+        public Task<string> GenerateTokenForGameAsync(string gameMaster, string nation)
         {
             var claims = new[]
             {
@@ -24,6 +25,27 @@ namespace EarthSeaGameApi.Services
                 new Claim(AppClaims.IsGameMaster, "false")
             };
 
+            return GenerateTokenForClaimsAsync(claims);
+        }
+
+        public Task<string> GenerateTokenForGameMasterAsync(string gameMaster)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMaster}:GameMaster"),
+                new Claim(JwtRegisteredClaimNames.Name, gameMaster),
+                new Claim (AppClaims.GameMasterName, gameMaster),
+                new Claim(AppClaims.IsGameMaster, "true")
+            };
+
+            return GenerateTokenForClaimsAsync(claims);
+
+
+        }
+
+        private static async Task<string> GenerateTokenForClaimsAsync(IEnumerable<Claim> claims)
+        {
             var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
 
             var header = @"{""alg"":""RS256"",""typ"":""JWT""}";

@@ -16,4 +16,11 @@ export const GameLobbySchema = z.object({
     easternIsland: NationSchema,
 });
 
+export const CreatedGameLobbySchema = z.object({
+    accessToken: z.string(),
+    createdGameLobby: GameLobbySchema,
+});
+
+export type CreatedGameLobby = z.infer<typeof CreatedGameLobbySchema>;
+
 export type GameLobby = z.infer<typeof GameLobbySchema>;
