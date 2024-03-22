@@ -29,10 +29,8 @@ export default function CreateLobby() {
                 },
             });
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: QueryKeys.gameMasterLobby,
-            });
+        onSuccess: (response) => {
+            queryClient.setQueryData(QueryKeys.gameMasterLobby, response.data);
         },
     }));
 
