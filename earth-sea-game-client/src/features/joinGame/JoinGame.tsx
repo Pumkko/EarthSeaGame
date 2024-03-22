@@ -1,11 +1,11 @@
 import PageTitle from "@components/PageTitle";
 import GameMasterField from "./GameMasterField";
-import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
+import { createJoinLobbyForm } from "./CreateJoinGameForm";
 import PickNationField from "./PickNationField";
 import InviteCodeField from "./InviteCodeField";
 import { Show } from "solid-js";
 
-export default function JoinLobbyForm() {
+export default function JoinGame() {
     const { form, joinLobby } = createJoinLobbyForm();
 
     return (

@@ -1,5 +1,5 @@
 import { For } from "solid-js";
-import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
+import { createJoinLobbyForm } from "./CreateJoinGameForm";
 import { z } from "zod";
 import FormFieldError from "@components/FormFieldErrror";
 

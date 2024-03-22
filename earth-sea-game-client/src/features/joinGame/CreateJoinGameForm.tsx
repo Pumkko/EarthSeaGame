@@ -13,7 +13,7 @@ type JoinLobbyInput = {
 export function createJoinLobbyForm() {
     const joinLobby = createMutation(() => ({
         mutationFn: async (value: JoinLobbyInput) => {
-            const targetUrl = new URL("GameLobby/join", import.meta.env.VITE_API_ROOT_URL);
+            const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
             const response = await axios.post<string>(targetUrl.href, value);
             const token = response.data;
 

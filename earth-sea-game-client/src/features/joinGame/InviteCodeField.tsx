@@ -1,7 +1,7 @@
 import FormFieldError from "@components/FormFieldErrror";
 import { For } from "solid-js";
 import { z } from "zod";
-import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
+import { createJoinLobbyForm } from "./CreateJoinGameForm";
 interface InviteCodeFieldProps {
     form: ReturnType<typeof createJoinLobbyForm>["form"];
 }

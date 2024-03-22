@@ -3,9 +3,9 @@ import { GameLobby } from "@lib/schemas/GameLobbySchema";
 import { createQuery } from "@tanstack/solid-query";
 import { Show, lazy } from "solid-js";
 
-const CreateLobby = lazy(() => import("../CreateLobby"));
+const CreateLobby = lazy(() => import("./CreateLobby"));
 
-export default function ManageLobbyOptions() {
+export default function GameMasterLobbySettings() {
     const query = createQuery<GameLobby | null>(() => ({
         queryKey: QueryKeys.lobby,
     }));

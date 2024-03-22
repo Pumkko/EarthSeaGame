@@ -12,12 +12,12 @@ import MsalInitializer from "./features/MsalInitializer";
 const root = document.getElementById("root");
 
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
-const ManageLobbyRoot = lazy(() => import("./features/lobby/manageLobby/ManageLobby"));
-const ManageLobbySpyChat = lazy(() => import("./features/lobby/manageLobby/tabs/SpyChat"));
-const ManageLobbyTeamsChat = lazy(() => import("./features/lobby/manageLobby/tabs/TeamsChat"));
-const ManageLobbyOptions = lazy(() => import("./features/lobby/manageLobby/tabs/Options"));
+const GameMasterLobby = lazy(() => import("./features/gameMasterLobby/GameMasterLobby"));
+const GameMasterSpyChat = lazy(() => import("./features/gameMasterLobby/tabs/GameMasterLobbySpyChat"));
+const GameMasterTeamsChat = lazy(() => import("./features/gameMasterLobby/tabs/GameMasterLobbyTeamsChat"));
+const GameMasterLobbySettings = lazy(() => import("./features/gameMasterLobby/tabs/settings/GameMasterLobbySettings"));
 const AppError = lazy(() => import("./features/error/AppError"));
-const JoinLobby = lazy(() => import("./features/lobby/joinLobby/JoinLobbyForm"));
+const JoinGame = lazy(() => import("./features/joinGame/JoinGame"));
 
 EnvironmentSchema.parse(import.meta.env);
 
@@ -27,12 +27,12 @@ render(
             <QueryClientProvider client={queryClient}>
                 <Router>
                     <Route path={Routes.startingMenu} component={StartingMenu} />
-                    <Route path={Routes.joinLobby} component={JoinLobby} />
+                    <Route path={Routes.joinLobby} component={JoinGame} />
 
-                    <Route path={Routes.manageLobby.root} component={ManageLobbyRoot}>
-                        <Route path={Routes.manageLobby.option} component={ManageLobbyOptions} />
-                        <Route path={Routes.manageLobby.spyChat} component={ManageLobbySpyChat} />
-                        <Route path={Routes.manageLobby.teamsChat} component={ManageLobbyTeamsChat} />
+                    <Route path={Routes.manageLobby.root} component={GameMasterLobby}>
+                        <Route path={Routes.manageLobby.option} component={GameMasterLobbySettings} />
+                        <Route path={Routes.manageLobby.spyChat} component={GameMasterSpyChat} />
+                        <Route path={Routes.manageLobby.teamsChat} component={GameMasterTeamsChat} />
                     </Route>
 
                     <Route path="*404" component={() => <div>Not Found</div>} />

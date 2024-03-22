@@ -1,6 +1,6 @@
 import FormFieldError from "@components/FormFieldErrror";
 import { For } from "solid-js";
-import { createJoinLobbyForm } from "./CreateJoinLobbyForm";
+import { createJoinLobbyForm } from "./CreateJoinGameForm";
 import { z } from "zod";
 interface PickNationFieldProps {
     form: ReturnType<typeof createJoinLobbyForm>["form"];

@@ -22,7 +22,7 @@ namespace EarthSeaGameApi.Controllers
         }
 
         [HttpPost]
-        [Route("lobby/join")]
+        [Route("join")]
         [AllowAnonymous]
         public async Task<ActionResult> JoinLobby([FromBody] JoinLobbyInput joinLobbyInput)
         {

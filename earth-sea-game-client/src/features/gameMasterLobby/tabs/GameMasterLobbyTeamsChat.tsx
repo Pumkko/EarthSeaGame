@@ -1,6 +1,6 @@
 import Chat from "@components/Chat";
 
-export default function TeamsChat() {
+export default function GameMasterLobbyTeamsChat() {
     return (
         <div class="grid grid-cols-3 h-full">
             <Chat />
