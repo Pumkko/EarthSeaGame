@@ -18,6 +18,16 @@ export default function GameMasterLobbySettings() {
                     <div>Earth Nation Code : {context.query.data?.gameLobby.earthNation.inviteCode}</div>
                     <div>Sea Nation Code : {context.query.data?.gameLobby.seaNation.inviteCode}</div>
                     <div>Eastern Island Code : {context.query.data?.gameLobby.easternIsland.inviteCode}</div>
+
+                    <Show when={context.signalRConnection()}>
+                        <button
+                            onClick={() => {
+                                context.signalRConnection()?.send("Echo", "master", "hello");
+                            }}
+                        >
+                            Click Me
+                        </button>
+                    </Show>
                 </div>
             </Show>
         </>
