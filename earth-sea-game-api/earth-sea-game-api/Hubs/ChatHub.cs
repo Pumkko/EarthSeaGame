@@ -50,17 +50,31 @@ namespace EarthSeaGameApi.Hubs
             await base.OnConnectedAsync();
         }
 
-        public Task BroadcastMessage(string name, string message) =>
-            Clients.All.SendAsync("broadcastMessage", name, message);
+
+        public Task SendToReferee(string message)
+        {
+            var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
+            var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
+
+            return Clients.User($"{gameMasterName}:GameMaster").SendAsync($"{nation}Message", message);
+        }
+
+        public Task SendToPlayer(string nation, string message)
+        {
+            var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
+            var isUserGameMaster = bool.Parse(Context.User?.FindFirst(AppClaims.IsGameMaster)?.Value ?? "false");
+            if(!isUserGameMaster)
+            {
+                // Temporary before i use auth policies
+                throw new UnauthorizedAccessException("Only game master can directly send to player");
+            }
+
+            return Clients.User($"{gameMasterName}:{nation}").SendAsync($"GameMasterMessage", message);
+        }
+
 
         public Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
                     .SendAsync("echo", name, $"{message} (echo from server)");
-
-        public Task JoinLobby([FromBody] JoinLobbyInput joinLobby)
-        {
-            return Clients.Client(Context.ConnectionId)
-                .SendAsync("joinLobby", "Done");
-        }
     }
 }

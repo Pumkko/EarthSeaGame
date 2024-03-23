@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { ENationSchema } from "./GameLobbySchema";
 
-export const ChatMessageSenderSchema = z.enum(["Referee", "EarthNation", "SeaNation", "EasternIsland"]);
+export const ChatMessageSenderSchema = z.union([ENationSchema, z.enum(["GameMaster"])]);
 
 export const ChatMessageSchema = z.object({
-    sender: ChatMessageSenderSchema,
+    sender: z.union([ENationSchema, ChatMessageSenderSchema]),
     recipient: ChatMessageSenderSchema,
     date: z.date(),
     content: z.string(),

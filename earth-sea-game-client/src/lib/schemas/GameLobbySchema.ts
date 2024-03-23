@@ -1,7 +1,9 @@
 import { z } from "zod";
 
+export const ENationSchema = z.enum(["EarthNation", "SeaNation", "EasternIsland"]);
+
 export const NationSchema = z.object({
-    name: z.string(),
+    name: ENationSchema,
     inviteCode: z.string(),
     inviteCodeCreationDate: z.string().datetime({ offset: true }),
     inviteCodeAlreadyUsed: z.boolean(),
@@ -24,9 +26,10 @@ export const GameMasterLobbySchema = z.object({
 export const JoinGameOutputSchema = z.object({
     accessToken: z.string(),
     gameMaster: z.string(),
-    nation: z.string(),
+    nation: ENationSchema,
 });
 
 export type GameMasterLobby = z.infer<typeof GameMasterLobbySchema>;
 export type GameLobby = z.infer<typeof GameLobbySchema>;
 export type JoinGameOutput = z.infer<typeof JoinGameOutputSchema>;
+export type ENation = z.infer<typeof ENationSchema>;
