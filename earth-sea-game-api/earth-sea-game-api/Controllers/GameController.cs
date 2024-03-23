@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using EarthSeaGameApi.Services;
 using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Models.Inputs;
+using EarthSeaGameApi.Models.Outputs;
 
 namespace EarthSeaGameApi.Controllers
 {
@@ -53,7 +54,14 @@ namespace EarthSeaGameApi.Controllers
 
             await gameLobbyService.JoinLobbyAsync(lobbyNationToJoin.Name, gameMasterLobby.Id, gameMasterLobby.GameMaster);
             var token = await jwtService.GenerateTokenForGameAsync(gameMasterLobby.GameMaster, lobbyNationToJoin.Name);
-            return Ok(token);
+
+            var output = new JoinGameOutput() {  
+                AccessToken = token,
+                GameMaster = gameMasterLobby.GameMaster,
+                Nation = lobbyNationToJoin.Name
+            };
+
+            return Ok(output);
         }
     }
 }

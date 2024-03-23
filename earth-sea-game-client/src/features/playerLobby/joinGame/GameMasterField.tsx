@@ -21,7 +21,7 @@ export default function GameMasterField(props: GameMasterFieldProps) {
                             Game Master
                         </label>
                         <input
-                            class={`rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
+                            class={`text-black rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
                             id={field().name}
                             name={field().name}
                             value={field().state.value}

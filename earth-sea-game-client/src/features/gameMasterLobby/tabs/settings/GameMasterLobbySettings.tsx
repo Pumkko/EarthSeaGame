@@ -15,6 +15,7 @@ export default function GameMasterLobbySettings() {
             <Show when={context.query.isSuccess && !!context.query.data}>
                 <div>
                     <h1>Invite your friends</h1>
+                    <div>Game Master: {context.query.data?.gameLobby.gameMaster}</div>
                     <div>Earth Nation Code : {context.query.data?.gameLobby.earthNation.inviteCode}</div>
                     <div>Sea Nation Code : {context.query.data?.gameLobby.seaNation.inviteCode}</div>
                     <div>Eastern Island Code : {context.query.data?.gameLobby.easternIsland.inviteCode}</div>

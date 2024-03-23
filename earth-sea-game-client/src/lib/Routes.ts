@@ -1,7 +1,11 @@
 const Routes = {
     startingMenu: "/",
-    joinLobby: "/lobby/join",
-    manageLobby: {
+    playerLobby: {
+        root: "/player",
+        playerHome: "/",
+        chat: "chat",
+    },
+    gameMasterLobby: {
         root: "/lobby/my",
         option: "/",
         spyChat: "chat/spy",

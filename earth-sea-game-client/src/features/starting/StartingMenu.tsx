@@ -16,7 +16,7 @@ export default function StartingMenu() {
             .loginPopup(loginRequest)
             .then((loginResponse) => {
                 msalInstance.setActiveAccount(loginResponse.account);
-                navigate(Routes.manageLobby.root);
+                navigate(Routes.gameMasterLobby.root);
             })
             .catch((error) => {
                 console.log(error);
@@ -24,7 +24,7 @@ export default function StartingMenu() {
     };
 
     const onJoinLobby = () => {
-        navigate(Routes.joinLobby);
+        navigate(Routes.playerLobby.root);
     };
 
     return (

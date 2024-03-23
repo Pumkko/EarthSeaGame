@@ -16,8 +16,12 @@ const GameMasterLobby = lazy(() => import("./features/gameMasterLobby/GameMaster
 const GameMasterSpyChat = lazy(() => import("./features/gameMasterLobby/tabs/GameMasterLobbySpyChat"));
 const GameMasterTeamsChat = lazy(() => import("./features/gameMasterLobby/tabs/GameMasterLobbyTeamsChat"));
 const GameMasterLobbySettings = lazy(() => import("./features/gameMasterLobby/tabs/settings/GameMasterLobbySettings"));
+
+const PlayerLobby = lazy(() => import("./features/playerLobby/PlayerLobby"));
+const PlayerLobbyHome = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyHome"));
+const PlayerLobbyChat = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyChat"));
+
 const AppError = lazy(() => import("./features/error/AppError"));
-const JoinGame = lazy(() => import("./features/joinGame/JoinGame"));
 
 EnvironmentSchema.parse(import.meta.env);
 
@@ -27,12 +31,15 @@ render(
             <QueryClientProvider client={queryClient}>
                 <Router>
                     <Route path={Routes.startingMenu} component={StartingMenu} />
-                    <Route path={Routes.joinLobby} component={JoinGame} />
+                    <Route path={Routes.playerLobby.root} component={PlayerLobby}>
+                        <Route path={Routes.playerLobby.playerHome} component={PlayerLobbyHome} />
+                        <Route path={Routes.playerLobby.chat} component={PlayerLobbyChat} />
+                    </Route>
 
-                    <Route path={Routes.manageLobby.root} component={GameMasterLobby}>
-                        <Route path={Routes.manageLobby.option} component={GameMasterLobbySettings} />
-                        <Route path={Routes.manageLobby.spyChat} component={GameMasterSpyChat} />
-                        <Route path={Routes.manageLobby.teamsChat} component={GameMasterTeamsChat} />
+                    <Route path={Routes.gameMasterLobby.root} component={GameMasterLobby}>
+                        <Route path={Routes.gameMasterLobby.option} component={GameMasterLobbySettings} />
+                        <Route path={Routes.gameMasterLobby.spyChat} component={GameMasterSpyChat} />
+                        <Route path={Routes.gameMasterLobby.teamsChat} component={GameMasterTeamsChat} />
                     </Route>
 
                     <Route path="*404" component={() => <div>Not Found</div>} />
