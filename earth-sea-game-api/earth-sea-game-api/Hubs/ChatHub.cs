@@ -51,12 +51,12 @@ namespace EarthSeaGameApi.Hubs
         }
 
 
-        public Task SendToReferee(string message)
+        public Task SendToGameMaster(string message)
         {
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
 
-            return Clients.User($"{gameMasterName}:GameMaster").SendAsync($"{nation}Message", message);
+            return Clients.User(gameMasterName).SendAsync($"{nation}Message", message);
         }
 
         public Task SendToPlayer(string nation, string message)

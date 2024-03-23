@@ -33,7 +33,7 @@ namespace EarthSeaGameApi.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, $"{gameMaster}:GameMaster"),
+                new Claim(JwtRegisteredClaimNames.Sub, gameMaster),
                 new Claim(JwtRegisteredClaimNames.Name, gameMaster),
                 new Claim (AppClaims.GameMasterName, gameMaster),
                 new Claim(AppClaims.IsGameMaster, "true")

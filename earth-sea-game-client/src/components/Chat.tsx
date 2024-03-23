@@ -4,7 +4,7 @@ import ChatMessage from "./ChatMessage";
 
 interface ChatProps {
     currentUser: ChatMessageSender;
-    onNewMessage: (message: string) => Promise<void>;
+    onNewMessage: (message: string) => Promise<void> | undefined;
     messages: ChatMessageModel[];
 }
 
