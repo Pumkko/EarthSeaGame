@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/solid-query";
 import { ZodError } from "zod";
 import { QueryKeys } from "./QueryKeys";
 import axios from "axios";
-import { GameMasterLobby, GameMasterLobbySchema } from "./schemas/GameLobbySchema";
+import { GameMasterLobbySchema } from "./schemas/GameLobbySchema";
 import { loginRequest, msalInstance } from "./MsalConfig";
 
 export const queryClient = new QueryClient({
@@ -28,7 +28,7 @@ queryClient.setQueryDefaults(QueryKeys.gameMasterLobby, {
         const token = silentLogin.accessToken;
 
         const targetUrl = new URL("api/game/my", import.meta.env.VITE_API_ROOT_URL);
-        const response = await axios.get<GameMasterLobby>(targetUrl.href, {
+        const response = await axios.get(targetUrl.href, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -42,6 +42,6 @@ queryClient.setQueryDefaults(QueryKeys.gameMasterLobby, {
             throw parseResult.error;
         }
 
-        return response.data;
+        return parseResult.data;
     },
 });

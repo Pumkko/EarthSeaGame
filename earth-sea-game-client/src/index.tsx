@@ -9,6 +9,8 @@ import { EnvironmentSchema } from "@lib/schemas/Environment";
 import Routes from "@lib/Routes";
 import { queryClient } from "@lib/QueryClient";
 import MsalInitializer from "./features/MsalInitializer";
+import { GameMasterLobbyContextProvider } from "./features/gameMasterLobby/GameMasterLobbyContext";
+import { PlayerLobbyContextProvider } from "./features/playerLobby/PlayerLobbyContext";
 const root = document.getElementById("root");
 
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
@@ -35,7 +37,9 @@ render(
                         path={Routes.playerLobby.root}
                         component={(props) => (
                             <Suspense fallback={<div>Loading Player Lobby....</div>}>
-                                <PlayerLobby {...props} />
+                                <PlayerLobbyContextProvider>
+                                    <PlayerLobby {...props} />
+                                </PlayerLobbyContextProvider>
                             </Suspense>
                         )}
                     >
@@ -47,7 +51,9 @@ render(
                         path={Routes.gameMasterLobby.root}
                         component={(props) => (
                             <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
-                                <GameMasterLobby {...props} />
+                                <GameMasterLobbyContextProvider>
+                                    <GameMasterLobby {...props} />
+                                </GameMasterLobbyContextProvider>
                             </Suspense>
                         )}
                     >

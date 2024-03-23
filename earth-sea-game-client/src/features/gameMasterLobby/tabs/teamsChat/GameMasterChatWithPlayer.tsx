@@ -11,6 +11,7 @@ interface GameMasterChatWithPlayerProps {
 export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayerProps) {
     const context = useContext(GameMasterLobbyContext);
     const [playerMessages, setPlayerMessages] = createSignal<ChatMessageModel[]>([]);
+
     const onNewMessageFromPlayer = (message: string) => {
         setPlayerMessages((m) => [
             ...m,
@@ -31,6 +32,7 @@ export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayer
     return (
         <Chat
             currentUser="GameMaster"
+            recipient={props.nation}
             messages={playerMessages()}
             onNewMessage={(message) => {
                 setPlayerMessages((m) => [

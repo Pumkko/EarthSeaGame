@@ -2,7 +2,7 @@ import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
-import { GameMasterLobby } from "@lib/schemas/GameLobbySchema";
+import { GameMasterLobbySchema } from "@lib/schemas/GameLobbySchema";
 import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
 import FormFieldError from "@components/FormFieldErrror";
@@ -23,14 +23,20 @@ export default function CreateLobby() {
             const token = silentLogin.accessToken;
 
             const targetUrl = new URL("api/game/my", import.meta.env.VITE_API_ROOT_URL);
-            return axios.post<GameMasterLobby>(targetUrl.href, lobby, {
+            const response = await axios.post(targetUrl.href, lobby, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
+
+            const parseResult = GameMasterLobbySchema.safeParse(response.data);
+            if (!parseResult.success) {
+                throw parseResult.error;
+            }
+            return parseResult.data;
         },
         onSuccess: (response) => {
-            queryClient.setQueryData(QueryKeys.gameMasterLobby, response.data);
+            queryClient.setQueryData(QueryKeys.gameMasterLobby, response);
         },
     }));
 

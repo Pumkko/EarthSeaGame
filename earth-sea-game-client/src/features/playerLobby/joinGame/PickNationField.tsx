@@ -1,34 +1,17 @@
 import FormFieldError from "@components/FormFieldErrror";
 import { For } from "solid-js";
 import { createJoinLobbyForm } from "./CreateJoinGameForm";
-import { z } from "zod";
+import { ENationSchema } from "@lib/schemas/GameLobbySchema";
 interface PickNationFieldProps {
     form: ReturnType<typeof createJoinLobbyForm>["form"];
 }
-
-const possibleNationsSchema = z.enum(["EarthNation", "SeaNation", "EasternIsland"], {
-    errorMap: (issue) => {
-        switch (issue.code) {
-            case "invalid_enum_value": {
-                return {
-                    message: "Must Pick a valid Nation",
-                };
-            }
-            default: {
-                return {
-                    message: "Something's wrong though I can't tell what",
-                };
-            }
-        }
-    },
-});
 
 export default function PickNationField(props: PickNationFieldProps) {
     return (
         <props.form.Field
             name="nation"
             validators={{
-                onChange: possibleNationsSchema,
+                onChange: ENationSchema,
             }}
             children={(field) => {
                 return (

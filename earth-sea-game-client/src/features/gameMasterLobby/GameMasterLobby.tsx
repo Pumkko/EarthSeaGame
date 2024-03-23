@@ -3,22 +3,25 @@ import Routes from "@lib/Routes";
 
 import { RouteSectionProps } from "@solidjs/router";
 import NavBarAnchor from "@components/NavBarAnchor";
-import { GameMasterLobbyContextProvider } from "./GameMasterLobbyContext";
+import { Show, useContext } from "solid-js";
+import { GameMasterLobbyContext } from "./GameMasterLobbyContext";
 export interface ManageLobbyProps {
     lobby: GameLobby;
 }
 
 export default function GameMasterLobby(props: RouteSectionProps) {
+    const context = useContext(GameMasterLobbyContext);
+
     return (
-        <GameMasterLobbyContextProvider>
-            <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">
-                <div class="flex justify-center p-4 text-2xl border-b-2 ">
-                    <NavBarAnchor href={Routes.gameMasterLobby.root}>Option</NavBarAnchor>
+        <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">
+            <div class="flex justify-center p-4 text-2xl border-b-2 ">
+                <NavBarAnchor href={Routes.gameMasterLobby.root}>Option</NavBarAnchor>
+                <Show when={!!context?.signalRConnection()}>
                     <NavBarAnchor href={Routes.gameMasterLobby.spyChat}>SpyChat</NavBarAnchor>
                     <NavBarAnchor href={Routes.gameMasterLobby.teamsChat}>TeamsChat</NavBarAnchor>
-                </div>
-                <div class="flex-grow overflow-auto">{props.children}</div>
+                </Show>
             </div>
-        </GameMasterLobbyContextProvider>
+            <div class="flex-grow overflow-auto">{props.children}</div>
+        </div>
     );
 }
