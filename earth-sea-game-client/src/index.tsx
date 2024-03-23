@@ -2,7 +2,7 @@
 import { render } from "solid-js/web";
 
 import "./index.scss";
-import { lazy } from "solid-js";
+import { Suspense, lazy } from "solid-js";
 import { Router, Route } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
@@ -31,12 +31,26 @@ render(
             <QueryClientProvider client={queryClient}>
                 <Router>
                     <Route path={Routes.startingMenu} component={StartingMenu} />
-                    <Route path={Routes.playerLobby.root} component={PlayerLobby}>
+                    <Route
+                        path={Routes.playerLobby.root}
+                        component={(props) => (
+                            <Suspense fallback={<div>Loading Player Lobby....</div>}>
+                                <PlayerLobby {...props} />
+                            </Suspense>
+                        )}
+                    >
                         <Route path={Routes.playerLobby.playerHome} component={PlayerLobbyHome} />
                         <Route path={Routes.playerLobby.chat} component={PlayerLobbyChat} />
                     </Route>
 
-                    <Route path={Routes.gameMasterLobby.root} component={GameMasterLobby}>
+                    <Route
+                        path={Routes.gameMasterLobby.root}
+                        component={(props) => (
+                            <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
+                                <GameMasterLobby {...props} />
+                            </Suspense>
+                        )}
+                    >
                         <Route path={Routes.gameMasterLobby.option} component={GameMasterLobbySettings} />
                         <Route path={Routes.gameMasterLobby.spyChat} component={GameMasterSpyChat} />
                         <Route path={Routes.gameMasterLobby.teamsChat} component={GameMasterTeamsChat} />
