@@ -2,14 +2,15 @@ import { ChatMessageModel, ChatMessageSender } from "@lib/schemas/MessageSchema"
 import { For, createSignal } from "solid-js";
 import ChatMessage from "./ChatMessage";
 
-interface ChatProps<TCurrentUser extends ChatMessageSender> {
-    currentUser: TCurrentUser;
-    recipient: Exclude<ChatMessageSender, TCurrentUser>;
+interface ChatProps {
+    currentUser: ChatMessageSender;
+    recipient: ChatMessageSender;
     onNewMessage: (message: string) => Promise<void> | undefined;
     messages: ChatMessageModel[];
+    isMiddleChat: boolean;
 }
 
-export default function Chat<TCurrentUser extends ChatMessageSender = ChatMessageSender>(props: ChatProps<TCurrentUser>) {
+export default function Chat(props: ChatProps) {
     const [newMessage, setNewMessage] = createSignal("");
 
     const beautifulNationName = () => {
@@ -26,7 +27,7 @@ export default function Chat<TCurrentUser extends ChatMessageSender = ChatMessag
     };
 
     return (
-        <div class="flex flex-col overflow-auto">
+        <div class={`flex flex-col overflow-auto ${props.isMiddleChat ? "border-x-2" : ""}`}>
             <h1 class="self-center">{beautifulNationName()}</h1>
             <div class="flex flex-col flex-grow justify-end">
                 <For each={props.messages}>{(message) => <ChatMessage message={message} currentUser={props.currentUser} />}</For>

@@ -50,6 +50,10 @@ namespace EarthSeaGameApi.Hubs
             await base.OnConnectedAsync();
         }
 
+        public Task PlayerSendToOtherPlayer (string nation, string message)
+        {
+            return Clients.Caller.SendAsync("Echo", "Hello");
+        }
 
         public Task SendToGameMaster(string message)
         {
@@ -59,7 +63,7 @@ namespace EarthSeaGameApi.Hubs
             return Clients.User(gameMasterName).SendAsync($"{nation}Message", message);
         }
 
-        public Task SendToPlayer(string nation, string message)
+        public Task GameMasterSendToPlayer(string nation, string message)
         {
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var isUserGameMaster = bool.Parse(Context.User?.FindFirst(AppClaims.IsGameMaster)?.Value ?? "false");

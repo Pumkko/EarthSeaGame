@@ -1,21 +1,22 @@
-import { ENation } from "@lib/schemas/GameLobbySchema";
-import { GameMasterLobbyContext } from "../../GameMasterLobbyContext";
 import Chat from "@components/Chat";
+import { EarthSeaGameDexieDb, ChatMessageDbModel } from "@lib/DB";
+import { ENation } from "@lib/schemas/GameLobbySchema";
 import { ChatMessageSender } from "@lib/schemas/MessageSchema";
-import { useContext, createEffect, createMemo, createResource } from "solid-js";
-import { ChatMessageDbModel, EarthSeaGameDexieDb } from "@lib/DB";
+import { useContext, createMemo, createResource, createEffect } from "solid-js";
+import { PlayerLobbyContext } from "../../PlayerLobbyContext";
 import { SignalRMethods } from "@lib/SignalR";
 
-interface GameMasterChatWithPlayerProps {
-    nation: ENation;
+interface PlayerChatProps {
+    recipient: ChatMessageSender;
+    currentNation: ENation;
     isMiddleChat?: boolean;
 }
 
-export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayerProps) {
-    const context = useContext(GameMasterLobbyContext);
+export default function PlayerChat(props: PlayerChatProps) {
+    const context = useContext(PlayerLobbyContext);
 
     const dexieDb = createMemo(() => {
-        const db = new EarthSeaGameDexieDb(`gameMasterTo${props.nation}Db`);
+        const db = new EarthSeaGameDexieDb(`${props.currentNation}To${props.recipient}Db`);
         return db;
     });
 
@@ -23,7 +24,7 @@ export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayer
         return await db.messages.toArray();
     });
 
-    const gameMaster = () => context?.query.data?.gameLobby.gameMaster;
+    const gameMaster = () => context?.currentGame()?.gameMaster;
 
     const onNewMessage = async (message: string, sender: ChatMessageSender, recipient: ChatMessageSender) => {
         const newMessageModel: ChatMessageDbModel = {
@@ -52,26 +53,31 @@ export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayer
     };
 
     const onNewMessageFromPlayer = (message: string) => {
-        return onNewMessage(message, props.nation, "GameMaster");
+        return onNewMessage(message, props.recipient, props.currentNation);
     };
 
-    const onNewMessageFromGameMaster = async (message: string) => {
-        await onNewMessage(message, "GameMaster", props.nation);
-        return context?.signalRConnection()?.send(SignalRMethods.GameMasterSendToPlayer, "EarthNation", message);
+    const onNewMessageFromRecipient = async (message: string) => {
+        await onNewMessage(message, props.currentNation, props.recipient);
+
+        if (props.recipient === "GameMaster") {
+            return context?.signalRConnection()?.send(SignalRMethods.SendToGameMaster, message);
+        } else {
+            return context?.signalRConnection()?.send(SignalRMethods.PlayerSendToOtherPlayer, props.recipient, message);
+        }
     };
 
     createEffect(() => {
-        const messageMethodName = `${props.nation}Message`;
+        const messageMethodName = `${props.recipient}Message`;
         context?.signalRConnection()?.on(messageMethodName, onNewMessageFromPlayer);
     });
 
     return (
         <Chat
             isMiddleChat={props.isMiddleChat ?? false}
-            currentUser="GameMaster"
-            recipient={props.nation}
+            currentUser={props.currentNation}
+            recipient={props.recipient}
             messages={messages() ?? []}
-            onNewMessage={onNewMessageFromGameMaster}
+            onNewMessage={onNewMessageFromRecipient}
         />
     );
 }
