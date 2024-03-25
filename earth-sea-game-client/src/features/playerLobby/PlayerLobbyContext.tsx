@@ -45,11 +45,6 @@ function createSignalResource(mutation: ReturnType<typeof createJoinLobbyMutatio
                 .build();
 
             await signalRConnection.start();
-
-            signalRConnection.on("Echo", () => {
-                console.log("Received Echo");
-            });
-
             return signalRConnection;
         },
     );
