@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-export const ENationSchema = z.enum(["EarthNation", "SeaNation", "EasternIsland"], {
+export const NationArray = ["EarthNation", "SeaNation", "EasternIsland"] as const;
+
+export const ENationSchema = z.enum(NationArray, {
     errorMap: (issue) => {
         switch (issue.code) {
             case "invalid_enum_value": {

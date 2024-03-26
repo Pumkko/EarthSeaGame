@@ -15,7 +15,7 @@ export default function PlayerLobby(props: RouteSectionProps) {
                     <NavBarAnchor href={Routes.playerLobby.chat}>Chat</NavBarAnchor>
                 </Show>
             </div>
-            <div class="flex-grow overflow-auto">{props.children}</div>
+            <div class="flex-grow">{props.children}</div>
         </div>
     );
 }
