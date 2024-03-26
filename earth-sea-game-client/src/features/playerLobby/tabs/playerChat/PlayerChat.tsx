@@ -1,5 +1,5 @@
 import Chat from "@components/Chat";
-import { EarthSeaGameDexieDb, ChatMessageDbModel } from "@lib/DB";
+import { ChatMessageDbModel, EarthSeaGamePlayerDb } from "@lib/DB";
 import { ENation } from "@lib/schemas/GameLobbySchema";
 import { ChatMessageSender } from "@lib/schemas/MessageSchema";
 import { useContext, createMemo, createResource, createEffect } from "solid-js";
@@ -16,12 +16,12 @@ export default function PlayerChat(props: PlayerChatProps) {
     const context = useContext(PlayerLobbyContext);
 
     const dexieDb = createMemo(() => {
-        const db = new EarthSeaGameDexieDb(`${props.currentNation}To${props.recipient}Db`);
+        const db = new EarthSeaGamePlayerDb();
         return db;
     });
 
     const [messages, { mutate }] = createResource(dexieDb, async (db) => {
-        return await db.messages.toArray();
+        return await db.gameMasterChat.toArray();
     });
 
     const gameMaster = () => context?.currentGame()?.gameMaster;
@@ -35,7 +35,7 @@ export default function PlayerChat(props: PlayerChatProps) {
             sender: sender,
         };
 
-        const newId = (await dexieDb().messages.add(newMessageModel)) as number;
+        const newId = (await dexieDb().gameMasterChat.add(newMessageModel)) as number;
 
         mutate((m) => {
             if (!m) {

@@ -9,6 +9,8 @@ import FormFieldError from "@components/FormFieldErrror";
 import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { loginRequest, msalInstance } from "@lib/MsalConfig";
+import Dexie from "dexie";
+import { DbNames } from "@lib/DB";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -19,6 +21,7 @@ export default function CreateLobby() {
 
     const createLobby = createMutation(() => ({
         mutationFn: async (lobby: CreateLobbyInput) => {
+            await Dexie.delete(DbNames.gameMasterDb);
             const silentLogin = await msalInstance.acquireTokenSilent(loginRequest);
             const token = silentLogin.accessToken;
 

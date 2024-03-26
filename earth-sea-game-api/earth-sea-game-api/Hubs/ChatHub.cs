@@ -55,12 +55,12 @@ namespace EarthSeaGameApi.Hubs
             return Clients.Caller.SendAsync("Echo", "Hello");
         }
 
-        public Task SendToGameMaster(string message)
+        public Task PlayerSendToGameMaster(string message)
         {
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
 
-            return Clients.User(gameMasterName).SendAsync($"{nation}Message", message);
+            return Clients.User(gameMasterName).SendAsync($"playerSentToGameMaster", nation, message);
         }
 
         public Task GameMasterSendToPlayer(string nation, string message)
@@ -73,7 +73,7 @@ namespace EarthSeaGameApi.Hubs
                 throw new UnauthorizedAccessException("Only game master can directly send to player");
             }
 
-            return Clients.User($"{gameMasterName}:{nation}").SendAsync($"GameMasterMessage", message);
+            return Clients.User($"{gameMasterName}:{nation}").SendAsync($"gameMasterSentToPlayer", message);
         }
 
 

@@ -1,7 +1,9 @@
+import { DbNames } from "@lib/DB";
 import { JoinGameOutput, JoinGameOutputSchema } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createMutation } from "@tanstack/solid-query";
 import axios from "axios";
+import Dexie from "dexie";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
 
 export type JoinLobbyInput = {
@@ -13,6 +15,7 @@ export type JoinLobbyInput = {
 function createJoinLobbyMutation() {
     return createMutation(() => ({
         mutationFn: async (value: JoinLobbyInput) => {
+            await Dexie.delete(DbNames.playerDb);
             const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
             const response = await axios.post(targetUrl.href, value);
 
