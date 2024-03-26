@@ -8,11 +8,18 @@ export default function PlayerLobbyChat() {
     const currentNation = () => context?.currentGame()?.nation;
 
     return (
-        <Show when={!!currentNation()}>
+        <Show when={!!currentNation() && !!context}>
             <div class="grid grid-cols-3 h-full">
-                <PlayerChat currentNation={currentNation()!} recipient={"GameMaster"} />
-                <div class="border-x-2">Two</div>
-                <div>Three</div>
+                <PlayerChat chat={context!.teamsChat.gameMasterChat} currentNation={currentNation()!} recipient={"GameMaster"} />
+                <Show when={currentNation() !== "EarthNation"}>
+                    <PlayerChat chat={context!.teamsChat.earthNationChat} currentNation={currentNation()!} recipient={"EarthNation"} />
+                </Show>
+                <Show when={currentNation() !== "SeaNation"}>
+                    <PlayerChat chat={context!.teamsChat.seaNationChat} currentNation={currentNation()!} recipient={"SeaNation"} />
+                </Show>
+                <Show when={currentNation() !== "EasternIsland"}>
+                    <PlayerChat chat={context!.teamsChat.earthNationChat} currentNation={currentNation()!} recipient={"EasternIsland"} />
+                </Show>
             </div>
         </Show>
     );

@@ -50,17 +50,16 @@ namespace EarthSeaGameApi.Hubs
             await base.OnConnectedAsync();
         }
 
-        public Task PlayerSendToOtherPlayer (string nation, string message)
-        {
-            return Clients.Caller.SendAsync("Echo", "Hello");
-        }
-
-        public Task PlayerSendToGameMaster(string message)
+        public Task PlayerSendToOtherPlayer (string recipientPlayer, string message)
         {
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
+            if (recipientPlayer == "GameMaster")
+            {
+                return Clients.User(gameMasterName).SendAsync($"playerSentToGameMaster", nation, message);
+            }
 
-            return Clients.User(gameMasterName).SendAsync($"playerSentToGameMaster", nation, message);
+            return Clients.Caller.SendAsync("Echo", "Hello");
         }
 
         public Task GameMasterSendToPlayer(string nation, string message)

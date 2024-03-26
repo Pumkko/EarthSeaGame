@@ -27,23 +27,32 @@ export class EarthSeaGameMasterDb extends Dexie {
     constructor() {
         super(DbNames.gameMasterDb);
         this.version(1).stores({
-            messages: "++id", // Primary key and indexed props
+            earthNationChat: "++id",
+            seaNationChat: "++id",
+            easternIslandChat: "++id",
+            earthNationEasternIslandSpyChat: "++id",
+            earthNationSeaNationSpyChat: "++id",
+            seaNationEasternIslandSpyChat: "++id",
         });
     }
 }
 
 export class EarthSeaGamePlayerDb extends Dexie {
-    // The player might play the Earth Nation and its recipients will be sea, eastern and game master
-    // but the player might also be the eastern player so its recipient will be sea and earth and game master
-    // that's why the variables here have a vague name (except the game master)
-    firstOtherPlayerChat!: Table<ChatMessageDbModel>;
-    secondOtherPlayerChat!: Table<ChatMessageDbModel>;
+    // One of this tables is going to be empty for each player, for the sea nation player the sea nation table will be empty
+    // But it's okay having those table declared greatly simplifies the managment of the db
+    earthNationChat!: Table<ChatMessageDbModel>;
+    seaNationChat!: Table<ChatMessageDbModel>;
+    easternIslandChat!: Table<ChatMessageDbModel>;
+
     gameMasterChat!: Table<ChatMessageDbModel>;
 
     constructor() {
         super(DbNames.playerDb);
         this.version(1).stores({
-            messages: "++id", // Primary key and indexed props
+            earthNationChat: "++id",
+            seaNationChat: "++id",
+            easternIslandChat: "++id",
+            gameMasterChat: "++id",
         });
     }
 }

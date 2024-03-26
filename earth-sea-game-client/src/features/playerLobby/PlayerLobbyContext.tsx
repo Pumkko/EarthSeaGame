@@ -1,10 +1,9 @@
-import { DbNames } from "@lib/DB";
 import { JoinGameOutput, JoinGameOutputSchema } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createMutation } from "@tanstack/solid-query";
 import axios from "axios";
-import Dexie from "dexie";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
+import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
 export type JoinLobbyInput = {
     readonly gameMasterName: string;
@@ -15,7 +14,6 @@ export type JoinLobbyInput = {
 function createJoinLobbyMutation() {
     return createMutation(() => ({
         mutationFn: async (value: JoinLobbyInput) => {
-            await Dexie.delete(DbNames.playerDb);
             const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
             const response = await axios.post(targetUrl.href, value);
 
@@ -56,6 +54,7 @@ function createSignalResource(mutation: ReturnType<typeof createJoinLobbyMutatio
 interface PlayerLobbyContextProps {
     signalRConnection: Resource<HubConnection | undefined>;
     joinLobbyMutation: ReturnType<typeof createJoinLobbyMutation>;
+    teamsChat: PlayerChatWithOtherPlayersResources;
     currentGame: () => JoinGameOutput | undefined;
 }
 
@@ -66,12 +65,14 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const [signalRConnection] = createSignalResource(mutation);
 
     const currentGame = () => mutation.data;
+    const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 
     return (
         <PlayerLobbyContext.Provider
             value={{
                 joinLobbyMutation: mutation,
                 signalRConnection: signalRConnection,
+                teamsChat,
                 currentGame,
             }}
         >
