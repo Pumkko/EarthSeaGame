@@ -17,13 +17,5 @@ export default function GameMasterChatWithPlayer(props: GameMasterChatWithPlayer
         return context?.teamsChat.onNewMessageFromGameMasterToPlayer(props.nation, message);
     };
 
-    return (
-        <Chat
-            isMiddleChat={props.isMiddleChat ?? false}
-            currentUser="GameMaster"
-            recipient={props.nation}
-            messages={props.chat() ?? []}
-            onNewMessage={onNewMessageFromGameMaster}
-        />
-    );
+    return <Chat currentUser="GameMaster" recipient={props.nation} messages={props.chat() ?? []} onNewMessage={onNewMessageFromGameMaster} />;
 }

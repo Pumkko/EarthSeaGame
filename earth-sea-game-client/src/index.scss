@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+.earth-sea-game-chat-container:nth-child(even) {
+    .earth-sea-game-chat {
+        @apply border-x-2;
+    }
+}
+
 body {
     font-family: "ModernAntiqua", "Courier New", Courier, monospace;
 }

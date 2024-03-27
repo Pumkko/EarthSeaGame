@@ -10,7 +10,6 @@ interface ChatProps {
     recipient: ChatMessageSender;
     onNewMessage: (message: string) => Promise<void> | undefined;
     messages: ChatMessageModel[];
-    isMiddleChat: boolean;
 }
 
 export default function Chat(props: ChatProps) {
@@ -48,9 +47,9 @@ export default function Chat(props: ChatProps) {
     }));
 
     return (
-        <div class="flex flex-col h-full overflow-auto">
-            <h1 class="self-center">{beautifulNationName()}</h1>
-            <div id={`ChatWith${props.recipient}`} class={`flex flex-col mb-4 flex-grow overflow-auto ${props.isMiddleChat ? "border-x-2" : ""}`}>
+        <div class="flex flex-col h-full overflow-auto earth-sea-game-chat-container">
+            <h1 class="self-center text-xl">{beautifulNationName()}</h1>
+            <div id={`ChatWith${props.recipient}`} class={`flex flex-col mb-4 flex-grow overflow-auto earth-sea-game-chat`}>
                 <For each={props.messages}>{(message) => <ChatMessage message={message} currentUser={props.currentUser} />}</For>
             </div>
             <form.Provider>

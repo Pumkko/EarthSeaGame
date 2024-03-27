@@ -19,13 +19,5 @@ export default function PlayerChat(props: PlayerChatProps) {
         return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer(props.recipient, message);
     };
 
-    return (
-        <Chat
-            isMiddleChat={props.isMiddleChat ?? false}
-            currentUser={props.currentNation}
-            recipient={props.recipient}
-            messages={props.chat() ?? []}
-            onNewMessage={onNewMessageFromCurrentNation}
-        />
-    );
+    return <Chat currentUser={props.currentNation} recipient={props.recipient} messages={props.chat() ?? []} onNewMessage={onNewMessageFromCurrentNation} />;
 }
