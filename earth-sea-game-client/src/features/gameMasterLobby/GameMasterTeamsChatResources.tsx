@@ -17,7 +17,10 @@ export interface GameMasterChatWithPlayerResources {
     onNewMessageFromGameMasterToPlayer: (playerNation: ENation, message: string) => Promise<void> | undefined;
 }
 
-function createChatResourceFromTable(dexieDb: () => EarthSeaGameMasterDb, table: keyof TablesOfDb<EarthSeaGameMasterDb>): TeamsChatHandler {
+function createChatResourceFromTable(
+    dexieDb: () => EarthSeaGameMasterDb,
+    table: keyof TablesOfDb<EarthSeaGameMasterDb>,
+): TeamsChatHandler {
     const [chat, { mutate }] = createResource(dexieDb, async (db) => {
         return await db[table].toArray();
     });
@@ -59,7 +62,11 @@ export function createGameMasterTeamsChatResources(
     const easternIslandChatHandler = createChatResourceFromTable(dexieDb, "easternIslandChat");
     const seaNationChatHandler = createChatResourceFromTable(dexieDb, "seaNationChat");
 
-    const createMessageDbModelFromMessage = (sender: ChatMessageSender, recipient: ChatMessageSender, message: string) => {
+    const createMessageDbModelFromMessage = (
+        sender: ChatMessageSender,
+        recipient: ChatMessageSender,
+        message: string,
+    ) => {
         if (sender === recipient) {
             console.error("Message sender and recipient are identical");
         }

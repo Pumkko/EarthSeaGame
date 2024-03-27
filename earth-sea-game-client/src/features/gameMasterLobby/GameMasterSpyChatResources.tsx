@@ -1,6 +1,6 @@
 import { ChatMessageDbModel, EarthSeaGameMasterDb, TablesOfDb } from "@lib/DB";
 import { SignalREvents } from "@lib/SignalR";
-import { ENation, ENationSchema } from "@lib/schemas/GameLobbySchema";
+import { ENation, ENationSchema, SenderAndRecipientGroup } from "@lib/schemas/GameLobbySchema";
 import { HubConnection } from "@microsoft/signalr";
 import { Resource, createEffect, createMemo, createResource } from "solid-js";
 
@@ -15,7 +15,10 @@ export interface GameMasterSpyChatResources {
     seaEasternSpyChat: Resource<ChatMessageDbModel[]>;
 }
 
-function createChatResourceFromTable(dexieDb: () => EarthSeaGameMasterDb, table: keyof TablesOfDb<EarthSeaGameMasterDb>): TeamsChatHandler {
+function createChatResourceFromTable(
+    dexieDb: () => EarthSeaGameMasterDb,
+    table: keyof TablesOfDb<EarthSeaGameMasterDb>,
+): TeamsChatHandler {
     const [chat, { mutate }] = createResource(dexieDb, async (db) => {
         return await db[table].toArray();
     });
@@ -44,8 +47,6 @@ function createChatResourceFromTable(dexieDb: () => EarthSeaGameMasterDb, table:
     };
 }
 
-type SenderAndRecipientGroup = "EarthSeaGroup" | "EarthEasternGroup" | "SeaEasternGroup";
-
 type SenderAndRecipientMessageToGroup = {
     [nation in ENation]: {
         [otherNation in Exclude<ENation, nation>]: SenderAndRecipientGroup;
@@ -67,7 +68,10 @@ const senderAndRecipientMessageToGroup: SenderAndRecipientMessageToGroup = {
     },
 };
 
-function isRecipientOtherNation<TSender extends ENation>(nation: TSender, otherNation: ENation): otherNation is Exclude<ENation, TSender> {
+function isRecipientOtherNation<TSender extends ENation>(
+    nation: TSender,
+    otherNation: ENation,
+): otherNation is Exclude<ENation, TSender> {
     return nation !== otherNation;
 }
 

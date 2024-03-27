@@ -50,3 +50,4 @@ export type GameMasterLobby = z.infer<typeof GameMasterLobbySchema>;
 export type GameLobby = z.infer<typeof GameLobbySchema>;
 export type JoinGameOutput = z.infer<typeof JoinGameOutputSchema>;
 export type ENation = z.infer<typeof ENationSchema>;
+export type SenderAndRecipientGroup = "EarthSeaGroup" | "EarthEasternGroup" | "SeaEasternGroup";

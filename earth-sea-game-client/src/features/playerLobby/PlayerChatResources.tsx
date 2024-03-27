@@ -15,10 +15,16 @@ export interface PlayerChatWithOtherPlayersResources {
     seaNationChat: Resource<ChatMessageDbModel[]>;
     easternIslandChat: Resource<ChatMessageDbModel[]>;
     gameMasterChat: Resource<ChatMessageDbModel[]>;
-    onNewMessageFromCurrentPlayerToOtherPlayer: (recipientPlayer: ChatMessageSender, message: string) => Promise<void> | undefined;
+    onNewMessageFromCurrentPlayerToOtherPlayer: (
+        recipientPlayer: ChatMessageSender,
+        message: string,
+    ) => Promise<void> | undefined;
 }
 
-function createChatResourceFromTable(dexieDb: () => EarthSeaGamePlayerDb, table: keyof TablesOfDb<EarthSeaGamePlayerDb>): TeamsChatHandler {
+function createChatResourceFromTable(
+    dexieDb: () => EarthSeaGamePlayerDb,
+    table: keyof TablesOfDb<EarthSeaGamePlayerDb>,
+): TeamsChatHandler {
     const [chat, { mutate }] = createResource(dexieDb, async (db) => {
         return await db[table].toArray();
     });
@@ -61,7 +67,11 @@ export function createPlayerChatResources(
     const easternIslandChatHandler = createChatResourceFromTable(dexieDb, "easternIslandChat");
     const seaNationChatHandler = createChatResourceFromTable(dexieDb, "seaNationChat");
 
-    const createMessageDbModelFromMessage = (otherPlayer: ChatMessageSender, otherPlayerType: "Recipient" | "Sender", message: string) => {
+    const createMessageDbModelFromMessage = (
+        otherPlayer: ChatMessageSender,
+        otherPlayerType: "Recipient" | "Sender",
+        message: string,
+    ) => {
         const currentNation = currentGame()?.nation;
         if (!currentNation) {
             return;

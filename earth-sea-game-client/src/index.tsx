@@ -15,7 +15,7 @@ const root = document.getElementById("root");
 
 const StartingMenu = lazy(() => import("./features/starting/StartingMenu"));
 const GameMasterLobby = lazy(() => import("./features/gameMasterLobby/GameMasterLobby"));
-const GameMasterSpyChat = lazy(() => import("./features/gameMasterLobby/tabs/GameMasterLobbySpyChat"));
+const GameMasterSpyChat = lazy(() => import("./features/gameMasterLobby/tabs/spyChat/GameMasterLobbySpyChat"));
 const GameMasterTeamsChat = lazy(() => import("./features/gameMasterLobby/tabs/teamsChat/GameMasterLobbyTeamsChat"));
 const GameMasterLobbySettings = lazy(() => import("./features/gameMasterLobby/tabs/settings/GameMasterLobbySettings"));
 

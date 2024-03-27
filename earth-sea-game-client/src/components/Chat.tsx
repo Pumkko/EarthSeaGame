@@ -6,39 +6,28 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 
 interface ChatProps {
+    title: string;
     currentUser: ChatMessageSender;
-    recipient: ChatMessageSender;
-    onNewMessage: (message: string) => Promise<void> | undefined;
+    key: string;
+    onNewMessage?: (message: string) => Promise<void> | undefined;
     messages: ChatMessageModel[];
 }
 
 export default function Chat(props: ChatProps) {
-    const beautifulNationName = () => {
-        switch (props.recipient) {
-            case "EarthNation":
-                return "Earth Nation";
-            case "EasternIsland":
-                return "Eastern Island";
-            case "SeaNation":
-                return "Sea Nation";
-            case "GameMaster":
-                return "Game Master";
-            default:
-                return "Unknown";
-        }
-    };
+    const gameChatDivId = () => `ChatWith${props.key}`;
+
     const form = createForm(() => ({
         defaultValues: {
             message: "",
         },
         validatorAdapter: zodValidator,
         onSubmit: async ({ value, formApi }) => {
-            await props.onNewMessage(value.message);
+            await props.onNewMessage?.(value.message);
             formApi.setFieldValue("message", "");
 
             // Justify-end breaks auto scroll, so i removed it messages will be up at first and then will move down
             // i then scrolldown after every messages
-            const scrollable = document.getElementById(`ChatWith${props.recipient}`);
+            const scrollable = document.getElementById(gameChatDivId());
             if (!scrollable) {
                 return;
             }
@@ -48,9 +37,11 @@ export default function Chat(props: ChatProps) {
 
     return (
         <div class="flex flex-col h-full overflow-auto earth-sea-game-chat-container">
-            <h1 class="self-center text-xl">{beautifulNationName()}</h1>
-            <div id={`ChatWith${props.recipient}`} class={`flex flex-col mb-4 flex-grow overflow-auto earth-sea-game-chat`}>
-                <For each={props.messages}>{(message) => <ChatMessage message={message} currentUser={props.currentUser} />}</For>
+            <h1 class="self-center text-xl">{props.title}</h1>
+            <div id={gameChatDivId()} class={`flex flex-col mb-4 flex-grow overflow-auto earth-sea-game-chat`}>
+                <For each={props.messages}>
+                    {(message) => <ChatMessage message={message} currentUser={props.currentUser} />}
+                </For>
             </div>
             <form.Provider>
                 <form
