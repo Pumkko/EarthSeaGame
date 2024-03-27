@@ -23,7 +23,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.earthNationChat() ?? []}
                         currentUser={currentNation()!}
-                        title={currentNation()!}
+                        title={"Earth Nation"}
                         key="CurrentPlayerChatWithEarthNation"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer(
@@ -37,7 +37,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.seaNationChat() ?? []}
                         currentUser={currentNation()!}
-                        title={currentNation()!}
+                        title={"Sea Nation"}
                         key="CurrentPlayerChatWithSeaNation"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer("SeaNation", message);
@@ -48,7 +48,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.easternIslandChat() ?? []}
                         currentUser={currentNation()!}
-                        title={currentNation()!}
+                        title={"Eastern Island"}
                         key="CurrentPlayerChatWithEasternIsland"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer(

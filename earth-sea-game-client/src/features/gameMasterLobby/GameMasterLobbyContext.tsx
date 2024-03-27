@@ -1,10 +1,10 @@
-import { QueryKeys } from "@lib/QueryKeys";
 import { GameMasterLobby } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
 import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
 import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
+import { QueryKeys } from "@lib/QueryClient";
 
 function createMyLobbyQuery() {
     return createQuery<GameMasterLobby | null>(() => ({

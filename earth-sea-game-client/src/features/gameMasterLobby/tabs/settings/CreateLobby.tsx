@@ -3,7 +3,6 @@ import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { For, Show } from "solid-js";
 import axios from "axios";
 import { GameMasterLobbySchema } from "@lib/schemas/GameLobbySchema";
-import { QueryKeys } from "@lib/QueryKeys";
 import PageTitle from "@components/PageTitle";
 import FormFieldError from "@components/FormFieldErrror";
 import { z } from "zod";
@@ -11,6 +10,7 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import { loginRequest, msalInstance } from "@lib/MsalConfig";
 import Dexie from "dexie";
 import { DbNames } from "@lib/DB";
+import { QueryKeys } from "@lib/QueryClient";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;

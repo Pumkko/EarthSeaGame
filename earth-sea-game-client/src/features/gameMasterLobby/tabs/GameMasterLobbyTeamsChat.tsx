@@ -1,5 +1,5 @@
 import { Show, useContext } from "solid-js";
-import { GameMasterLobbyContext } from "../../GameMasterLobbyContext";
+import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
 import Chat from "@components/Chat";
 
 export default function GameMasterLobbyTeamsChat() {

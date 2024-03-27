@@ -1,12 +1,12 @@
 import { ChatMessageModel, ChatMessageSender } from "@lib/schemas/MessageSchema";
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
 import ChatMessage from "./ChatMessage";
 import { createForm } from "@tanstack/solid-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import { z } from "zod";
 
 interface ChatProps {
-    title: string;
+    title?: string;
     currentUser: ChatMessageSender;
     key: string;
     onNewMessage?: (message: string) => Promise<void> | undefined;
@@ -37,12 +37,15 @@ export default function Chat(props: ChatProps) {
 
     return (
         <div class="flex flex-col h-full overflow-auto earth-sea-game-chat-container">
-            <h1 class="self-center text-xl">{props.title}</h1>
+            <Show when={!!props.title}>
+                <h1 class="self-center text-xl">{props.title}</h1>
+            </Show>
             <div id={gameChatDivId()} class={`flex flex-col mb-4 flex-grow overflow-auto earth-sea-game-chat`}>
                 <For each={props.messages}>
                     {(message) => <ChatMessage message={message} currentUser={props.currentUser} />}
                 </For>
             </div>
+
             <form.Provider>
                 <form
                     class="flex w-full mb-2"
@@ -60,6 +63,7 @@ export default function Chat(props: ChatProps) {
                         children={(field) => (
                             <input
                                 class="text-black border-2 rounded border-black m-2 p-2 flex-grow"
+                                disabled={!props.onNewMessage}
                                 name={field().name}
                                 value={field().state.value}
                                 onBlur={field().handleBlur}
@@ -67,7 +71,7 @@ export default function Chat(props: ChatProps) {
                             />
                         )}
                     />
-                    <button class="border-2 px-2 mr-2" type="submit">
+                    <button disabled={!props.onNewMessage} class="border-2 px-2 mr-2" type="submit">
                         Send
                     </button>
                 </form>

@@ -1,9 +1,12 @@
 import { QueryClient } from "@tanstack/solid-query";
 import { ZodError } from "zod";
-import { QueryKeys } from "./QueryKeys";
 import axios from "axios";
 import { GameMasterLobbySchema } from "./schemas/GameLobbySchema";
 import { loginRequest, msalInstance } from "./MsalConfig";
+
+export const QueryKeys = {
+    gameMasterLobby: ["gameMasterLobby"],
+};
 
 export const queryClient = new QueryClient({
     defaultOptions: {
