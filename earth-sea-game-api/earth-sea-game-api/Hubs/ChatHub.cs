@@ -1,9 +1,8 @@
 ﻿using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Models;
-using EarthSeaGameApi.Models.Inputs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
 namespace EarthSeaGameApi.Hubs
@@ -13,15 +12,46 @@ namespace EarthSeaGameApi.Hubs
     {
         private const string EARTH_SEA_GROUP = "EarthSeaGroup";
 
-        private const string EARTH_EASTERN_GROUP = "EarthThirdNationGroup";
+        private const string EARTH_EASTERN_GROUP = "EarthEasternGroup";
 
-        private const string SEA_EASTERN_GROUP = "SeaThirdNationGroup";
+        private const string SEA_EASTERN_GROUP = "SeaEasternGroup";
 
-        public Task JoinEarthSeaGroup() => Groups.AddToGroupAsync(Context.ConnectionId, EARTH_SEA_GROUP);
-
-        public Task JoinEarthThirdNationGroup() => Groups.AddToGroupAsync(Context.ConnectionId, EARTH_EASTERN_GROUP);
-
-        public Task JoinSeaThirdNationGroup() => Groups.AddToGroupAsync(Context.ConnectionId, SEA_EASTERN_GROUP);
+        private readonly Dictionary<string, Dictionary<string, string>> groupToUseForSenderToRecipientMessage = new()
+        {
+            {
+                ENation.EarthNation, new()
+                {
+                    {
+                        ENation.EasternIsland, EARTH_EASTERN_GROUP
+                    },
+                    {
+                        ENation.SeaNation, EARTH_SEA_GROUP
+                    }
+                }
+            },
+            {
+                ENation.SeaNation, new()
+                {
+                    {
+                        ENation.EarthNation, EARTH_SEA_GROUP
+                    },
+                    {
+                        ENation.EasternIsland, SEA_EASTERN_GROUP
+                    }
+                }
+            },
+            {
+                ENation.EasternIsland, new()
+                {
+                    {
+                        ENation.EarthNation, EARTH_EASTERN_GROUP
+                    },
+                    {
+                        ENation.SeaNation, SEA_EASTERN_GROUP
+                    }
+                }
+            }
+        };
 
         public override async Task OnConnectedAsync()
         {
@@ -29,6 +59,7 @@ namespace EarthSeaGameApi.Hubs
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
             var isUserGameMaster = bool.Parse(Context.User?.FindFirst(AppClaims.IsGameMaster)?.Value ?? "false");
+
 
             string[] groupsToJoin;
             if (isUserGameMaster)
@@ -46,38 +77,49 @@ namespace EarthSeaGameApi.Hubs
                 };
             }
 
-            await Task.WhenAll(groupsToJoin.Select(g => Groups.AddToGroupAsync(Context.ConnectionId, $"{gameMasterName}:{g}")));
+
+
+            await Task.WhenAll(groupsToJoin.Select(g => Groups.AddToGroupAsync(Context.ConnectionId, GetGroupNameForGameMaster(gameMasterName, g))));
             await base.OnConnectedAsync();
         }
 
-        public Task PlayerSendToOtherPlayer (string recipientPlayer, string message)
-        {
+        public Task PlayerSendToOtherPlayer(string recipientPlayer, string message)
+        { 
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
-            var nation = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
+            var sendingPlayer = Context.User?.FindFirst(AppClaims.Nation)?.Value!;
             if (recipientPlayer == "GameMaster")
             {
-                return Clients.User(gameMasterName).SendAsync($"playerSentToGameMaster", nation, message);
+                return Clients.User(gameMasterName).SendAsync("playerSentToGameMaster", sendingPlayer, message);
             }
-
-            return Clients.Caller.SendAsync("Echo", "Hello");
+            else
+            {
+                var group = groupToUseForSenderToRecipientMessage[sendingPlayer][recipientPlayer];
+                var fullGroupName = GetGroupNameForGameMaster(gameMasterName, group);
+                return Clients.Group(fullGroupName).SendAsync("playerSentToOtherPlayer", sendingPlayer, recipientPlayer, message);
+            }
         }
 
         public Task GameMasterSendToPlayer(string nation, string message)
         {
             var gameMasterName = Context.User?.FindFirst(AppClaims.GameMasterName)?.Value!;
             var isUserGameMaster = bool.Parse(Context.User?.FindFirst(AppClaims.IsGameMaster)?.Value ?? "false");
-            if(!isUserGameMaster)
+            if (!isUserGameMaster)
             {
                 // Temporary before i use auth policies
                 throw new UnauthorizedAccessException("Only game master can directly send to player");
             }
 
-            return Clients.User($"{gameMasterName}:{nation}").SendAsync($"gameMasterSentToPlayer", message);
+            return Clients.User($"{gameMasterName}:{nation}").SendAsync("gameMasterSentToPlayer", message);
         }
 
 
         public Task Echo(string name, string message) =>
             Clients.Client(Context.ConnectionId)
                     .SendAsync("echo", name, $"{message} (echo from server)");
+
+        private static string GetGroupNameForGameMaster(string gameMasterName, string groupName)
+        {
+            return $"{gameMasterName}:{groupName}";
+        }
     }
 }

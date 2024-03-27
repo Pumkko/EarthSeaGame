@@ -2,6 +2,8 @@ import { ChatMessageModel, ChatMessageSender } from "@lib/schemas/MessageSchema"
 import { For } from "solid-js";
 import ChatMessage from "./ChatMessage";
 import { createForm } from "@tanstack/solid-form";
+import { zodValidator } from "@tanstack/zod-form-adapter";
+import { z } from "zod";
 
 interface ChatProps {
     currentUser: ChatMessageSender;
@@ -28,6 +30,7 @@ export default function Chat(props: ChatProps) {
         defaultValues: {
             message: "",
         },
+        validatorAdapter: zodValidator,
         onSubmit: async ({ value, formApi }) => {
             await props.onNewMessage(value.message);
             formApi.setFieldValue("message", "");
@@ -59,6 +62,9 @@ export default function Chat(props: ChatProps) {
                 >
                     <form.Field
                         name="message"
+                        validators={{
+                            onChange: z.string().min(1),
+                        }}
                         children={(field) => (
                             <input
                                 class="text-black border-2 rounded border-black m-2 p-2 flex-grow"

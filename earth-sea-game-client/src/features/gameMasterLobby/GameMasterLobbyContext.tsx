@@ -4,6 +4,7 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
 import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
+import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
 
 function createMyLobbyQuery() {
     return createQuery<GameMasterLobby | null>(() => ({
@@ -28,6 +29,7 @@ interface GameMasterLobbyContextProps {
     query: ReturnType<typeof createMyLobbyQuery>;
     signalRConnection: Resource<HubConnection | undefined>;
     teamsChat: GameMasterChatWithPlayerResources;
+    spyChat: GameMasterSpyChatResources;
 }
 
 export const GameMasterLobbyContext = createContext<GameMasterLobbyContextProps>();
@@ -41,6 +43,7 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
     const [signalRConnection] = createSignalResource(token);
 
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
+    const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
 
     return (
         <GameMasterLobbyContext.Provider
@@ -48,6 +51,7 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
                 query,
                 signalRConnection,
                 teamsChat,
+                spyChat,
             }}
         >
             {props.children}

@@ -1,6 +1,6 @@
 import { ChatMessageDbModel, EarthSeaGamePlayerDb, TablesOfDb } from "@lib/DB";
 import { SignalREvents, SignalRMethods } from "@lib/SignalR";
-import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
+import { ENationSchema, JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { ChatMessageSender } from "@lib/schemas/MessageSchema";
 import { HubConnection } from "@microsoft/signalr";
 import { Resource, createEffect, createMemo, createResource } from "solid-js";
@@ -93,14 +93,40 @@ export function createPlayerChatResources(
         return createMessageDbModelFromMessage("GameMaster", "Sender", message);
     };
 
-    const onNewMessageFromCurrentPlayerToOtherPlayer = async (recipientPlayer: ChatMessageSender, message: string) => {
-        await createMessageDbModelFromMessage(recipientPlayer, "Recipient", message);
-        return signalRConnection()?.send(SignalRMethods.playerSendToOtherPlayer, recipientPlayer, message);
+    /**
+     * Called when a player sends a message to a different player, what happens here in reality is the message is sent to a group
+     * The group has always three members : The sending player, the recipient player, the game master
+     * @param sendingPlayer Player who sent the message might be the current player
+     * @param _ recipient player, ignored here because if the sendingPlayer is not the current player then the current player is the recipient
+     * and if the sending player is the current player then the message is already in the db because it was written when the message was sent
+     * @param message content of the message
+     * @returns
+     */
+    const onPlayerSentToOtherPlayer = (sendingPlayer: string, _: string, message: string) => {
+        console.log(sendingPlayer);
+        const isValidSendingPlayer = ENationSchema.safeParse(sendingPlayer);
+        if (!isValidSendingPlayer.success) {
+            console.error(isValidSendingPlayer.error);
+            return;
+        }
+        const sendingNation = isValidSendingPlayer.data;
+
+        if (sendingNation === currentGame()?.nation) {
+            return;
+        }
+
+        return createMessageDbModelFromMessage(sendingNation, "Sender", message);
     };
 
     createEffect(() => {
         signalRConnection()?.on(SignalREvents.gameMasterSentToPlayer, onGameMasterSentToPlayer);
+        signalRConnection()?.on(SignalREvents.playerSentToOtherPlayer, onPlayerSentToOtherPlayer);
     });
+
+    const onNewMessageFromCurrentPlayerToOtherPlayer = async (recipientPlayer: ChatMessageSender, message: string) => {
+        await createMessageDbModelFromMessage(recipientPlayer, "Recipient", message);
+        return signalRConnection()?.send(SignalRMethods.playerSendToOtherPlayer, recipientPlayer, message);
+    };
 
     return {
         earthNationChat: earthNationChatHandler.chat,

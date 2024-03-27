@@ -18,7 +18,7 @@ export default function PlayerLobbyChat() {
                     <PlayerChat chat={context!.teamsChat.seaNationChat} currentNation={currentNation()!} recipient={"SeaNation"} />
                 </Show>
                 <Show when={currentNation() !== "EasternIsland"}>
-                    <PlayerChat chat={context!.teamsChat.earthNationChat} currentNation={currentNation()!} recipient={"EasternIsland"} />
+                    <PlayerChat chat={context!.teamsChat.easternIslandChat} currentNation={currentNation()!} recipient={"EasternIsland"} />
                 </Show>
             </div>
         </Show>

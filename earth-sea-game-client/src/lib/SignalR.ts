@@ -5,5 +5,6 @@ export const SignalRMethods = {
 
 export const SignalREvents = {
     playerSentToGameMaster: "playerSentToGameMaster",
+    playerSentToOtherPlayer: "playerSentToOtherPlayer",
     gameMasterSentToPlayer: "gameMasterSentToPlayer",
 };
