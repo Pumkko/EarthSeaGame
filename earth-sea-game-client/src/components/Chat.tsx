@@ -22,6 +22,8 @@ export default function Chat(props: ChatProps) {
                 return "Eastern Island";
             case "SeaNation":
                 return "Sea Nation";
+            case "GameMaster":
+                return "Game Master";
             default:
                 return "Unknown";
         }
