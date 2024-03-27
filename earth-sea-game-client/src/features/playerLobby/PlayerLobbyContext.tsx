@@ -1,7 +1,7 @@
 import { JoinGameOutput, JoinGameOutputSchema } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createMutation } from "@tanstack/solid-query";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
@@ -14,15 +14,23 @@ export type JoinLobbyInput = {
 function createJoinLobbyMutation() {
     return createMutation(() => ({
         mutationFn: async (value: JoinLobbyInput) => {
-            const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
-            const response = await axios.post(targetUrl.href, value);
+            try {
+                const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
+                const response = await axios.post(targetUrl.href, value);
 
-            const parseResult = JoinGameOutputSchema.safeParse(response.data);
-            if (!parseResult.success) {
-                throw parseResult.error;
+                const parseResult = JoinGameOutputSchema.safeParse(response.data);
+                if (!parseResult.success) {
+                    console.error(parseResult.error);
+                    throw new Error("Failed to interpret operation result");
+                }
+
+                return parseResult.data;
+            } catch (e) {
+                if (axios.isAxiosError(e) && e.response?.status === HttpStatusCode.Unauthorized) {
+                    throw new Error("Invalid credentials");
+                }
+                throw new Error("Something wrong happened, contact the Maker");
             }
-
-            return parseResult.data;
         },
     }));
 }

@@ -56,6 +56,9 @@ export default function JoinGame() {
                     </button>
                 </form>
             </form.Provider>
+            <Show when={joinLobbyMutation.isError}>
+                <p class="text-red-400 text-xl mt-2">{joinLobbyMutation.error?.message}</p>
+            </Show>
         </div>
     );
 }
