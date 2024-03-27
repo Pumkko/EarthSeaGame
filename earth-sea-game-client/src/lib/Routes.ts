@@ -6,6 +6,8 @@ const Routes = {
         chat: "chat",
     },
     gameMasterLobby: {
+        createLobby: "/lobby/my/create",
+        gateway: "/lobby/my/gateway",
         root: "/lobby/my",
         option: "/",
         spyChat: "chat/spy",

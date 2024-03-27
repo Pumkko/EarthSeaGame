@@ -1,21 +1,25 @@
-import { useNavigate } from "@solidjs/router";
-import StartingMenuButton from "./components/StartingMenuButton";
-import Routes from "@lib/Routes";
 import PageTitle from "@components/PageTitle";
-import { msalInstance, loginRequest } from "@lib/MsalConfig";
+import { loginRequest, msalInstance } from "@lib/MsalConfig";
+import { QueryKeys } from "@lib/QueryClient";
+import Routes from "@lib/Routes";
+import { useNavigate } from "@solidjs/router";
+import { useQueryClient } from "@tanstack/solid-query";
+import StartingMenuButton from "./components/StartingMenuButton";
 export default function StartingMenu() {
     const navigate = useNavigate();
 
+    const queryClient = useQueryClient();
     const onCreateOrManageLobby = async () => {
-        msalInstance
-            .loginPopup(loginRequest)
-            .then((loginResponse) => {
-                msalInstance.setActiveAccount(loginResponse.account);
-                navigate(Routes.gameMasterLobby.root);
-            })
-            .catch((error) => {
-                console.log(error);
+        try {
+            const loginResponse = await msalInstance.loginPopup(loginRequest);
+            msalInstance.setActiveAccount(loginResponse.account);
+            queryClient.removeQueries({
+                queryKey: QueryKeys.gameMasterLobby,
             });
+            navigate(Routes.gameMasterLobby.gateway);
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const onJoinLobby = () => {

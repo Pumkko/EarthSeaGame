@@ -1,7 +1,7 @@
-import { Show, lazy, useContext } from "solid-js";
-import { GameMasterLobbyContext } from "../../GameMasterLobbyContext";
-
-const CreateLobby = lazy(() => import("./CreateLobby"));
+import Routes from "@lib/Routes";
+import { Navigate } from "@solidjs/router";
+import { Show, useContext } from "solid-js";
+import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
 
 export default function GameMasterLobbySettings() {
     const context = useContext(GameMasterLobbyContext)!;
@@ -10,7 +10,7 @@ export default function GameMasterLobbySettings() {
     return (
         <>
             <Show when={context.query.isSuccess && !context.query.data}>
-                <CreateLobby />
+                <Navigate href={Routes.gameMasterLobby.createLobby} />
             </Show>
             <Show when={context.query.isSuccess && !!context.query.data}>
                 <div>

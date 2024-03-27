@@ -1,3 +1,4 @@
+import { EarthSeaGamePlayerDb } from "@lib/DB";
 import { JoinGameOutput, JoinGameOutputSchema } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createMutation } from "@tanstack/solid-query";
@@ -15,6 +16,8 @@ function createJoinLobbyMutation() {
     return createMutation(() => ({
         mutationFn: async (value: JoinLobbyInput) => {
             try {
+                const gameMasterDb = new EarthSeaGamePlayerDb();
+                await gameMasterDb.clearGameTable();
                 const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
                 const response = await axios.post(targetUrl.href, value);
 

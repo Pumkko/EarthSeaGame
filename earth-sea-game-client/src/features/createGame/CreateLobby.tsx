@@ -1,16 +1,17 @@
+import FormFieldError from "@components/FormFieldErrror";
+import PageTitle from "@components/PageTitle";
+import { EarthSeaGameMasterDb } from "@lib/DB";
+import { loginRequest, msalInstance } from "@lib/MsalConfig";
+import { QueryKeys } from "@lib/QueryClient";
+import Routes from "@lib/Routes";
+import { GameMasterLobbySchema } from "@lib/schemas/GameLobbySchema";
+import { useNavigate } from "@solidjs/router";
 import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
-import { For, Show } from "solid-js";
-import axios from "axios";
-import { GameMasterLobbySchema } from "@lib/schemas/GameLobbySchema";
-import PageTitle from "@components/PageTitle";
-import FormFieldError from "@components/FormFieldErrror";
-import { z } from "zod";
 import { zodValidator } from "@tanstack/zod-form-adapter";
-import { loginRequest, msalInstance } from "@lib/MsalConfig";
-import Dexie from "dexie";
-import { DbNames } from "@lib/DB";
-import { QueryKeys } from "@lib/QueryClient";
+import axios from "axios";
+import { For, Show } from "solid-js";
+import { z } from "zod";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -19,9 +20,13 @@ type CreateLobbyInput = {
 export default function CreateLobby() {
     const queryClient = useQueryClient();
 
+    const navigate = useNavigate();
+
     const createLobby = createMutation(() => ({
         mutationFn: async (lobby: CreateLobbyInput) => {
-            await Dexie.delete(DbNames.gameMasterDb);
+            const gameMasterDb = new EarthSeaGameMasterDb();
+            await gameMasterDb.clearGameTable();
+
             const silentLogin = await msalInstance.acquireTokenSilent(loginRequest);
             const token = silentLogin.accessToken;
 
@@ -40,6 +45,9 @@ export default function CreateLobby() {
         },
         onSuccess: (response) => {
             queryClient.setQueryData(QueryKeys.gameMasterLobby, response);
+            navigate(Routes.gameMasterLobby.root, {
+                replace: true,
+            });
         },
     }));
 
@@ -54,7 +62,7 @@ export default function CreateLobby() {
     }));
 
     return (
-        <div class="flex flex-col items-center">
+        <div class="h-screen bg-submarine bg-cover bg-center flex flex-col items-center">
             <PageTitle>Create Lobby</PageTitle>
             <form.Provider>
                 <form

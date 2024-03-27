@@ -35,6 +35,17 @@ export class EarthSeaGameMasterDb extends Dexie {
             seaNationEasternIslandSpyChat: "++id",
         });
     }
+
+    clearGameTable() {
+        return Promise.allSettled([
+            this.earthNationChat.clear(),
+            this.seaNationChat.clear(),
+            this.easternIslandChat.clear(),
+            this.earthNationEasternIslandSpyChat.clear(),
+            this.earthNationSeaNationSpyChat.clear(),
+            this.seaNationEasternIslandSpyChat.clear(),
+        ]);
+    }
 }
 
 export class EarthSeaGamePlayerDb extends Dexie {
@@ -54,5 +65,14 @@ export class EarthSeaGamePlayerDb extends Dexie {
             easternIslandChat: "++id",
             gameMasterChat: "++id",
         });
+    }
+
+    clearGameTable() {
+        return Promise.allSettled([
+            this.earthNationChat.clear(),
+            this.seaNationChat.clear(),
+            this.easternIslandChat.clear(),
+            this.gameMasterChat.clear(),
+        ]);
     }
 }
