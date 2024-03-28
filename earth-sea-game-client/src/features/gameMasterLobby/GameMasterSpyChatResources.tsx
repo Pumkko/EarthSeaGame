@@ -2,7 +2,7 @@ import { ChatMessageDbModel, EarthSeaGameMasterDb, TablesOfDb } from "@lib/DB";
 import { SignalREvents } from "@lib/SignalR";
 import { ENation, ENationSchema, SenderAndRecipientGroup } from "@lib/schemas/GameLobbySchema";
 import { HubConnection } from "@microsoft/signalr";
-import { Resource, createEffect, createMemo, createResource } from "solid-js";
+import { Resource, createEffect, createMemo, createResource, onCleanup } from "solid-js";
 
 interface TeamsChatHandler {
     chat: Resource<ChatMessageDbModel[]>;
@@ -82,6 +82,10 @@ export function createGameMasterSpyChatResources(
     const dexieDb = createMemo(() => {
         const db = new EarthSeaGameMasterDb();
         return db;
+    });
+
+    onCleanup(() => {
+        dexieDb().close();
     });
 
     const earthSeaSpyChat = createChatResourceFromTable(dexieDb, "earthNationSeaNationSpyChat");

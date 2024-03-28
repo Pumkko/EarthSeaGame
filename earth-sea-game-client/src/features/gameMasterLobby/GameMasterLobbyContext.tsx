@@ -1,10 +1,10 @@
+import { QueryKeys } from "@lib/QueryClient";
 import { GameMasterLobby } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource } from "solid-js";
-import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
+import { JSXElement, Resource, createContext, createResource, onCleanup } from "solid-js";
 import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
-import { QueryKeys } from "@lib/QueryClient";
+import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
 
 function createMyLobbyQuery() {
     return createQuery<GameMasterLobby | null>(() => ({
@@ -44,6 +44,10 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
 
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
     const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
+
+    onCleanup(async () => {
+        await signalRConnection()?.stop();
+    });
 
     return (
         <GameMasterLobbyContext.Provider

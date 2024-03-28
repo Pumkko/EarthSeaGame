@@ -2,7 +2,7 @@ import { QueryKeys } from "@lib/QueryClient";
 import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource } from "solid-js";
+import { JSXElement, Resource, createContext, createResource, onCleanup } from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
 export type JoinLobbyInput = {
@@ -46,6 +46,10 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const currentGame = () => query.data ?? undefined;
 
     const [signalRConnection] = createSignalResource(token);
+
+    onCleanup(async () => {
+        await signalRConnection()?.stop();
+    });
 
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 

@@ -3,7 +3,7 @@ import { SignalREvents, SignalRMethods } from "@lib/SignalR";
 import { ENationSchema, JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { ChatMessageSender } from "@lib/schemas/MessageSchema";
 import { HubConnection } from "@microsoft/signalr";
-import { Resource, createEffect, createMemo, createResource } from "solid-js";
+import { Resource, createEffect, createMemo, createResource, onCleanup } from "solid-js";
 
 interface TeamsChatHandler {
     chat: Resource<ChatMessageDbModel[]>;
@@ -60,6 +60,10 @@ export function createPlayerChatResources(
     const dexieDb = createMemo(() => {
         const db = new EarthSeaGamePlayerDb();
         return db;
+    });
+
+    onCleanup(() => {
+        dexieDb().close();
     });
 
     const gameMasterChatHandler = createChatResourceFromTable(dexieDb, "gameMasterChat");
