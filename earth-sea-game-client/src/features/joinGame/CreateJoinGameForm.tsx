@@ -8,7 +8,7 @@ import { createForm } from "@tanstack/solid-form";
 import { createMutation, useQueryClient } from "@tanstack/solid-query";
 import { zodValidator } from "@tanstack/zod-form-adapter";
 import axios, { HttpStatusCode } from "axios";
-import { JoinLobbyInput } from "../PlayerLobbyContext";
+import { JoinLobbyInput } from "../playerLobby/PlayerLobbyContext";
 
 function createJoinLobbyMutation() {
     const queryClient = useQueryClient();

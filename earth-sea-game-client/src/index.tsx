@@ -25,7 +25,7 @@ const PlayerLobby = lazy(() => import("./features/playerLobby/PlayerLobby"));
 const PlayerLobbyHome = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyHome"));
 const PlayerLobbyChat = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyChat"));
 const PlayerLobbygateway = lazy(() => import("./features/playerLobby/PlayerLobbyGateway"));
-const PlayerLobbyJoinLobby = lazy(() => import("./features/playerLobby/joinGame/JoinGame"));
+const PlayerLobbyJoinLobby = lazy(() => import("./features/joinGame/JoinGame"));
 
 const AppError = lazy(() => import("./features/error/AppError"));
 
