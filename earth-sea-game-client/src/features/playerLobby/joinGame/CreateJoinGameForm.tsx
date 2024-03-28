@@ -39,7 +39,9 @@ function createJoinLobbyMutation() {
         onSuccess: (data) => {
             queryClient.setQueryData(QueryKeys.playerLobby, data);
             localStorage.setItem(PlayerTokenLocalStorageKey, data.accessToken);
-            navigate(Routes.playerLobby.root);
+            navigate(Routes.playerLobby.root, {
+                replace: true,
+            });
         },
     }));
 }

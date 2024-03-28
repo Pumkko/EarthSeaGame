@@ -50,7 +50,7 @@ queryClient.setQueryDefaults(QueryKeys.gameMasterLobby, {
     },
 });
 
-export type JoinWithTokenQueryData = JoinGameOutput | "MustJoinGame";
+export type JoinWithTokenQueryData = JoinGameOutput | null;
 
 async function joinWithToken(existingToken: string): Promise<JoinWithTokenQueryData> {
     try {
@@ -73,7 +73,7 @@ async function joinWithToken(existingToken: string): Promise<JoinWithTokenQueryD
             console.error(e);
             throw e;
         } else {
-            return "MustJoinGame";
+            return null;
         }
     }
 }
@@ -84,7 +84,7 @@ queryClient.setQueryDefaults(QueryKeys.playerLobby, {
     queryFn: async (): Promise<JoinWithTokenQueryData> => {
         const existingToken = localStorage.getItem(PlayerTokenLocalStorageKey);
         if (!existingToken) {
-            return "MustJoinGame";
+            return null;
         }
 
         const joinWithExistingToken = await joinWithToken(existingToken);

@@ -42,8 +42,9 @@ export const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
 export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const query = createPlayerLobbyQuery();
 
-    const token = () => (query.data === "MustJoinGame" ? undefined : query.data?.accessToken);
-    const currentGame = () => (query.data === "MustJoinGame" ? undefined : query.data);
+    // ?? undefined not necessary but i find it more readable, and it makes the result clear
+    const token = () => query.data?.accessToken ?? undefined;
+    const currentGame = () => query.data ?? undefined;
 
     const [signalRConnection] = createSignalResource(token);
 

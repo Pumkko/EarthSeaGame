@@ -23,6 +23,9 @@ export default function StartingMenu() {
     };
 
     const onJoinLobby = () => {
+        queryClient.removeQueries({
+            queryKey: QueryKeys.playerLobby,
+        });
         navigate(Routes.playerLobby.gateway);
     };
 

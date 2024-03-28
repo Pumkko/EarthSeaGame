@@ -11,10 +11,10 @@ export default function GameMasterLobbyGateway() {
 
     return (
         <>
-            <Show when={playerGame.isSuccess && playerGame.data !== "MustJoinGame"}>
+            <Show when={playerGame.isSuccess && !!playerGame.data}>
                 <Navigate href={Routes.playerLobby.root} />
             </Show>
-            <Show when={playerGame.isSuccess && playerGame.data === "MustJoinGame"}>
+            <Show when={playerGame.isSuccess && !playerGame.data}>
                 <Navigate href={Routes.playerLobby.joinLobby} />
             </Show>
         </>
