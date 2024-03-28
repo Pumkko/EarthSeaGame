@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/solid-query";
 import axios, { HttpStatusCode } from "axios";
 import { ZodError } from "zod";
 import { PlayerTokenLocalStorageKey, loginRequest, msalInstance } from "./AuthConfig";
-import { GameMasterLobbySchema, JoinGameOutput, JoinGameOutputSchema } from "./schemas/GameLobbySchema";
+import { GameMasterLobbySchema, JoinGameOutput, JoinGameOutputWithTokenSchema } from "./schemas/GameLobbySchema";
 
 export const QueryKeys = {
     gameMasterLobby: ["gameMasterLobby"],
@@ -58,13 +58,13 @@ async function joinWithToken(existingToken: string): Promise<JoinGameOutput | nu
                 Authorization: `Bearer ${existingToken}`,
             },
         });
-        const parseResult = JoinGameOutputSchema.safeParse(response.data);
+        const parseResult = JoinGameOutputWithTokenSchema.safeParse(response.data);
         if (!parseResult.success) {
             console.error(parseResult.error);
             throw new Error("Failed to interpret operation result");
         }
 
-        return parseResult.data;
+        return { ...parseResult.data, accessToken: existingToken };
     } catch (e) {
         const isUnauthorizedError = axios.isAxiosError(e) && e.response?.status === HttpStatusCode.Unauthorized;
         if (!isUnauthorizedError) {

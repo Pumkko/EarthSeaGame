@@ -46,8 +46,14 @@ export const JoinGameOutputSchema = z.object({
     nation: ENationSchema,
 });
 
+export const JoinGameOutputWithTokenSchema = z.object({
+    gameMaster: z.string(),
+    nation: ENationSchema,
+});
+
 export type GameMasterLobby = z.infer<typeof GameMasterLobbySchema>;
 export type GameLobby = z.infer<typeof GameLobbySchema>;
 export type JoinGameOutput = z.infer<typeof JoinGameOutputSchema>;
+export type JoinGameOutputWithToken = z.infer<typeof JoinGameOutputWithTokenSchema>;
 export type ENation = z.infer<typeof ENationSchema>;
 export type SenderAndRecipientGroup = "EarthSeaGroup" | "EarthEasternGroup" | "SeaEasternGroup";

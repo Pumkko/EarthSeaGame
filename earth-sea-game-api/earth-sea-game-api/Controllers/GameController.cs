@@ -44,12 +44,8 @@ namespace EarthSeaGameApi.Controllers
                 return Unauthorized();
             }
 
-            // No need to call gameLobbyService.JoinLobbyAsync because the user has already joined
-            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
-
-            var output = new JoinGameOutput()
+            var output = new JoinGameWithTokenOutput()
             {
-                AccessToken = token,
                 GameMaster = gameMasterLobby.GameMaster,
                 Nation = playerNation
             };
