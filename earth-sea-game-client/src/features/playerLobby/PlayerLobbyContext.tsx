@@ -1,8 +1,7 @@
-import { EarthSeaGamePlayerDb } from "@lib/DB";
-import { JoinGameOutput, JoinGameOutputSchema } from "@lib/schemas/GameLobbySchema";
+import { JoinWithTokenQueryData, QueryKeys } from "@lib/QueryClient";
+import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { createMutation } from "@tanstack/solid-query";
-import axios, { HttpStatusCode } from "axios";
+import { createQuery } from "@tanstack/solid-query";
 import { JSXElement, Resource, createContext, createResource } from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
@@ -12,59 +11,28 @@ export type JoinLobbyInput = {
     readonly inviteCode: string;
 };
 
-function createJoinLobbyMutation() {
-    return createMutation(() => ({
-        mutationFn: async (value: JoinLobbyInput) => {
-            try {
-                const gameMasterDb = new EarthSeaGamePlayerDb();
-                await gameMasterDb.clearGameTable();
-                const targetUrl = new URL("api/game/join", import.meta.env.VITE_API_ROOT_URL);
-                const response = await axios.post(targetUrl.href, value);
-
-                const parseResult = JoinGameOutputSchema.safeParse(response.data);
-                if (!parseResult.success) {
-                    console.error(parseResult.error);
-                    throw new Error("Failed to interpret operation result");
-                }
-
-                return parseResult.data;
-            } catch (e) {
-                if (axios.isAxiosError(e) && e.response?.status === HttpStatusCode.Unauthorized) {
-                    throw new Error("Invalid credentials");
-                }
-                throw new Error("Something wrong happened, contact the Maker");
-            }
-        },
+function createPlayerLobbyQuery() {
+    return createQuery<JoinWithTokenQueryData>(() => ({
+        queryKey: QueryKeys.playerLobby,
     }));
 }
 
-function createSignalResource(mutation: ReturnType<typeof createJoinLobbyMutation>) {
-    return createResource(
-        () => ({
-            data: mutation.data,
-            isSuccess: mutation.isSuccess,
-        }),
-        async (mutation) => {
-            if (mutation.data === null || mutation.data === undefined || !mutation.isSuccess) {
-                return undefined;
-            }
+function createSignalResource(token: () => string | undefined) {
+    return createResource(token, async (accessToken) => {
+        const signalRConnection = new HubConnectionBuilder()
+            .withUrl("https://localhost:7071/hubs/chat", {
+                accessTokenFactory: () => accessToken,
+            })
+            .build();
 
-            const token = mutation.data.accessToken;
-            const signalRConnection = new HubConnectionBuilder()
-                .withUrl("https://localhost:7071/hubs/chat", {
-                    accessTokenFactory: () => token,
-                })
-                .build();
-
-            await signalRConnection.start();
-            return signalRConnection;
-        },
-    );
+        await signalRConnection.start();
+        return signalRConnection;
+    });
 }
 
 interface PlayerLobbyContextProps {
     signalRConnection: Resource<HubConnection | undefined>;
-    joinLobbyMutation: ReturnType<typeof createJoinLobbyMutation>;
+    query: ReturnType<typeof createPlayerLobbyQuery>;
     teamsChat: PlayerChatWithOtherPlayersResources;
     currentGame: () => JoinGameOutput | undefined;
 }
@@ -72,17 +40,20 @@ interface PlayerLobbyContextProps {
 export const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
 
 export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
-    const mutation = createJoinLobbyMutation();
-    const [signalRConnection] = createSignalResource(mutation);
+    const query = createPlayerLobbyQuery();
 
-    const currentGame = () => mutation.data;
+    const token = () => (query.data === "MustJoinGame" ? undefined : query.data?.accessToken);
+    const currentGame = () => (query.data === "MustJoinGame" ? undefined : query.data);
+
+    const [signalRConnection] = createSignalResource(token);
+
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 
     return (
         <PlayerLobbyContext.Provider
             value={{
-                joinLobbyMutation: mutation,
-                signalRConnection: signalRConnection,
+                query,
+                signalRConnection,
                 teamsChat,
                 currentGame,
             }}

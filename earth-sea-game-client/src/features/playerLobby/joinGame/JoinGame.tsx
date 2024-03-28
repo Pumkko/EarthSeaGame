@@ -1,17 +1,15 @@
 import PageTitle from "@components/PageTitle";
-import { Show, useContext } from "solid-js";
-import { PlayerLobbyContext } from "../PlayerLobbyContext";
+import { Show } from "solid-js";
 import { createJoinLobbyForm } from "./CreateJoinGameForm";
 import GameMasterField from "./GameMasterField";
 import InviteCodeField from "./InviteCodeField";
 import PickNationField from "./PickNationField";
 
 export default function JoinGame() {
-    const { form } = createJoinLobbyForm();
-    const { joinLobbyMutation } = useContext(PlayerLobbyContext)!;
+    const { form, joinLobbyMutation } = createJoinLobbyForm();
 
     return (
-        <div class="flex flex-col items-center">
+        <div class="h-screen bg-aircraft bg-cover bg-center flex flex-col items-center">
             <PageTitle>Join Lobby</PageTitle>
 
             <form.Provider>

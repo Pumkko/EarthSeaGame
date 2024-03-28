@@ -17,3 +17,5 @@ export const loginRequest = {
 };
 
 export const msalInstance = new PublicClientApplication(msalConfig);
+
+export const PlayerTokenLocalStorageKey = "earthSeaGame:PlayerToken";

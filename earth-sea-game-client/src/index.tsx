@@ -24,6 +24,8 @@ const GameMasterLobbyGateway = lazy(() => import("./features/gameMasterLobby/Gam
 const PlayerLobby = lazy(() => import("./features/playerLobby/PlayerLobby"));
 const PlayerLobbyHome = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyHome"));
 const PlayerLobbyChat = lazy(() => import("./features/playerLobby/tabs/PlayerLobbyChat"));
+const PlayerLobbygateway = lazy(() => import("./features/playerLobby/PlayerLobbyGateway"));
+const PlayerLobbyJoinLobby = lazy(() => import("./features/playerLobby/joinGame/JoinGame"));
 
 const AppError = lazy(() => import("./features/error/AppError"));
 
@@ -36,6 +38,7 @@ render(
                 <Router>
                     <Route path={Routes.startingMenu} component={StartingMenu} />
                     <Route path={Routes.gameMasterLobby.createLobby} component={GameMasterCreateLobby} />
+                    <Route path={Routes.playerLobby.joinLobby} component={PlayerLobbyJoinLobby} />
                     <Route
                         path={Routes.gameMasterLobby.gateway}
                         component={() => (
@@ -44,6 +47,16 @@ render(
                             </Suspense>
                         )}
                     />
+
+                    <Route
+                        path={Routes.playerLobby.gateway}
+                        component={() => (
+                            <Suspense fallback={<div>Loading Player Lobby...</div>}>
+                                <PlayerLobbygateway />
+                            </Suspense>
+                        )}
+                    />
+
                     <Route
                         path={Routes.playerLobby.root}
                         component={(props) => (

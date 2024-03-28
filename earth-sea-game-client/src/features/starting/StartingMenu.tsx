@@ -1,5 +1,5 @@
 import PageTitle from "@components/PageTitle";
-import { loginRequest, msalInstance } from "@lib/MsalConfig";
+import { loginRequest, msalInstance } from "@lib/AuthConfig";
 import { QueryKeys } from "@lib/QueryClient";
 import Routes from "@lib/Routes";
 import { useNavigate } from "@solidjs/router";
@@ -23,7 +23,7 @@ export default function StartingMenu() {
     };
 
     const onJoinLobby = () => {
-        navigate(Routes.playerLobby.root);
+        navigate(Routes.playerLobby.gateway);
     };
 
     return (

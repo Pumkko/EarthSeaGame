@@ -1,11 +1,12 @@
 import { QueryClient } from "@tanstack/solid-query";
+import axios, { HttpStatusCode } from "axios";
 import { ZodError } from "zod";
-import axios from "axios";
-import { GameMasterLobbySchema } from "./schemas/GameLobbySchema";
-import { loginRequest, msalInstance } from "./MsalConfig";
+import { PlayerTokenLocalStorageKey, loginRequest, msalInstance } from "./AuthConfig";
+import { GameMasterLobbySchema, JoinGameOutput, JoinGameOutputSchema } from "./schemas/GameLobbySchema";
 
 export const QueryKeys = {
     gameMasterLobby: ["gameMasterLobby"],
+    playerLobby: ["playerLobby"],
 };
 
 export const queryClient = new QueryClient({
@@ -46,5 +47,47 @@ queryClient.setQueryDefaults(QueryKeys.gameMasterLobby, {
         }
 
         return parseResult.data;
+    },
+});
+
+export type JoinWithTokenQueryData = JoinGameOutput | "MustJoinGame";
+
+async function joinWithToken(existingToken: string): Promise<JoinWithTokenQueryData> {
+    try {
+        const targetUrl = new URL("api/game/joinWithToken", import.meta.env.VITE_API_ROOT_URL);
+        const response = await axios.get(targetUrl.href, {
+            headers: {
+                Authorization: `Bearer ${existingToken}`,
+            },
+        });
+        const parseResult = JoinGameOutputSchema.safeParse(response.data);
+        if (!parseResult.success) {
+            console.error(parseResult.error);
+            throw new Error("Failed to interpret operation result");
+        }
+
+        return parseResult.data;
+    } catch (e) {
+        const isUnauthorizedError = axios.isAxiosError(e) && e.response?.status === HttpStatusCode.Unauthorized;
+        if (!isUnauthorizedError) {
+            console.error(e);
+            throw e;
+        } else {
+            return "MustJoinGame";
+        }
+    }
+}
+
+queryClient.setQueryDefaults(QueryKeys.playerLobby, {
+    staleTime: 2 * 60 * 60 * 1000,
+    gcTime: 2 * 60 * 60 * 1000,
+    queryFn: async (): Promise<JoinWithTokenQueryData> => {
+        const existingToken = localStorage.getItem(PlayerTokenLocalStorageKey);
+        if (!existingToken) {
+            return "MustJoinGame";
+        }
+
+        const joinWithExistingToken = await joinWithToken(existingToken);
+        return joinWithExistingToken;
     },
 });

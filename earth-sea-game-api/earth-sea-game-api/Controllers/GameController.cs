@@ -5,6 +5,8 @@ using EarthSeaGameApi.Services;
 using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Models.Inputs;
 using EarthSeaGameApi.Models.Outputs;
+using System.Security.Claims;
+using Microsoft.Net.Http.Headers;
 
 namespace EarthSeaGameApi.Controllers
 {
@@ -18,6 +20,43 @@ namespace EarthSeaGameApi.Controllers
         {
             return Ok();
         }
+
+
+        /// <summary>
+        /// Join a game with an existing and still valid token, if that succeed returns the game with the same token that was used to authorize the request
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("joinWithToken")]
+        public async Task<IActionResult> JoinWithToken()
+        {
+            var gameMasterName = User.Claims.SingleOrDefault(c => c.Type == AppClaims.GameMasterName)?.Value;
+            var playerNation = User.Claims.SingleOrDefault(c => c.Type == AppClaims.Nation)?.Value;
+
+            if(gameMasterName == null || playerNation == null)
+            {
+                return Unauthorized();
+            }
+
+            var gameMasterLobby = await gameLobbyService.GetLobbyForGameMasterAsync(gameMasterName);
+            if (gameMasterLobby == null)
+            {
+                return Unauthorized();
+            }
+
+            // No need to call gameLobbyService.JoinLobbyAsync because the user has already joined
+            var token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            var output = new JoinGameOutput()
+            {
+                AccessToken = token,
+                GameMaster = gameMasterLobby.GameMaster,
+                Nation = playerNation
+            };
+
+            return Ok(output);
+        }
+
 
         [HttpPost]
         [Route("join")]

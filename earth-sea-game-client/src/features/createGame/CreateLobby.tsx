@@ -1,7 +1,7 @@
 import FormFieldError from "@components/FormFieldErrror";
 import PageTitle from "@components/PageTitle";
+import { loginRequest, msalInstance } from "@lib/AuthConfig";
 import { EarthSeaGameMasterDb } from "@lib/DB";
-import { loginRequest, msalInstance } from "@lib/MsalConfig";
 import { QueryKeys } from "@lib/QueryClient";
 import Routes from "@lib/Routes";
 import { GameMasterLobbySchema } from "@lib/schemas/GameLobbySchema";

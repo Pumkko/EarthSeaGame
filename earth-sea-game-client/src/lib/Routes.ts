@@ -1,6 +1,8 @@
 const Routes = {
     startingMenu: "/",
     playerLobby: {
+        joinLobby: "/lobby/join",
+        gateway: "lobby/gateway",
         root: "/player",
         playerHome: "/",
         chat: "chat",
