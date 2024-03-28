@@ -1,4 +1,4 @@
-import { JoinWithTokenQueryData, QueryKeys } from "@lib/QueryClient";
+import { QueryKeys } from "@lib/QueryClient";
 import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
@@ -12,7 +12,7 @@ export type JoinLobbyInput = {
 };
 
 function createPlayerLobbyQuery() {
-    return createQuery<JoinWithTokenQueryData>(() => ({
+    return createQuery<JoinGameOutput | null>(() => ({
         queryKey: QueryKeys.playerLobby,
     }));
 }
@@ -42,8 +42,7 @@ export const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
 export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const query = createPlayerLobbyQuery();
 
-    // ?? undefined not necessary but i find it more readable, and it makes the result clear
-    const token = () => query.data?.accessToken ?? undefined;
+    const token = () => query.data?.accessToken;
     const currentGame = () => query.data ?? undefined;
 
     const [signalRConnection] = createSignalResource(token);

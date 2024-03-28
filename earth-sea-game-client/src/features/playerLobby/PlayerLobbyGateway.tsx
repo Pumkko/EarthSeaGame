@@ -1,11 +1,12 @@
-import { JoinWithTokenQueryData, QueryKeys } from "@lib/QueryClient";
+import { QueryKeys } from "@lib/QueryClient";
 import Routes from "@lib/Routes";
+import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { Navigate } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
 import { Show } from "solid-js";
 
 export default function GameMasterLobbyGateway() {
-    const playerGame = createQuery<JoinWithTokenQueryData>(() => ({
+    const playerGame = createQuery<JoinGameOutput | null>(() => ({
         queryKey: QueryKeys.playerLobby,
     }));
 

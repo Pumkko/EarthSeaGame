@@ -50,9 +50,7 @@ queryClient.setQueryDefaults(QueryKeys.gameMasterLobby, {
     },
 });
 
-export type JoinWithTokenQueryData = JoinGameOutput | null;
-
-async function joinWithToken(existingToken: string): Promise<JoinWithTokenQueryData> {
+async function joinWithToken(existingToken: string): Promise<JoinGameOutput | null> {
     try {
         const targetUrl = new URL("api/game/joinWithToken", import.meta.env.VITE_API_ROOT_URL);
         const response = await axios.get(targetUrl.href, {
@@ -81,7 +79,7 @@ async function joinWithToken(existingToken: string): Promise<JoinWithTokenQueryD
 queryClient.setQueryDefaults(QueryKeys.playerLobby, {
     staleTime: 2 * 60 * 60 * 1000,
     gcTime: 2 * 60 * 60 * 1000,
-    queryFn: async (): Promise<JoinWithTokenQueryData> => {
+    queryFn: async (): Promise<JoinGameOutput | null> => {
         const existingToken = localStorage.getItem(PlayerTokenLocalStorageKey);
         if (!existingToken) {
             return null;
