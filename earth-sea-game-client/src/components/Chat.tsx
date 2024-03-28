@@ -1,9 +1,9 @@
 import { ChatMessageModel, ChatMessageSender } from "@lib/schemas/MessageSchema";
-import { For, Show } from "solid-js";
-import ChatMessage from "./ChatMessage";
 import { createForm } from "@tanstack/solid-form";
 import { zodValidator } from "@tanstack/zod-form-adapter";
+import { For, Show, createEffect } from "solid-js";
 import { z } from "zod";
+import ChatMessage from "./ChatMessage";
 
 interface ChatProps {
     title?: string;
@@ -16,6 +16,16 @@ interface ChatProps {
 export default function Chat(props: ChatProps) {
     const gameChatDivId = () => `ChatWith${props.key}`;
 
+    const scrollToBottom = () => {
+        // Justify-end breaks auto scroll, so i removed it messages will be up at first and then will move down
+        // i then scrolldown after every messages
+        const scrollable = document.getElementById(gameChatDivId());
+        if (!scrollable) {
+            return;
+        }
+        scrollable.scrollTo(0, scrollable.scrollHeight - scrollable.clientHeight);
+    };
+
     const form = createForm(() => ({
         defaultValues: {
             message: "",
@@ -24,16 +34,13 @@ export default function Chat(props: ChatProps) {
         onSubmit: async ({ value, formApi }) => {
             await props.onNewMessage?.(value.message);
             formApi.setFieldValue("message", "");
-
-            // Justify-end breaks auto scroll, so i removed it messages will be up at first and then will move down
-            // i then scrolldown after every messages
-            const scrollable = document.getElementById(gameChatDivId());
-            if (!scrollable) {
-                return;
-            }
-            scrollable.scrollTo(0, scrollable.scrollHeight - scrollable.clientHeight);
+            scrollToBottom();
         },
     }));
+
+    createEffect(() => {
+        scrollToBottom();
+    });
 
     return (
         <div class="flex flex-col h-full overflow-auto earth-sea-game-chat-container">

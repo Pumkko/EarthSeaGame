@@ -7,9 +7,7 @@ export default function Timeline() {
                     style={{ "font-size": "12px", "text-decoration": "none" }}
                     title="Timeline creator"
                     href="https://time.graphics"
-                >
-                    Timeline creator
-                </a>
+                />
             </div>
         </div>
     );
