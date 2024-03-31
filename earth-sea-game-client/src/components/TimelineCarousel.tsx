@@ -41,7 +41,10 @@ export default function TimelineCarousel(props: { events: CarouselTimelineEventP
 
     const onNext = () => {
         const currentIndex = imageStore.events.findIndex((i) => i.isDisplayed);
-        const nextIndex = currentIndex + 1 >= imageStore.events.length ? 0 : currentIndex + 1;
+        if (currentIndex + 1 >= imageStore.events.length) {
+            return;
+        }
+        const nextIndex = currentIndex + 1;
 
         batch(() => {
             setImages("events", currentIndex, {
@@ -62,7 +65,10 @@ export default function TimelineCarousel(props: { events: CarouselTimelineEventP
 
     const onPrevious = () => {
         const currentIndex = imageStore.events.findIndex((i) => i.isDisplayed);
-        const nextIndex = currentIndex - 1 < 0 ? imageStore.events.length - 1 : currentIndex - 1;
+        if (currentIndex - 1 < 0) {
+            return;
+        }
+        const nextIndex = currentIndex - 1;
 
         batch(() => {
             setImages("events", currentIndex, {
