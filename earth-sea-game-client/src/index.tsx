@@ -8,6 +8,8 @@ import { Route, Router } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { Suspense, lazy } from "solid-js";
 import "./animations/slideInForwardLeft.scss";
+import "./animations/slideInForwardRight.scss";
+import "./animations/slideOutForwardLeft.scss";
 import "./animations/slideOutForwardRight.scss";
 import MsalInitializer from "./features/MsalInitializer";
 import { GameMasterLobbyContextProvider } from "./features/gameMasterLobby/GameMasterLobbyContext";

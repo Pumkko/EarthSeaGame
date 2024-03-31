@@ -11,12 +11,8 @@ export default function PlayerLobbyHome() {
                 <TimelineCarousel
                     events={[
                         {
-                            imagePath: "/earthNationTimeline/army_marching.webp",
+                            imagePath: "/earthNationTimeline/civil_war.webp",
                             events: [
-                                {
-                                    date: "1804",
-                                    event: "Sea Nation Adopts new Constitution",
-                                },
                                 {
                                     date: "1896",
                                     event: "Earth Nation Explodes",
@@ -58,9 +54,26 @@ export default function PlayerLobbyHome() {
                                     date: "1957",
                                     event: "Rebirth of the Earth Nation",
                                 },
+                            ],
+                        },
+                        {
+                            imagePath: "/earthNationTimeline/naval_task_force.webp",
+                            events: [
+                                {
+                                    date: "1958",
+                                    event: "First Strait Crisis",
+                                },
                                 {
                                     date: "1959",
-                                    event: "First Strait Crisis",
+                                    event: "Treaty of Unity is signed",
+                                },
+                                {
+                                    date: "1965",
+                                    event: "Second Strait Crisis",
+                                },
+                                {
+                                    date: "1968",
+                                    event: "Cordial Treaty is signed",
                                 },
                             ],
                         },
