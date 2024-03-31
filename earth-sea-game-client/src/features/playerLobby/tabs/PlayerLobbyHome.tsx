@@ -7,6 +7,8 @@ export default function PlayerLobbyHome() {
 
     const language = useLanguage();
 
+    const earthNationTimeline = () => language().timelines.earthNation;
+
     // No Idea why but using Switch and Match heres breaks with the following error: Cannot read properties of undefined (reading 'when')
     return (
         <Show when={!!context.currentGame()}>
@@ -18,19 +20,19 @@ export default function PlayerLobbyHome() {
                             events: [
                                 {
                                     date: "1896",
-                                    event: language().timelines.earthNation.earthNationCollapse(),
+                                    event: earthNationTimeline().collapse(),
                                 },
                                 {
                                     date: "1898",
-                                    event: "Earth Nations plunges into Civil War",
+                                    event: earthNationTimeline().civilWar(),
                                 },
                                 {
                                     date: "1907",
-                                    event: "Eastern Island asks Sea Nation for protection",
+                                    event: earthNationTimeline().seaNationProtectionTreaty(),
                                 },
                                 {
                                     date: "1918",
-                                    event: "Warlord Era begins",
+                                    event: earthNationTimeline().warlordEraBegins(),
                                 },
                             ],
                         },
@@ -39,44 +41,44 @@ export default function PlayerLobbyHome() {
                             events: [
                                 {
                                     date: "1940",
-                                    event: "Great War begins",
+                                    event: earthNationTimeline().greatWarBegins(),
                                 },
                                 {
                                     date: "1947",
-                                    event: "Atomic Bombings of the Far Away Nation",
+                                    event: earthNationTimeline().atomicBombings(),
                                 },
                                 {
                                     date: "1947",
-                                    event: "Great War ends",
+                                    event: earthNationTimeline().greatWarEnds(),
                                 },
                                 {
                                     date: "1950",
-                                    event: "Second Civil War Begins",
+                                    event: earthNationTimeline().secondCivilWarBegins(),
                                 },
                             ],
                         },
                         {
-                            imagePath: "/earthNationTimeline/naval_task_force.webp",
+                            imagePath: "/earthNationTimeline/rebirth_of_the_nation.jpg",
                             events: [
                                 {
                                     date: "1957",
-                                    event: "Rebirth of the Earth Nation",
+                                    event: earthNationTimeline().rebirthOfTheNation(),
                                 },
                                 {
                                     date: "1961",
-                                    event: "First Strait Crisis",
+                                    event: earthNationTimeline().firstStraitCrisis(),
                                 },
                                 {
                                     date: "1962",
-                                    event: "Border Conflict with the Southern Nation",
+                                    event: earthNationTimeline().southerNationBorderConflict(),
                                 },
                                 {
                                     date: "1963",
-                                    event: "Treaty of Unity is signed",
+                                    event: earthNationTimeline().treatyOfUnity(),
                                 },
                                 {
                                     date: "1965",
-                                    event: "Cordial Treaty is signed",
+                                    event: earthNationTimeline().cohabitationTreaty(),
                                 },
                             ],
                         },
@@ -85,19 +87,19 @@ export default function PlayerLobbyHome() {
                             events: [
                                 {
                                     date: "1966",
-                                    event: "Southern Nation Declares Independance",
+                                    event: earthNationTimeline().southernNationIndependence(),
                                 },
                                 {
                                     date: "1968",
-                                    event: "Second Strait Crisis",
+                                    event: earthNationTimeline().secondStraitCrisis(),
                                 },
                                 {
                                     date: "1978",
-                                    event: "First Nuclear Reactor enters service",
+                                    event: earthNationTimeline().firstNuclearReactor(),
                                 },
                                 {
                                     date: "1979",
-                                    event: "Sinking of the Nepture",
+                                    event: earthNationTimeline().sinkingOfTheNepture(),
                                 },
                             ],
                         },

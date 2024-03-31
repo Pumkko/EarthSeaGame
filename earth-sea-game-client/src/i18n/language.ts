@@ -22,7 +22,23 @@ export interface Language {
     };
     timelines: {
         earthNation: {
-            earthNationCollapse: string;
+            collapse: string;
+            civilWar: string;
+            seaNationProtectionTreaty: string;
+            warlordEraBegins: string;
+            greatWarBegins: string;
+            atomicBombings: string;
+            greatWarEnds: string;
+            secondCivilWarBegins: string;
+            rebirthOfTheNation: string;
+            firstStraitCrisis: string;
+            southerNationBorderConflict: string;
+            treatyOfUnity: string;
+            cohabitationTreaty: string;
+            southernNationIndependence: string;
+            secondStraitCrisis: string;
+            firstNuclearReactor: string;
+            sinkingOfTheNepture: string;
         };
     };
 }
