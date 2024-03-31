@@ -17,6 +17,7 @@
         "@tanstack/zod-form-adapter": "^0.13.7",
         "autoprefixer": "^10.4.18",
         "axios": "^1.6.7",
+        "daisyui": "^4.9.0",
         "dexie": "^3.2.7",
         "postcss": "^8.4.35",
         "sass": "^1.71.1",

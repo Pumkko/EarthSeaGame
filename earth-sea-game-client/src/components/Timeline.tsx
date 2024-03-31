@@ -1,14 +1,52 @@
-export default function Timeline() {
+import { For, Show } from "solid-js";
+
+export type TimelineEvents = {
+    date: string;
+    event: string;
+};
+
+export interface TimelineItemProps {
+    event: TimelineEvents;
+    isFirst: boolean;
+    isLast: boolean;
+}
+
+export function TimelineItem(props: TimelineItemProps) {
     return (
-        <div>
-            <iframe width="100%" height="400" src="https://time.graphics/embed?v=1&id=893712" allowfullscreen />
-            <div>
-                <a
-                    style={{ "font-size": "12px", "text-decoration": "none" }}
-                    title="Timeline creator"
-                    href="https://time.graphics"
-                />
+        <li>
+            <Show when={!props.isFirst}>
+                <hr />
+            </Show>
+            <div class="timeline-start">{props.event.date}</div>
+            <div class="timeline-middle rounded-full border-white border-2 p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 ">
+                    <path
+                        fill-rule="evenodd"
+                        d="M4.125 3C3.089 3 2.25 3.84 2.25 4.875V18a3 3 0 0 0 3 3h15a3 3 0 0 1-3-3V4.875C17.25 3.839 16.41 3 15.375 3H4.125ZM12 9.75a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5H12Zm-.75-2.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H12a.75.75 0 0 1-.75-.75ZM6 12.75a.75.75 0 0 0 0 1.5h7.5a.75.75 0 0 0 0-1.5H6Zm-.75 3.75a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5H6a.75.75 0 0 1-.75-.75ZM6 6.75a.75.75 0 0 0-.75.75v3c0 .414.336.75.75.75h3a.75.75 0 0 0 .75-.75v-3A.75.75 0 0 0 9 6.75H6Z"
+                        clip-rule="evenodd"
+                    />
+                    <path d="M18.75 6.75h1.875c.621 0 1.125.504 1.125 1.125V18a1.5 1.5 0 0 1-3 0V6.75Z" />
+                </svg>
             </div>
-        </div>
+
+            <div class="timeline-end timeline-box text-black">{props.event.event}</div>
+            <Show when={!props.isLast}>
+                <hr />
+            </Show>
+        </li>
+    );
+}
+
+export interface TimelineProps {
+    events: TimelineEvents[];
+}
+
+export function Timeline(props: TimelineProps) {
+    return (
+        <ul class="timeline">
+            <For each={props.events}>
+                {(e, i) => <TimelineItem event={e} isFirst={i() === 0} isLast={i() === props.events.length - 1} />}
+            </For>
+        </ul>
     );
 }

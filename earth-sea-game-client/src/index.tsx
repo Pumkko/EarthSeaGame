@@ -7,6 +7,8 @@ import { EnvironmentSchema } from "@lib/schemas/Environment";
 import { Route, Router } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { Suspense, lazy } from "solid-js";
+import "./animations/slideInForwardLeft.scss";
+import "./animations/slideOutForwardRight.scss";
 import MsalInitializer from "./features/MsalInitializer";
 import { GameMasterLobbyContextProvider } from "./features/gameMasterLobby/GameMasterLobbyContext";
 import { PlayerLobbyContextProvider } from "./features/playerLobby/PlayerLobbyContext";
