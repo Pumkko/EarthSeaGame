@@ -7,6 +7,7 @@ import { EnvironmentSchema } from "@lib/schemas/Environment";
 import { Route, Router } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { ErrorBoundary, Suspense, lazy } from "solid-js";
+import "./animations/fadeInForward.scss";
 import "./animations/slideInForwardLeft.scss";
 import "./animations/slideInForwardRight.scss";
 import "./animations/slideOutForwardLeft.scss";
