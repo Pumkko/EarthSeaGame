@@ -4,11 +4,13 @@ import { QueryKeys } from "@lib/QueryClient";
 import Routes from "@lib/Routes";
 import { useNavigate } from "@solidjs/router";
 import { useQueryClient } from "@tanstack/solid-query";
+import { useLanguage } from "../LanguageProvider";
 import StartingMenuButton from "./components/StartingMenuButton";
 export default function StartingMenu() {
     const navigate = useNavigate();
-
+    const language = useLanguage();
     const queryClient = useQueryClient();
+
     const onCreateOrManageLobby = async () => {
         try {
             const loginResponse = await msalInstance.loginPopup(loginRequest);
@@ -31,10 +33,14 @@ export default function StartingMenu() {
 
     return (
         <div class="bg-cover h-screen flex items-center p-8 justify-between flex-col bg-clemenceau_cv">
-            <PageTitle>Between Earth and Seas</PageTitle>
+            <PageTitle>{language().gameTitle()}</PageTitle>
             <div class="flex gap-8">
-                <StartingMenuButton onClick={onJoinLobby}>Join Lobby</StartingMenuButton>
-                <StartingMenuButton onclick={onCreateOrManageLobby}>My Lobby</StartingMenuButton>
+                <StartingMenuButton onClick={onJoinLobby}>
+                    {language().startingMenu.joinGameButton()}
+                </StartingMenuButton>
+                <StartingMenuButton onclick={onCreateOrManageLobby}>
+                    {language().startingMenu.myGameButton()}
+                </StartingMenuButton>
             </div>
         </div>
     );

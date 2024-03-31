@@ -11,6 +11,9 @@ dependencies:
   '@microsoft/signalr':
     specifier: ^8.0.0
     version: 8.0.0
+  '@solid-primitives/i18n':
+    specifier: ^2.1.1
+    version: 2.1.1(solid-js@1.8.15)
   '@solidjs/router':
     specifier: ^0.13.0
     version: 0.13.0(solid-js@1.8.15)
@@ -735,6 +738,14 @@ packages:
     os: [win32]
     requiresBuild: true
     optional: true
+
+  /@solid-primitives/i18n@2.1.1(solid-js@1.8.15):
+    resolution: {integrity: sha512-1p9B8hveu+gzFRWfXcRtdzzEdr7gw3c8uLXm+2bU33JHgiI8kYJsWvG128sE6vU1ZtYGPrGq980Jd6hxYupyZQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.8.15
+    dev: false
 
   /@solidjs/router@0.13.0(solid-js@1.8.15):
     resolution: {integrity: sha512-YHLbFv9J53+iG4yVrh0vVdYiyXPTk892UyZ1jiMPsUXn2dYkX4552N+8SjvlKWWsmNmYxaoefM6jZn1YtVIUUg==}

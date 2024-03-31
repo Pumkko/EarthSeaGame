@@ -1,8 +1,11 @@
 import TimelineCarousel from "@components/TimelineCarousel";
 import { Show, useContext } from "solid-js";
+import { useLanguage } from "../../LanguageProvider";
 import { PlayerLobbyContext } from "../PlayerLobbyContext";
 export default function PlayerLobbyHome() {
     const context = useContext(PlayerLobbyContext)!;
+
+    const language = useLanguage();
 
     // No Idea why but using Switch and Match heres breaks with the following error: Cannot read properties of undefined (reading 'when')
     return (
@@ -15,7 +18,7 @@ export default function PlayerLobbyHome() {
                             events: [
                                 {
                                     date: "1896",
-                                    event: "Earth Nation Explodes",
+                                    event: language().timelines.earthNation.earthNationCollapse(),
                                 },
                                 {
                                     date: "1898",

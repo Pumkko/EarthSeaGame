@@ -6,11 +6,12 @@ import Routes from "@lib/Routes";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
 import { Route, Router } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
-import { Suspense, lazy } from "solid-js";
+import { ErrorBoundary, Suspense, lazy } from "solid-js";
 import "./animations/slideInForwardLeft.scss";
 import "./animations/slideInForwardRight.scss";
 import "./animations/slideOutForwardLeft.scss";
 import "./animations/slideOutForwardRight.scss";
+import { LanguageProvider } from "./features/LanguageProvider";
 import MsalInitializer from "./features/MsalInitializer";
 import { GameMasterLobbyContextProvider } from "./features/gameMasterLobby/GameMasterLobbyContext";
 import { PlayerLobbyContextProvider } from "./features/playerLobby/PlayerLobbyContext";
@@ -37,64 +38,74 @@ EnvironmentSchema.parse(import.meta.env);
 
 render(
     () => (
-        <MsalInitializer>
-            <QueryClientProvider client={queryClient}>
-                <Router>
-                    <Route path={Routes.startingMenu} component={StartingMenu} />
-                    <Route path={Routes.gameMasterLobby.createLobby} component={GameMasterCreateLobby} />
-                    <Route path={Routes.playerLobby.joinLobby} component={PlayerLobbyJoinLobby} />
-                    <Route
-                        path={Routes.gameMasterLobby.gateway}
-                        component={() => (
-                            <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
-                                <GameMasterLobbyGateway />
-                            </Suspense>
-                        )}
-                    />
+        <LanguageProvider>
+            <MsalInitializer>
+                <QueryClientProvider client={queryClient}>
+                    <Router>
+                        <Route path={Routes.startingMenu} component={StartingMenu} />
+                        <Route path={Routes.gameMasterLobby.createLobby} component={GameMasterCreateLobby} />
+                        <Route path={Routes.playerLobby.joinLobby} component={PlayerLobbyJoinLobby} />
+                        <Route
+                            path={Routes.gameMasterLobby.gateway}
+                            component={() => (
+                                <ErrorBoundary fallback={<AppError />}>
+                                    <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
+                                        <GameMasterLobbyGateway />
+                                    </Suspense>
+                                </ErrorBoundary>
+                            )}
+                        />
 
-                    <Route
-                        path={Routes.playerLobby.gateway}
-                        component={() => (
-                            <Suspense fallback={<div>Loading Player Lobby...</div>}>
-                                <PlayerLobbygateway />
-                            </Suspense>
-                        )}
-                    />
+                        <Route
+                            path={Routes.playerLobby.gateway}
+                            component={() => (
+                                <ErrorBoundary fallback={<AppError />}>
+                                    <Suspense fallback={<div>Loading Player Lobby...</div>}>
+                                        <PlayerLobbygateway />
+                                    </Suspense>
+                                </ErrorBoundary>
+                            )}
+                        />
 
-                    <Route
-                        path={Routes.playerLobby.root}
-                        component={(props) => (
-                            <Suspense fallback={<div>Loading Player Lobby....</div>}>
-                                <PlayerLobbyContextProvider>
-                                    <PlayerLobby {...props} />
-                                </PlayerLobbyContextProvider>
-                            </Suspense>
-                        )}
-                    >
-                        <Route path={Routes.playerLobby.playerHome} component={PlayerLobbyHome} />
-                        <Route path={Routes.playerLobby.chat} component={PlayerLobbyChat} />
-                    </Route>
+                        <Route
+                            path={Routes.playerLobby.root}
+                            component={(props) => (
+                                <ErrorBoundary fallback={<AppError />}>
+                                    <Suspense fallback={<div>Loading Player Lobby....</div>}>
+                                        <PlayerLobbyContextProvider>
+                                            <PlayerLobby {...props} />
+                                        </PlayerLobbyContextProvider>
+                                    </Suspense>
+                                </ErrorBoundary>
+                            )}
+                        >
+                            <Route path={Routes.playerLobby.playerHome} component={PlayerLobbyHome} />
+                            <Route path={Routes.playerLobby.chat} component={PlayerLobbyChat} />
+                        </Route>
 
-                    <Route
-                        path={Routes.gameMasterLobby.root}
-                        component={(props) => (
-                            <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
-                                <GameMasterLobbyContextProvider>
-                                    <GameMasterLobby {...props} />
-                                </GameMasterLobbyContextProvider>
-                            </Suspense>
-                        )}
-                    >
-                        <Route path={Routes.gameMasterLobby.option} component={GameMasterLobbySettings} />
-                        <Route path={Routes.gameMasterLobby.spyChat} component={GameMasterSpyChat} />
-                        <Route path={Routes.gameMasterLobby.teamsChat} component={GameMasterTeamsChat} />
-                    </Route>
+                        <Route
+                            path={Routes.gameMasterLobby.root}
+                            component={(props) => (
+                                <ErrorBoundary fallback={<AppError />}>
+                                    <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
+                                        <GameMasterLobbyContextProvider>
+                                            <GameMasterLobby {...props} />
+                                        </GameMasterLobbyContextProvider>
+                                    </Suspense>
+                                </ErrorBoundary>
+                            )}
+                        >
+                            <Route path={Routes.gameMasterLobby.option} component={GameMasterLobbySettings} />
+                            <Route path={Routes.gameMasterLobby.spyChat} component={GameMasterSpyChat} />
+                            <Route path={Routes.gameMasterLobby.teamsChat} component={GameMasterTeamsChat} />
+                        </Route>
 
-                    <Route path="*404" component={() => <div>Not Found</div>} />
-                    <Route path={Routes.error} component={AppError} />
-                </Router>
-            </QueryClientProvider>
-        </MsalInitializer>
+                        <Route path="*404" component={() => <div>Not Found</div>} />
+                        <Route path={Routes.error} component={AppError} />
+                    </Router>
+                </QueryClientProvider>
+            </MsalInitializer>
+        </LanguageProvider>
     ),
     root!,
 );
