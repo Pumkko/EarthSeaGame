@@ -29,15 +29,15 @@ export default function PlayerLobbyHome() {
                                     date: "1918",
                                     event: "Warlord Era begins",
                                 },
-                                {
-                                    date: "1940",
-                                    event: "Great War begins",
-                                },
                             ],
                         },
                         {
                             imagePath: "/earthNationTimeline/destroyed_city.webp",
                             events: [
+                                {
+                                    date: "1940",
+                                    event: "Great War begins",
+                                },
                                 {
                                     date: "1947",
                                     event: "Atomic Bombings of the Far Away Nation",
@@ -50,30 +50,51 @@ export default function PlayerLobbyHome() {
                                     date: "1950",
                                     event: "Second Civil War Begins",
                                 },
-                                {
-                                    date: "1957",
-                                    event: "Rebirth of the Earth Nation",
-                                },
                             ],
                         },
                         {
                             imagePath: "/earthNationTimeline/naval_task_force.webp",
                             events: [
                                 {
-                                    date: "1958",
+                                    date: "1957",
+                                    event: "Rebirth of the Earth Nation",
+                                },
+                                {
+                                    date: "1961",
                                     event: "First Strait Crisis",
                                 },
                                 {
-                                    date: "1959",
+                                    date: "1962",
+                                    event: "Border Conflict with the Southern Nation",
+                                },
+                                {
+                                    date: "1963",
                                     event: "Treaty of Unity is signed",
                                 },
                                 {
                                     date: "1965",
-                                    event: "Second Strait Crisis",
+                                    event: "Cordial Treaty is signed",
+                                },
+                            ],
+                        },
+                        {
+                            imagePath: "/earthNationTimeline/nuclear_reactor.webp",
+                            events: [
+                                {
+                                    date: "1966",
+                                    event: "Southern Nation Declares Independance",
                                 },
                                 {
                                     date: "1968",
-                                    event: "Cordial Treaty is signed",
+                                    event: "Second Strait Crisis",
+                                },
+                                {
+                                    date: "1978",
+                                    event: "First Nuclear Reactor enters service",
+                                },
+                                {
+                                    date: "1979",
+                                    event: "Sinking of the Nepture",
                                 },
                             ],
                         },
