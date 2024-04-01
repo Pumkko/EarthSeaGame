@@ -12,6 +12,11 @@ export default function PlayerLobby(props: RouteSectionProps) {
     const language = useLanguage();
     const currentNation = () => context?.currentGame()?.nation;
 
+    const onShowWorldMap = () => {
+        const modal = document.getElementById("world_map_modal") as HTMLDialogElement;
+        modal?.showModal();
+    };
+
     return (
         <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">
             <div class="flex justify-between p-4 text-2xl border-b-2 ">
@@ -25,7 +30,15 @@ export default function PlayerLobby(props: RouteSectionProps) {
                     </Show>
                 </div>
                 <div>
-                    <ChatMessageSenderI18n sender={currentNation()} />
+                    <button onClick={onShowWorldMap}>{language().playerLobby.worldMap()}</button>
+                    <dialog id="world_map_modal" class="text-black modal">
+                        <div class="modal-box w-[60%] max-w-[60%] h-[95%] max-h-[95%] flex">
+                            <img src="/world_map.webp" />
+                        </div>
+                        <form method="dialog" class="modal-backdrop">
+                            <button>close</button>
+                        </form>
+                    </dialog>
                 </div>
             </div>
             <div class="flex-grow overflow-auto">{props.children}</div>

@@ -15,6 +15,7 @@ const frDefinition = {
     playerLobby: {
         chatTab: "Chat",
         homeTab: "Accueil",
+        worldMap: "Carte du Monde",
     },
     gameMasterLobby: {
         homeTab: "Accueil",

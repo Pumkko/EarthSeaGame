@@ -19,6 +19,7 @@ export interface Language {
     playerLobby: {
         homeTab: string;
         chatTab: string;
+        worldMap: string;
     };
     gameMasterLobby: {
         homeTab: string;
