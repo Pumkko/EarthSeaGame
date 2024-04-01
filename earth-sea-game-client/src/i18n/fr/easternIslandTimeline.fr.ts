@@ -46,7 +46,6 @@ export const EasternNationTimeline: Language["timelines"]["easternIsland"] = {
         details:
             "Une Faction sort victorieuse de la deuxième guerre civile. Ses chefs proclament la Renaissance de la Nation de la Terre. L'annonce est accueilli avec inquiétude par les territoires du Sud et l'Île Orientale.",
     },
-
     firstStraitCrisis: {
         event: "Première crise du détroit",
         details:
@@ -70,7 +69,7 @@ export const EasternNationTimeline: Language["timelines"]["easternIsland"] = {
     southernNationIndependence: {
         event: "Indépendance de la Nation du Sud",
         details:
-            "Considérant le traité de cohabitation comme une victoire, la Nation du Sud déclare officiellement son indépendance. Pour son premier discours le chef de l'état de la nouvelle Nation exprime le besoin pour le continent de faire le deuil de l'ancienne Nation de la Terre.",
+            "Après sa victoire contre la Nation de la Terre, la Nation du Sud déclare officiellement son indépendance. Pour son premier discours le chef de l'état de la nouvelle Nation exprime le besoin pour le continent de faire le deuil de l'ancienne Nation de la Terre.",
     },
     secondStraitCrisis: {
         event: "Deuxième crise du détroit",

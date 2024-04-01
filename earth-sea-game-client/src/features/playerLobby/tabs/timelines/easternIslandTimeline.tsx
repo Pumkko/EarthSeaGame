@@ -9,7 +9,7 @@ export default function createEasternIslandTimeline(): Accessor<CarouselTimeline
     const timeline = createMemo(() => {
         return [
             {
-                imagePath: "/easternIslandTimeline/civil_war.webp",
+                imagePath: "/timeline/civil_war.webp",
                 events: [
                     {
                         date: "1896",
@@ -38,7 +38,7 @@ export default function createEasternIslandTimeline(): Accessor<CarouselTimeline
                 ],
             },
             {
-                imagePath: "/easternIslandTimeline/destroyed_city.webp",
+                imagePath: "/timeline/destroyed_city.webp",
                 events: [
                     {
                         date: "1940",
@@ -67,7 +67,7 @@ export default function createEasternIslandTimeline(): Accessor<CarouselTimeline
                 ],
             },
             {
-                imagePath: "/easternIslandTimeline/rebirth_of_the_nation.jpg",
+                imagePath: "/timeline/rebirth_of_the_nation.webp",
                 events: [
                     {
                         date: "1957",
@@ -102,7 +102,7 @@ export default function createEasternIslandTimeline(): Accessor<CarouselTimeline
                 ],
             },
             {
-                imagePath: "/easternIslandTimeline/nuclear_reactor.webp",
+                imagePath: "/timeline/neptune_attack.webp",
                 events: [
                     {
                         date: "1966",

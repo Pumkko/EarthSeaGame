@@ -9,7 +9,7 @@ export default function createSeaNationTimeline(): Accessor<CarouselTimelineEven
     const timeline = createMemo(() => {
         return [
             {
-                imagePath: "/seaNationTimeline/protection_treaty.webp",
+                imagePath: "/timeline/seaNation/protection_treaty.webp",
                 events: [
                     {
                         date: "1896",
@@ -32,7 +32,7 @@ export default function createSeaNationTimeline(): Accessor<CarouselTimelineEven
                 ],
             },
             {
-                imagePath: "/seaNationTimeline/sea_nation_mobilization.webp",
+                imagePath: "/timeline/seaNation/sea_nation_mobilization.webp",
                 events: [
                     {
                         date: "1940",
@@ -55,7 +55,7 @@ export default function createSeaNationTimeline(): Accessor<CarouselTimelineEven
                 ],
             },
             {
-                imagePath: "/seaNationTimeline/naval_task_force.webp",
+                imagePath: "/timeline/seaNation/naval_task_force.webp",
                 events: [
                     {
                         date: "1957",
@@ -78,7 +78,7 @@ export default function createSeaNationTimeline(): Accessor<CarouselTimelineEven
                 ],
             },
             {
-                imagePath: "/seaNationTimeline/neptune_attack.webp",
+                imagePath: "/timeline/neptune_attack.webp",
                 events: [
                     {
                         date: "1966",

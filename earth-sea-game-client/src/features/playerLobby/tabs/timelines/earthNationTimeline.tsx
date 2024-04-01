@@ -9,7 +9,7 @@ export default function createEarthNationTimeline(): Accessor<CarouselTimelineEv
     const timeline = createMemo(() => {
         return [
             {
-                imagePath: "/earthNationTimeline/civil_war.webp",
+                imagePath: "/timeline/civil_war.webp",
                 events: [
                     {
                         date: "1896",
@@ -38,7 +38,7 @@ export default function createEarthNationTimeline(): Accessor<CarouselTimelineEv
                 ],
             },
             {
-                imagePath: "/earthNationTimeline/destroyed_city.webp",
+                imagePath: "/timeline/destroyed_city.webp",
                 events: [
                     {
                         date: "1940",
@@ -67,7 +67,7 @@ export default function createEarthNationTimeline(): Accessor<CarouselTimelineEv
                 ],
             },
             {
-                imagePath: "/earthNationTimeline/rebirth_of_the_nation.jpg",
+                imagePath: "/timeline/rebirth_of_the_nation.webp",
                 events: [
                     {
                         date: "1957",
@@ -102,7 +102,7 @@ export default function createEarthNationTimeline(): Accessor<CarouselTimelineEv
                 ],
             },
             {
-                imagePath: "/earthNationTimeline/nuclear_reactor.webp",
+                imagePath: "/timeline/earthNation/nuclear_reactor.webp",
                 events: [
                     {
                         date: "1966",
