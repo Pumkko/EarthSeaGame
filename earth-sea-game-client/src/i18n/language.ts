@@ -46,5 +46,19 @@ export interface Language {
             firstNuclearReactor: TimelineEventI18n;
             sinkingOfTheNepture: TimelineEventI18n;
         };
+        seaNation: {
+            seaNationConstitution: TimelineEventI18n;
+            earthNationCivilWar: TimelineEventI18n;
+            easternIslandAsksForProtection: TimelineEventI18n;
+            greatWarBegins: TimelineEventI18n;
+            atomicBombings: TimelineEventI18n;
+            greatWarEnds: TimelineEventI18n;
+            earthNationRebirthProclamation: TimelineEventI18n;
+            firstStraitCrisis: TimelineEventI18n;
+            southernNationConflict: TimelineEventI18n;
+            earthNationTreatyWithNeighbor: TimelineEventI18n;
+            secondStraitCrisis: TimelineEventI18n;
+            sinkingOfTheNeptune: TimelineEventI18n;
+        };
     };
 }

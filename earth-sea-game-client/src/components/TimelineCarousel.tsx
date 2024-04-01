@@ -9,7 +9,7 @@ interface CarouselTimelineEvent {
     isDisplayed: boolean;
 }
 
-type CarouselTimelineEventProps = Pick<CarouselTimelineEvent, "events" | "imagePath">;
+export type CarouselTimelineEventProps = Pick<CarouselTimelineEvent, "events" | "imagePath">;
 
 export default function TimelineCarousel(props: { events: CarouselTimelineEventProps[] }) {
     const [imageStore, setImages] = createStore<{
