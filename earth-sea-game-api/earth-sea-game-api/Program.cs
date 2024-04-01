@@ -6,8 +6,10 @@ using EarthSeaGameApi.Hubs;
 using EarthSeaGameApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,21 +19,41 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var keyVaultConfigSection = builder.Configuration.GetSection(KeyVaultConfig.ConfigKey);
+var authConfigSection = builder.Configuration.GetSection(AuthConfig.ConfigKey);
+var cosmosDbConfigSection = builder.Configuration.GetSection(CosmosDbConfig.ConfigKey);
+
+
+var kvConfig = keyVaultConfigSection.Get<KeyVaultConfig>();
+var authConfig = authConfigSection.Get<AuthConfig>();
+var cosmosDbConfig = cosmosDbConfigSection.Get<CosmosDbConfig>();
+
+if(kvConfig == null || cosmosDbConfig == null || authConfig == null)
+{
+    throw new ConfigurationErrorsException("Missing configuration");
+} 
+
+builder.Services.AddSingleton(kvConfig);
+builder.Services.AddSingleton(authConfig);
+builder.Services.AddSingleton(cosmosDbConfig);
+
 
 builder.Services.AddAuthentication(AppAuthenticationScheme.EarthSeaGameBearer)
     .AddJwtBearer(AppAuthenticationScheme.EarthSeaGameBearer, options =>
     {
-        var kvUri = new Uri("https://earth-sea-game-kv.vault.azure.net/");
+
+
+        var kvUri = new Uri(kvConfig.KeyVaultUri);
 
         var credentials = new DefaultAzureCredential();
         var keyClient = new KeyClient(kvUri, credentials);
-        var key = keyClient.GetKey("earth-sea-game-kv-key");
+        var key = keyClient.GetKey(kvConfig.KeyVaultKeyName);
         var signingKey = key.Value.Key.ToRSA();
 
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidIssuer = "https://localhost:7071",
-            ValidAudience = "http://localhost:5173",
+            ValidIssuer = authConfig.Issuer,
+            ValidAudience = authConfig.Audience,
             IssuerSigningKey = new RsaSecurityKey(signingKey),
             ValidateLifetime = true,
         };

@@ -2,6 +2,7 @@
 using Azure.Security.KeyVault.Keys.Cryptography;
 using EarthSeaGameApi.Configs;
 using EarthSeaGameApi.Models;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +12,7 @@ using System.Text.Json;
 
 namespace EarthSeaGameApi.Services
 {
-    public class JwtService : IJwtService
+    public class JwtService(AuthConfig authConfig, KeyVaultConfig keyVaultConfig) : IJwtService
     {
         public Task<string> GenerateTokenForGameAsync(string gameMaster, string nation)
         {
@@ -44,15 +45,15 @@ namespace EarthSeaGameApi.Services
 
         }
 
-        private static async Task<string> GenerateTokenForClaimsAsync(IEnumerable<Claim> claims)
+        private async Task<string> GenerateTokenForClaimsAsync(IEnumerable<Claim> claims)
         {
-            var jwt = new JwtSecurityToken("https://localhost:7071", "http://localhost:5173", claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
+            var jwt = new JwtSecurityToken(authConfig.Issuer, authConfig.Audience, claims, DateTime.UtcNow, DateTime.UtcNow.AddHours(12));
 
             var header = @"{""alg"":""RS256"",""typ"":""JWT""}";
             var payload = JsonSerializer.Serialize(jwt.Payload);
             var headerAndPayload = $"{Base64UrlEncoder.Encode(header)}.{Base64UrlEncoder.Encode(payload)}";
 
-            var cryptoClient = new CryptographyClient(new Uri("https://earth-sea-game-kv.vault.azure.net/keys/earth-sea-game-kv-key"), new DefaultAzureCredential());
+            var cryptoClient = new CryptographyClient(new Uri($"{keyVaultConfig.KeyVaultUri}/keys/{keyVaultConfig.KeyVaultKeyName}"), new DefaultAzureCredential());
 
             var digest = SHA256.HashData(Encoding.ASCII.GetBytes(headerAndPayload));
             var signature = (await cryptoClient.SignAsync(SignatureAlgorithm.RS256, digest)).Signature;

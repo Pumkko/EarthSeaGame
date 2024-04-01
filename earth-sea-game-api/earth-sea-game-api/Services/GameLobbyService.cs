@@ -5,6 +5,7 @@ using EarthSeaGameApi.Models;
 using Microsoft.Azure.Cosmos.Linq;
 using System.Text.Json;
 using EarthSeaGameApi.Models.Inputs;
+using Microsoft.Extensions.Options;
 
 namespace EarthSeaGameApi.Services
 {
@@ -12,21 +13,15 @@ namespace EarthSeaGameApi.Services
     {
         private readonly Container gameLobbyContainer;
 
-        public GameLobbyService(IConfiguration configuration)
+        public GameLobbyService(CosmosDbConfig databaseConfig)
         {
-            var databaseConfig = configuration.GetSection(CosmosDbConfig.ConfigKey).Get<CosmosDbConfig>();
-            if (databaseConfig == null)
-            {
-                throw new Exception("Bad configuration CosmosDbConfig");
-            }
-
             var cosmosClient = new CosmosClientBuilder(databaseConfig.DatabaseConnectionString)
                .WithSerializerOptions(new CosmosSerializationOptions()
                {
                    PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
                }).Build();
 
-            gameLobbyContainer = cosmosClient.GetContainer(databaseConfig.DatabaseName, databaseConfig.ContainerName);
+            gameLobbyContainer = cosmosClient.GetContainer(databaseConfig.DatabaseName, databaseConfig.ContainerName); ;
         }
 
         public async Task<GameLobby> CreateLobbyForGameMasterAsync(CreateGameLobbyInput gameLobbyToCreate, string gameMasterName)
