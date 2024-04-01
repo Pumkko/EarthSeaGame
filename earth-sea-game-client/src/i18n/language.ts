@@ -4,6 +4,11 @@ type MessageSenderToLanguage = {
     [key in ChatMessageSender]: string;
 };
 
+type TimelineEventI18n = {
+    event: string;
+    details: string;
+};
+
 export interface Language {
     gameTitle: string;
     startingMenu: {
@@ -22,23 +27,23 @@ export interface Language {
     };
     timelines: {
         earthNation: {
-            collapse: string;
-            civilWar: string;
-            seaNationProtectionTreaty: string;
-            warlordEraBegins: string;
-            greatWarBegins: string;
-            atomicBombings: string;
-            greatWarEnds: string;
-            secondCivilWarBegins: string;
-            rebirthOfTheNation: string;
-            firstStraitCrisis: string;
-            southerNationBorderConflict: string;
-            treatyOfUnity: string;
-            cohabitationTreaty: string;
-            southernNationIndependence: string;
-            secondStraitCrisis: string;
-            firstNuclearReactor: string;
-            sinkingOfTheNepture: string;
+            collapse: TimelineEventI18n;
+            civilWar: TimelineEventI18n;
+            seaNationProtectionTreaty: TimelineEventI18n;
+            warlordEraBegins: TimelineEventI18n;
+            greatWarBegins: TimelineEventI18n;
+            atomicBombings: TimelineEventI18n;
+            greatWarEnds: TimelineEventI18n;
+            secondCivilWarBegins: TimelineEventI18n;
+            rebirthOfTheNation: TimelineEventI18n;
+            firstStraitCrisis: TimelineEventI18n;
+            southerNationBorderConflict: TimelineEventI18n;
+            treatyOfUnity: TimelineEventI18n;
+            cohabitationTreaty: TimelineEventI18n;
+            southernNationIndependence: TimelineEventI18n;
+            secondStraitCrisis: TimelineEventI18n;
+            firstNuclearReactor: TimelineEventI18n;
+            sinkingOfTheNepture: TimelineEventI18n;
         };
     };
 }

@@ -3,6 +3,7 @@ import { For, Show } from "solid-js";
 export type TimelineEvents = {
     date: string;
     event: string;
+    eventDetails: string;
 };
 
 export interface TimelineItemProps {
@@ -29,7 +30,9 @@ export function TimelineItem(props: TimelineItemProps) {
                 </svg>
             </div>
 
-            <div class="timeline-end timeline-box text-black">{props.event.event}</div>
+            <div class="timeline-end timeline-box text-black tooltip tooltip-top" data-tip={props.event.eventDetails}>
+                {props.event.event}
+            </div>
             <Show when={!props.isLast}>
                 <hr />
             </Show>
