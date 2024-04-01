@@ -26,6 +26,7 @@ export interface Language {
         teamsChatTab: string;
     };
     timelines: {
+        detailModalTitle: string;
         earthNation: {
             collapse: TimelineEventI18n;
             civilWar: TimelineEventI18n;

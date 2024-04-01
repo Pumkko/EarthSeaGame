@@ -1,4 +1,5 @@
 import { For, Show } from "solid-js";
+import { useLanguage } from "../features/LanguageProvider";
 
 export type TimelineEvents = {
     date: string;
@@ -21,11 +22,13 @@ export function TimelineItem(props: TimelineItemProps) {
         m?.showModal();
     };
 
+    const language = useLanguage();
+
     return (
         <>
             <dialog id={dialogId()} class="modal text-black">
                 <div class="modal-box">
-                    <h3 class="font-bold text-lg">En Détail</h3>
+                    <h3 class="font-bold text-lg">{language().timelines.detailModalTitle()}</h3>
                     <p class="py-4">{props.event.eventDetails}</p>
                 </div>
                 <form method="dialog" class="modal-backdrop">

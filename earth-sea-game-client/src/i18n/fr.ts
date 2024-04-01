@@ -23,16 +23,17 @@ const frDefinition = {
         myGameButton: "Mon Jeu",
     },
     timelines: {
+        detailModalTitle: "En Détail",
         earthNation: {
             collapse: {
                 event: "Éclatement de la Nation de la Terre",
                 details:
-                    "La Nation de la Terre, l'un des plus ancien et puissant état du monde, s'écroule sous son propre poids, le gouvernement central n'exerce plus qu'un contrôle limité.",
+                    "La Nation de la Terre, l'un des plus anciens et puissants état du monde, s'écroule sous son propre poids. Le gouvernement central n'exerce plus qu'un contrôle limité.",
             },
             civilWar: {
                 event: "Début de la Première Guerre Civile",
                 details:
-                    "La situation sur le continent s'embrase, le gouvernement est massacré, les plus puissantes factions du continent s'arment, le continent plonge dans la violence.",
+                    "La situation sur le continent s'embrase et le gouvernement est massacré. Les plus puissantes factions du continent s'arment, le territoire plonge dans la violence.",
             },
             atomicBombings: {
                 event: "Bombardements Atomiques de la Nation Reculée",
@@ -52,27 +53,27 @@ const frDefinition = {
             firstStraitCrisis: {
                 event: "Première crise du détroit",
                 details:
-                    "La jeune Nation de la Terre, désireuse de réunifier les anciens territoires de l'ancienne Nation de la Terre, tente d'envahir l'Île Orientale. La Nation des Mers liée par traité réagit en envoyant deux porte-avions et leur escorte. La Nation de la Terre incapable de lutter contre une telle flotte se retire, humiliée.",
+                    "Le gourvernement de la Renaissance, désireux de rétablir les frontières de l'ancienne Nation de la Terre, lance une expédition sur l'Île Orientale. La Nation des Mers liée par traité réagit en envoyant deux porte-avions et leur escorte. La Nation de la Terre largement dépassée doit se retirer.",
             },
             greatWarBegins: {
                 event: "Début de la Grande Guerre",
                 details:
-                    "La Nation Reculée, souhaite profiter du chaos sur le continent pour en prendre le contrôle, la Nation des Mers est également attaquée, la Grande Guerre commence.",
+                    "La Nation Reculée, souhaitant profiter du chaos sur le continent pour en prendre le contrôle lance une attaque massive tous azimut, la Grande Guerre commence.",
             },
             greatWarEnds: {
                 event: "Fin de la Grande Guerre",
                 details:
-                    "La Nation Reculée capitule après avoir vu ses trois plus grandes villes détruites par des bombardements atomiques. La Grande Guerre est terminée, plus de 80 millions de personnes y ont perdu la vie. Le Continent est ravagée, la Nation des Mers devient de très loin l'état le plus puissant du monde et seul état disposant de l'arme nucléaire.",
+                    "La Nation Reculée capitule après avoir vu ses trois plus grandes villes détruites par des bombardements atomiques. La Grande Guerre est terminée, plus de 80 millions de personnes y ont perdu la vie. Le Continent est ravagée, la Nation des Mers devient de très loin l'état le plus puissant du monde et seul doté de l'arme nucléaire.",
             },
             rebirthOfTheNation: {
                 event: "Proclamation de la Renaissance de la Nation",
                 details:
-                    "Une Faction sort victorieuse de la deuxième guerre civile et proclame la Renaissance de la Nation de la Terre.",
+                    "Une Faction sort victorieuse de la deuxième guerre civile. Ses chefs proclament la Renaissance de la Nation de la Terre.",
             },
             seaNationProtectionTreaty: {
                 event: "Traité de Protection",
                 details:
-                    "Face au chaos du continent, l'Île Orientale auparavant une province de la Nation de la Terre, demande la protection de la Nation des Mers en vertu de l'article 8 de la constitution.",
+                    "Face au chaos du continent, l'Île Orientale auparavant une province de la Nation de la Terre, demande la protection de la Nation des Mers.",
             },
             secondCivilWarBegins: {
                 event: "Début de la Deuxième Guerre Civile",
@@ -82,7 +83,7 @@ const frDefinition = {
             secondStraitCrisis: {
                 event: "Deuxième crise du détroit",
                 details:
-                    "Désormais supportée par la Nation du Nord, la Nation de la Terre tente une nouvelle invasion de l'Île Orientale. La Nation des Mers réagit avec quatre porte-avions et ordonne le déploiement préventif de ses forces nucléaires.",
+                    "Désormais supportée par la Nation du Nord, le gouvernement de la Renaissance tente une nouvelle fois de ramener l'Île Orientale dans le territoire de la Nation de la Terre. La Nation des Mers réagit avec trois porte-avions et ordonne le déploiement préventif de ses forces nucléaires.",
             },
             sinkingOfTheNepture: {
                 event: "Naufrage du Nepture",
@@ -92,17 +93,17 @@ const frDefinition = {
             southerNationBorderConflict: {
                 event: "Guerre contre la Nation du Sud",
                 details:
-                    "Toujours dans le but de rétablir l'héritage de l'ancienne Nation de la Terre, le nouveau gouvernement lance une expédition vers le sud. Ce territoire contrôlé par l'un des derniers seigneurs de guerre, refuse la légitimité de la Nouvelle Nation de la Terre. Le conflit s'enlise.",
+                    "Toujours dans le but de rétablir l'héritage de l'ancienne Nation de la Terre, le nouveau gouvernement lance une expédition vers le sud. Ce territoire contrôlé par l'un des derniers seigneurs de guerre, refuse de reconnaître la légitimité de la Nouvelle Nation de la Terre. Le conflit s'enlise.",
             },
             southernNationIndependence: {
                 event: "Indépendance de la Nation du Sud",
                 details:
-                    "Considérant le traité de cohabitation comme une victoire, la Nation du Sud déclare officiellement son indépendance. Pour son premier discours le chef d'état de la nouvelle Nation exprime le besoin pour le continent de faire le deuil de l'ancienne Nation de la Terre.",
+                    "Considérant le traité de cohabitation comme une victoire, la Nation du Sud déclare officiellement son indépendance. Pour son premier discours le chef de l'état de la nouvelle Nation exprime le besoin pour le continent de faire le deuil de l'ancienne Nation de la Terre.",
             },
             treatyOfUnity: {
                 event: "Traité d'Unité",
                 details:
-                    "Humiliée par sa défaite lors de sa tentative d'envahir l'Île Orientalen la Nation de la Terre signe un traité d'amitié avec la Nation du Nord. La Nation du Nord devient dans les faits un état satellite de la Nation de la Terre.",
+                    "Humiliée par sa défaite lors de sa tentative d'envahir l'Île Orientale la Nation de la Terre signe un traité d'amitié avec la Nation du Nord. La Nation du Nord devient dans les faits un état satellite de la Nation de la Terre.",
             },
             warlordEraBegins: {
                 event: "Âge des Seigneurs de Guerre",
