@@ -1,7 +1,8 @@
 import * as i18n from "@solid-primitives/i18n";
 import { Language } from "../language";
-import { EarthNationTimelineFr } from "./earthNationTimelineFr";
-import { SeaNationTimelineFr } from "./seaNationTimelineFr";
+import { EarthNationTimelineFr } from "./earthNationTimeline.fr";
+import { EasternNationTimeline } from "./easternIslandTimeline.fr";
+import { SeaNationTimelineFr } from "./seaNationTimeline.fr";
 
 const frDefinition = {
     gameTitle: "Entre Terres et Mers",
@@ -28,6 +29,7 @@ const frDefinition = {
         detailModalTitle: "En Détail",
         earthNation: EarthNationTimelineFr,
         seaNation: SeaNationTimelineFr,
+        easternIsland: EasternNationTimeline,
     },
 } satisfies Language;
 

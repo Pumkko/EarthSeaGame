@@ -22,18 +22,19 @@ export const SeaNationTimelineFr: Language["timelines"]["seaNation"] = {
             "La Nation Reculée prétextant la nécessité de protéger sa population menacée par la guerre civile sur le continent, lance une attaque massive qui vise également la Nation Des Mers.",
     },
     atomicBombings: {
-        event: "Bombardement Atomiques de la Nation Reculée",
+        event: "Bombardements Atomiques de la Nation Reculée",
         details:
             "Après une mobilisation sans précédent de son industrie et sa population, la Nation Des Mers développe une force militaire inégalée dans l'histoire. Dans son arsenal une arme nouvelle capable de raser des villes entières.",
     },
     greatWarEnds: {
         event: "Capitulation de la Nation Reculée",
-        details: "La Nation Reculée capitule enfin après trois bombardements atomiques sur ses plus grandes villes.",
+        details:
+            "La Nation Reculée capitule enfin après la destruction de ses trois plus grandes villes par des bombes atomiques.",
     },
     earthNationRebirthProclamation: {
         event: "Fin de la guerre civil terrestre",
         details:
-            "Un nouveau gouvernement se forme sur l'ancien territoire de la Nation de la Terre. Il se présente comme le seul légitime héritier de l'ancien état et proclame la Renaissance la Nation de la Terre.",
+            "Un nouveau gouvernement se forme sur l'ancien territoire de la Nation de la Terre. Il se présente comme le seul légitime héritier de l'ancien état et proclame la Renaissance de la Nation de la Terre.",
     },
     firstStraitCrisis: {
         event: "Première crise du détroit",

@@ -1,6 +1,6 @@
 import { Language } from "../language";
 
-export const EarthNationTimelineFr: Language["timelines"]["earthNation"] = {
+export const EasternNationTimeline: Language["timelines"]["easternIsland"] = {
     collapse: {
         event: "Éclatement de la Nation de la Terre",
         details:
@@ -21,15 +21,10 @@ export const EarthNationTimelineFr: Language["timelines"]["earthNation"] = {
         details:
             "le Traité de Cohabitation entre la Nation de la Terre et la Nation du Sud est signé. Celui-ci met fin à la guerre et à travers l'article 4 du traité chaque nation reconnait une différence de point de vue non résolu sur le futur du continent.",
     },
-    firstNuclearReactor: {
-        event: "Mise en service du R1",
-        details:
-            "Le R1 premier réacteur nucléaire construit par la Nation de la Terre entre en service dans le plus grand secret.",
-    },
     firstStraitCrisis: {
         event: "Première crise du détroit",
         details:
-            "Le gourvernement de la Renaissance, désireux de rétablir les frontières de l'ancienne Nation de la Terre, lance une expédition sur l'Île Orientale. La Nation Des Mers liée par traité réagit en envoyant deux porte-avions et leur escorte. La Nation de la Terre largement dépassée doit se retirer.",
+            "Le gouvernement de la Renaissance décide d'unifier par la force les anciens territoires de la Nation de la Terre. Plusieurs armées sont rassemblées sur le continent, la Nation Des Mers liée par traité réagit en déployant deux porte-avions et leur escorte dans le détroit. La Nation de la Terre largement dépassée doit retirer ses troupes.",
     },
     greatWarBegins: {
         event: "Début de la Grande Guerre",
@@ -44,7 +39,7 @@ export const EarthNationTimelineFr: Language["timelines"]["earthNation"] = {
     rebirthOfTheNation: {
         event: "Proclamation de la Renaissance de la Nation",
         details:
-            "Une Faction sort victorieuse de la deuxième guerre civile. Ses chefs proclament la Renaissance de la Nation de la Terre.",
+            "Une Faction sort victorieuse de la deuxième guerre civile. Ses chefs proclament la Renaissance de la Nation de la Terre. L'annonce est accueilli avec inquiétude par les territoires du Sud et l'Île Orientale.",
     },
     seaNationProtectionTreaty: {
         event: "Traité de Protection",
@@ -69,7 +64,7 @@ export const EarthNationTimelineFr: Language["timelines"]["earthNation"] = {
     southerNationBorderConflict: {
         event: "Guerre contre la Nation du Sud",
         details:
-            "Toujours dans le but de rétablir l'héritage de l'ancienne Nation de la Terre, le nouveau gouvernement lance une expédition vers le sud. Ce territoire contrôlé par l'un des derniers seigneurs de guerre résiste, les généraux du Sud maneouvrent habilement et tiennent bon face aux assaults de la Nation de la Terre.",
+            "Après l'échec de sa tentive de contrôler l'Île Orientale le gouvernemnet de la Renaissance tente d'envahir son voisin du Sud. Les généraux du Sud maneouvrent habilement et tiennent bon face aux assaults de la Nation de la Terre.",
     },
     southernNationIndependence: {
         event: "Indépendance de la Nation du Sud",
