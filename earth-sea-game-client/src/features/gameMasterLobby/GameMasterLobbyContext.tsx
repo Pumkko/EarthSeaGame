@@ -13,7 +13,7 @@ function createMyLobbyQuery() {
 }
 
 function createSignalResource(token: () => string | undefined) {
-    return createResource(token, async (accessToken) => {
+    const [signalRConnection] = createResource(token, async (accessToken) => {
         const signalRConnection = new HubConnectionBuilder()
             .withUrl("https://localhost:7071/hubs/chat", {
                 accessTokenFactory: () => accessToken,
@@ -23,6 +23,12 @@ function createSignalResource(token: () => string | undefined) {
         await signalRConnection.start();
         return signalRConnection;
     });
+
+    onCleanup(async () => {
+        await signalRConnection()?.stop();
+    });
+
+    return [signalRConnection];
 }
 
 interface GameMasterLobbyContextProps {
@@ -44,10 +50,6 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
 
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
     const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
-
-    onCleanup(async () => {
-        await signalRConnection()?.stop();
-    });
 
     return (
         <GameMasterLobbyContext.Provider

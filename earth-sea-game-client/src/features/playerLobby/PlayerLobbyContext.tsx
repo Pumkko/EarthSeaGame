@@ -18,7 +18,7 @@ function createPlayerLobbyQuery() {
 }
 
 function createSignalResource(token: () => string | undefined) {
-    return createResource(token, async (accessToken) => {
+    const [signalRConnection] = createResource(token, async (accessToken) => {
         const signalRConnection = new HubConnectionBuilder()
             .withUrl("https://localhost:7071/hubs/chat", {
                 accessTokenFactory: () => accessToken,
@@ -28,6 +28,12 @@ function createSignalResource(token: () => string | undefined) {
         await signalRConnection.start();
         return signalRConnection;
     });
+
+    onCleanup(async () => {
+        await signalRConnection()?.stop();
+    });
+
+    return [signalRConnection];
 }
 
 interface PlayerLobbyContextProps {
@@ -46,10 +52,6 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const currentGame = () => query.data ?? undefined;
 
     const [signalRConnection] = createSignalResource(token);
-
-    onCleanup(async () => {
-        await signalRConnection()?.stop();
-    });
 
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 
