@@ -95,12 +95,12 @@ export default function TimelineCarousel(props: { events: CarouselTimelineEventP
                     src={currentEvents()!.imagePath}
                 />
 
-                <div class="flex justify-around">
+                <div class="flex justify-center">
                     <ArrowLeftCircle
                         onClick={onPrevious}
                         class="w-12 h-12 self-center hover:opacity-50 cursor-pointer duration-500"
                     />
-                    <div class={`${currentAnimationClass()} w-4/5 overflow-x-auto flex justify-center`}>
+                    <div class={`${currentAnimationClass()} flex justify-center`}>
                         <Timeline events={currentEvents()!.events} />
                     </div>
                     <ArrowRightCircle
