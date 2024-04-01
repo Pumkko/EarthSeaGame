@@ -17,8 +17,8 @@ const frDefinition = {
     },
     gameMasterLobby: {
         homeTab: "Accueil",
-        spyChatTab: "Chat Espion",
-        teamsChatTab: "Chat Equipe",
+        spyChatTab: "Espion",
+        teamsChatTab: "Chat",
     },
     startingMenu: {
         joinGameButton: "Rejoindre un Jeu",

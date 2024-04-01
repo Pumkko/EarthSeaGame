@@ -9,7 +9,6 @@ export default function PlayerLobbyHome() {
     const earthNationTimeline = createEarthNationTimeline();
     const seaNationTimeline = createSeaNationTimeline();
 
-    // No Idea why but using Switch and Match heres breaks with the following error: Cannot read properties of undefined (reading 'when')
     return (
         <Show when={!!context.currentGame()}>
             <div class="h-full flex flex-col justify-between">

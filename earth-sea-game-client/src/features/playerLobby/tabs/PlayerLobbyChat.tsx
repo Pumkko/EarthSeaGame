@@ -1,11 +1,14 @@
-import { Show, useContext } from "solid-js";
-import { PlayerLobbyContext } from "../PlayerLobbyContext";
 import Chat from "@components/Chat";
+import { Show, useContext } from "solid-js";
+import { useLanguage } from "../../LanguageProvider";
+import { PlayerLobbyContext } from "../PlayerLobbyContext";
 
 export default function PlayerLobbyChat() {
     const context = useContext(PlayerLobbyContext);
 
     const currentNation = () => context?.currentGame()?.nation;
+
+    const language = useLanguage();
 
     return (
         <Show when={!!currentNation() && !!context}>
@@ -13,7 +16,7 @@ export default function PlayerLobbyChat() {
                 <Chat
                     messages={context!.teamsChat.gameMasterChat() ?? []}
                     currentUser={currentNation()!}
-                    title="Game Master"
+                    title={language().messageSender.GameMaster()}
                     key="CurrentPlayerChatWithGameMaster"
                     onNewMessage={(message) => {
                         return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer("GameMaster", message);
@@ -23,7 +26,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.earthNationChat() ?? []}
                         currentUser={currentNation()!}
-                        title={"Earth Nation"}
+                        title={language().messageSender.EarthNation()}
                         key="CurrentPlayerChatWithEarthNation"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer(
@@ -37,7 +40,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.seaNationChat() ?? []}
                         currentUser={currentNation()!}
-                        title={"Sea Nation"}
+                        title={language().messageSender.SeaNation()}
                         key="CurrentPlayerChatWithSeaNation"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer("SeaNation", message);
@@ -48,7 +51,7 @@ export default function PlayerLobbyChat() {
                     <Chat
                         messages={context!.teamsChat.easternIslandChat() ?? []}
                         currentUser={currentNation()!}
-                        title={"Eastern Island"}
+                        title={language().messageSender.EasternIsland()}
                         key="CurrentPlayerChatWithEasternIsland"
                         onNewMessage={(message) => {
                             return context?.teamsChat.onNewMessageFromCurrentPlayerToOtherPlayer(

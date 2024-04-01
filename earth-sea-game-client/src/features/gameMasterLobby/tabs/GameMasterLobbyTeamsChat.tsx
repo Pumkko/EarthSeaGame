@@ -1,9 +1,12 @@
-import { Show, useContext } from "solid-js";
-import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
 import Chat from "@components/Chat";
+import { Show, useContext } from "solid-js";
+import { useLanguage } from "../../LanguageProvider";
+import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
 
 export default function GameMasterLobbyTeamsChat() {
     const context = useContext(GameMasterLobbyContext);
+
+    const language = useLanguage();
 
     return (
         <Show when={!!context}>
@@ -11,7 +14,7 @@ export default function GameMasterLobbyTeamsChat() {
                 <Chat
                     key="GameMasterChatEarthNation"
                     currentUser="GameMaster"
-                    title="Earth Nation"
+                    title={language().messageSender.EarthNation()}
                     messages={context!.teamsChat.earthNationChat() ?? []}
                     onNewMessage={(message) => {
                         return context?.teamsChat.onNewMessageFromGameMasterToPlayer("EarthNation", message);
@@ -20,7 +23,7 @@ export default function GameMasterLobbyTeamsChat() {
                 <Chat
                     key="GameMasterChatSeaNation"
                     currentUser="GameMaster"
-                    title="Sea Nation"
+                    title={language().messageSender.SeaNation()}
                     messages={context!.teamsChat.seaNationChat() ?? []}
                     onNewMessage={(message) => {
                         return context?.teamsChat.onNewMessageFromGameMasterToPlayer("SeaNation", message);
@@ -29,7 +32,7 @@ export default function GameMasterLobbyTeamsChat() {
                 <Chat
                     key="GameMasterChatEasternIsland"
                     currentUser="GameMaster"
-                    title="Eastern Island"
+                    title={language().messageSender.EasternIsland()}
                     messages={context!.teamsChat.easternIslandChat() ?? []}
                     onNewMessage={(message) => {
                         return context?.teamsChat.onNewMessageFromGameMasterToPlayer("EasternIsland", message);
