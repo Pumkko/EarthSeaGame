@@ -20,7 +20,7 @@ on:
 jobs:
   build_and_deploy:
     env:
-        working-directory: ./earth-sea-game-api
+        working-directory: ./earth-sea-game-client
     runs-on: ubuntu-latest
     name: Build and Deploy
     steps:
