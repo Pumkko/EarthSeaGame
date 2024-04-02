@@ -6,6 +6,7 @@ param signalRConnectionStringSecretName string
 param cosmosDbConnectionStringSecretName string
 param cosmosDbDatabaseName string
 param cosmosDbGameContainerName string
+param audienceUrl string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: 'earth-sea-game-service-plan'
@@ -16,9 +17,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   kind: 'windows'
 }
 
+var appServiceName = 'earth-sea-game-api'
 
 resource appService 'Microsoft.Web/sites@2023-01-01' = {
-  name: 'earth-sea-game-api'
+  name: appServiceName
   location: location
   identity: {
     type: 'SystemAssigned'
@@ -48,11 +50,11 @@ resource appService 'Microsoft.Web/sites@2023-01-01' = {
         }
         {
           name: 'Auth:Issuer'
-          value: ''
+          value: 'https://${appServiceName}.azurewebsites.net/'
         }
         {
           name: 'Auth:Audience'
-          value: ''
+          value: audienceUrl
         }
         {
           name: 'KeyVault:KeyVaultUri'

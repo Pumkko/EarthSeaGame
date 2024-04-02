@@ -42,6 +42,7 @@ module appService 'appService.bicep' = {
   scope: resourceGroup
   name: 'appServiceModule'
   params: {
+    audienceUrl: 'https://www.pumkko.dev/'
     cosmosDbConnectionStringSecretName: keyVault.outputs.cosmosDbConnectionStringSecretName
     cosmosDbDatabaseName: cosmosDb.outputs.databaseName
     cosmosDbGameContainerName: cosmosDb.outputs.containerName
