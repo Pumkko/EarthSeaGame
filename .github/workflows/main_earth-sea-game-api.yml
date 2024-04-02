@@ -11,6 +11,8 @@ on:
 
 jobs:
   build:
+    env:
+      working-directory: ./earth-sea-game-api
     runs-on: windows-latest
 
     steps:
@@ -24,6 +26,7 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        working-directory: ${{env.working-directory}}
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
