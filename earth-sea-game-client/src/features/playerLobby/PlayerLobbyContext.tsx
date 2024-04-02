@@ -19,8 +19,9 @@ function createPlayerLobbyQuery() {
 
 function createSignalResource(token: () => string | undefined) {
     const [signalRConnection] = createResource(token, async (accessToken) => {
+        const targetUrl = new URL("hubs/chat", import.meta.env.VITE_API_ROOT_URL);
         const signalRConnection = new HubConnectionBuilder()
-            .withUrl("https://localhost:7071/hubs/chat", {
+            .withUrl(targetUrl.href, {
                 accessTokenFactory: () => accessToken,
             })
             .build();
