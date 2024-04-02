@@ -82,7 +82,7 @@ builder.Services.AddCors(corsSetup =>
 {
     corsSetup.AddPolicy("SIGNALR_POLICY", policy =>
     {
-        policy.WithOrigins("http://localhost:5173");
+        policy.WithOrigins(authConfig.Audience);
         policy.WithMethods("GET", "POST");
         policy.AllowAnyHeader();
         policy.AllowCredentials();
