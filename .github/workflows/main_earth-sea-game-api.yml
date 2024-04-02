@@ -65,6 +65,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'earth-sea-game-api'
-          slot-name: 'Production'
           package: .
           
