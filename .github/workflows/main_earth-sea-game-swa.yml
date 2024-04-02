@@ -13,9 +13,7 @@ env:
   APP_LOCATION: "./earth-sea-game-client/dist" # location of your client code
 
 on:
-  push:
-    branches:
-      - main
+    workflow_dispatch:
 
 jobs:
   build_and_deploy:
