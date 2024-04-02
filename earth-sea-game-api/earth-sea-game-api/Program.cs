@@ -80,7 +80,7 @@ builder.Services.AddAuthentication(AppAuthenticationScheme.EarthSeaGameBearer)
 
 builder.Services.AddCors(corsSetup =>
 {
-    corsSetup.AddPolicy("SIGNALR_POLICY", policy =>
+    corsSetup.AddDefaultPolicy(policy =>
     {
         policy.WithOrigins(authConfig.Audience);
         policy.WithMethods("GET", "POST");
@@ -108,15 +108,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("SIGNALR_POLICY");
-
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 app.MapControllers();
-
-
 app.MapHub<ChatHub>("/hubs/chat");
-
 app.Run();
