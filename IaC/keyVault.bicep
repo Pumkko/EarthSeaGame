@@ -14,6 +14,22 @@ resource keyvault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   }
 }
 
+resource signalRConnectionString 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  name: 'signalRConnectionString'
+  parent: keyvault
+  properties: {
+    value: ''
+  }
+}
+
+resource cosmosDbConnectionString 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  name: 'cosmosDbConnectionString'
+  parent: keyvault
+  properties: {
+    value: ''
+  }
+}
+
 resource keyVaultKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
   name: 'earth-sea-game-kv-key'
   parent: keyvault
@@ -45,3 +61,8 @@ resource keyVaultKey 'Microsoft.KeyVault/vaults/keys@2023-07-01' = {
     }
   }
 }
+
+output keyVaultName string = keyvault.name
+output keyVaultKeyName string = keyVaultKey.name
+output cosmosDbConnectionStringSecretName string = cosmosDbConnectionString.name
+output signalRConnectionStringSecretName string = signalRConnectionString.name

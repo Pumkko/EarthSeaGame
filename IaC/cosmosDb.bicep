@@ -58,3 +58,6 @@ resource gameLobbyContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/
     }
   }
 }
+
+output databaseName string = earthSeaGameDbName
+output containerName string = gameLobbyContainerName

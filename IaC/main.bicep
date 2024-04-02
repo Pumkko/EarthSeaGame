@@ -29,3 +29,34 @@ module keyVault 'keyVault.bicep' = {
     location: location
   }
 }
+
+module staticWebApp 'staticWebApp.bicep' = {
+  scope: resourceGroup
+  name: 'staticWebAppModule'
+  params: {
+    location: 'eastus2'
+  }
+}
+
+module appService 'appService.bicep' = {
+  scope: resourceGroup
+  name: 'appServiceModule'
+  params: {
+    cosmosDbConnectionStringSecretName: keyVault.outputs.cosmosDbConnectionStringSecretName
+    cosmosDbDatabaseName: cosmosDb.outputs.databaseName
+    cosmosDbGameContainerName: cosmosDb.outputs.containerName
+    keyVaultName: keyVault.outputs.keyVaultName
+    keyVaultKeyName: keyVault.outputs.keyVaultKeyName
+    signalRConnectionStringSecretName: keyVault.outputs.signalRConnectionStringSecretName
+    location: location
+  }
+}
+
+module role 'appServiceKeyVaultReaderRole.bicep' = {
+  scope: resourceGroup
+  name: 'roleModule'
+  params: {
+    keyVaultName: keyVault.outputs.keyVaultName
+    webAppPrincipalId: appService.outputs.webAppSystemIdentityPrincipalId
+  }
+}

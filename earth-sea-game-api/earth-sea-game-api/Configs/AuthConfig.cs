@@ -2,7 +2,7 @@
 {
     public class AuthConfig
     {
-        public const string ConfigKey = "AuthConfig";
+        public const string ConfigKey = "Auth";
 
         public required string Issuer { get; set; }
 
