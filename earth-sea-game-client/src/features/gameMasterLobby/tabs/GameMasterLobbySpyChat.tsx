@@ -1,8 +1,8 @@
-import { Show, useContext } from "solid-js";
-import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
 import Chat from "@components/Chat";
+import { Show } from "solid-js";
+import { useGameMasterLobbyContext } from "../GameMasterLobbyContext";
 export default function GameMasterLobbySpyChat() {
-    const context = useContext(GameMasterLobbyContext);
+    const context = useGameMasterLobbyContext();
 
     return (
         <Show when={!!context}>
@@ -10,17 +10,17 @@ export default function GameMasterLobbySpyChat() {
                 <Chat
                     key="GameMasterChatSpyEarthAndEastern"
                     currentUser="EarthNation"
-                    messages={context!.spyChat.earthEasternSpyChat() ?? []}
+                    messages={context.spyChat.earthEasternSpyChat() ?? []}
                 />
                 <Chat
                     key="GameMasterChatSpyEarthAndSea"
                     currentUser="SeaNation"
-                    messages={context!.spyChat.earthSeaSpyChat() ?? []}
+                    messages={context.spyChat.earthSeaSpyChat() ?? []}
                 />
                 <Chat
                     key="GameMasterChatSpyEasternAndSea"
                     currentUser="EasternIsland"
-                    messages={context!.spyChat.seaEasternSpyChat() ?? []}
+                    messages={context.spyChat.seaEasternSpyChat() ?? []}
                 />
             </div>
         </Show>

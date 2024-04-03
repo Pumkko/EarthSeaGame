@@ -1,11 +1,11 @@
 import TimelineCarousel from "@components/TimelineCarousel";
-import { Match, Show, Switch, useContext } from "solid-js";
-import { PlayerLobbyContext } from "../PlayerLobbyContext";
+import { Match, Show, Switch } from "solid-js";
+import { usePlayerLobbyContext } from "../PlayerLobbyContext";
 import createEarthNationTimeline from "./timelines/earthNationTimeline";
 import createEasternIslandTimeline from "./timelines/easternIslandTimeline";
 import createSeaNationTimeline from "./timelines/seaNationTimeline";
 export default function PlayerLobbyHome() {
-    const context = useContext(PlayerLobbyContext)!;
+    const context = usePlayerLobbyContext();
 
     const earthNationTimeline = createEarthNationTimeline();
     const seaNationTimeline = createSeaNationTimeline();

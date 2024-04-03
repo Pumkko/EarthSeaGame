@@ -1,10 +1,10 @@
 import Chat from "@components/Chat";
-import { Show, useContext } from "solid-js";
+import { Show } from "solid-js";
 import { useLanguage } from "../../LanguageProvider";
-import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
+import { useGameMasterLobbyContext } from "../GameMasterLobbyContext";
 
 export default function GameMasterLobbyTeamsChat() {
-    const context = useContext(GameMasterLobbyContext);
+    const context = useGameMasterLobbyContext();
 
     const language = useLanguage();
 
@@ -15,27 +15,27 @@ export default function GameMasterLobbyTeamsChat() {
                     key="GameMasterChatEarthNation"
                     currentUser="GameMaster"
                     title={language().messageSender.EarthNation()}
-                    messages={context!.teamsChat.earthNationChat() ?? []}
+                    messages={context.teamsChat.earthNationChat() ?? []}
                     onNewMessage={(message) => {
-                        return context?.teamsChat.onNewMessageFromGameMasterToPlayer("EarthNation", message);
+                        return context.teamsChat.onNewMessageFromGameMasterToPlayer("EarthNation", message);
                     }}
                 />
                 <Chat
                     key="GameMasterChatSeaNation"
                     currentUser="GameMaster"
                     title={language().messageSender.SeaNation()}
-                    messages={context!.teamsChat.seaNationChat() ?? []}
+                    messages={context.teamsChat.seaNationChat() ?? []}
                     onNewMessage={(message) => {
-                        return context?.teamsChat.onNewMessageFromGameMasterToPlayer("SeaNation", message);
+                        return context.teamsChat.onNewMessageFromGameMasterToPlayer("SeaNation", message);
                     }}
                 />
                 <Chat
                     key="GameMasterChatEasternIsland"
                     currentUser="GameMaster"
                     title={language().messageSender.EasternIsland()}
-                    messages={context!.teamsChat.easternIslandChat() ?? []}
+                    messages={context.teamsChat.easternIslandChat() ?? []}
                     onNewMessage={(message) => {
-                        return context?.teamsChat.onNewMessageFromGameMasterToPlayer("EasternIsland", message);
+                        return context.teamsChat.onNewMessageFromGameMasterToPlayer("EasternIsland", message);
                     }}
                 />
             </div>

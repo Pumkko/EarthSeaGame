@@ -2,7 +2,7 @@ import { QueryKeys } from "@lib/QueryClient";
 import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource, onCleanup } from "solid-js";
+import { JSXElement, Resource, createContext, createResource, onCleanup, useContext } from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
 export type JoinLobbyInput = {
@@ -45,7 +45,7 @@ interface PlayerLobbyContextProps {
     isAuthenticated: () => boolean;
 }
 
-export const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
+const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
 
 export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     const query = createPlayerLobbyQuery();
@@ -72,4 +72,13 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
             {props.children}
         </PlayerLobbyContext.Provider>
     );
+}
+
+export function usePlayerLobbyContext() {
+    const context = useContext(PlayerLobbyContext);
+    if (!context) {
+        throw new Error("no Provider called for PlayerLobbyContext");
+    }
+
+    return context;
 }

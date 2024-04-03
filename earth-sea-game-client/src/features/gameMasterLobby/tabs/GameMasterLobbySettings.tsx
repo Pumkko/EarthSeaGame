@@ -1,10 +1,10 @@
 import Routes from "@lib/Routes";
 import { Navigate } from "@solidjs/router";
-import { Show, useContext } from "solid-js";
-import { GameMasterLobbyContext } from "../GameMasterLobbyContext";
+import { Show } from "solid-js";
+import { useGameMasterLobbyContext } from "../GameMasterLobbyContext";
 
 export default function GameMasterLobbySettings() {
-    const context = useContext(GameMasterLobbyContext)!;
+    const context = useGameMasterLobbyContext();
 
     // No Idea why but using Switch and Match heres breaks with the following error: Cannot read properties of undefined (reading 'when')
     return (

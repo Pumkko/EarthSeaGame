@@ -2,7 +2,7 @@ import { QueryKeys } from "@lib/QueryClient";
 import { GameMasterLobby } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource, onCleanup } from "solid-js";
+import { JSXElement, Resource, createContext, createResource, onCleanup, useContext } from "solid-js";
 import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
 import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
 
@@ -40,7 +40,7 @@ interface GameMasterLobbyContextProps {
     isAuthenticated: () => boolean;
 }
 
-export const GameMasterLobbyContext = createContext<GameMasterLobbyContextProps>();
+const GameMasterLobbyContext = createContext<GameMasterLobbyContextProps>();
 
 export function GameMasterLobbyContextProvider(props: { children: JSXElement }) {
     const query = createMyLobbyQuery();
@@ -68,4 +68,13 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
             {props.children}
         </GameMasterLobbyContext.Provider>
     );
+}
+
+export function useGameMasterLobbyContext() {
+    const context = useContext(GameMasterLobbyContext);
+    if (!context) {
+        throw new Error("no Provider called for GameMasterLobbyContext");
+    }
+
+    return context;
 }

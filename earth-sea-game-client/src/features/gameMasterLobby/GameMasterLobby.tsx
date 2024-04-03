@@ -3,19 +3,19 @@ import { GameLobby } from "@lib/schemas/GameLobbySchema";
 
 import NavBarAnchor from "@components/NavBarAnchor";
 import { Navigate, RouteSectionProps } from "@solidjs/router";
-import { Show, useContext } from "solid-js";
+import { Show } from "solid-js";
 import { useLanguage } from "../LanguageProvider";
-import { GameMasterLobbyContext } from "./GameMasterLobbyContext";
+import { useGameMasterLobbyContext } from "./GameMasterLobbyContext";
 export interface ManageLobbyProps {
     lobby: GameLobby;
 }
 
 export default function GameMasterLobby(props: RouteSectionProps) {
-    const context = useContext(GameMasterLobbyContext);
+    const context = useGameMasterLobbyContext();
     const language = useLanguage();
     return (
         <>
-            <Show when={!context?.isAuthenticated()}>
+            <Show when={!context.isAuthenticated()}>
                 <Navigate href={Routes.startingMenu} />
             </Show>
             <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">

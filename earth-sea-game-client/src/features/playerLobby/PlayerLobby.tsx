@@ -2,15 +2,15 @@ import ChatMessageSenderI18n from "@components/ChatMessageSenderI18n";
 import NavBarAnchor from "@components/NavBarAnchor";
 import Routes from "@lib/Routes";
 import { Navigate, RouteSectionProps } from "@solidjs/router";
-import { Show, useContext } from "solid-js";
+import { Show } from "solid-js";
 import { useLanguage } from "../LanguageProvider";
-import { PlayerLobbyContext } from "./PlayerLobbyContext";
+import { usePlayerLobbyContext } from "./PlayerLobbyContext";
 
 export default function PlayerLobby(props: RouteSectionProps) {
-    const context = useContext(PlayerLobbyContext);
+    const context = usePlayerLobbyContext();
 
     const language = useLanguage();
-    const currentNation = () => context?.currentGame()?.nation;
+    const currentNation = () => context.currentGame()?.nation;
 
     const onShowWorldMap = () => {
         const modal = document.getElementById("world_map_modal") as HTMLDialogElement;
@@ -19,7 +19,7 @@ export default function PlayerLobby(props: RouteSectionProps) {
 
     return (
         <>
-            <Show when={!context?.isAuthenticated()}>
+            <Show when={!context.isAuthenticated()}>
                 <Navigate href={Routes.startingMenu} />
             </Show>
             <div class="h-screen bg-cover bg-center bg-rocket text-white flex flex-col">
