@@ -1,8 +1,23 @@
 import { QueryKeys } from "@lib/QueryClient";
+import Routes from "@lib/Routes";
+import { SignalREvents } from "@lib/SignalR";
 import { GameLobby, GameMasterLobby } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Match, Resource, Switch, createContext, createResource, onCleanup, useContext } from "solid-js";
+import {
+    Accessor,
+    JSXElement,
+    Match,
+    Resource,
+    Setter,
+    Switch,
+    createContext,
+    createEffect,
+    createResource,
+    createSignal,
+    onCleanup,
+    useContext,
+} from "solid-js";
 import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
 import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
 
@@ -37,6 +52,10 @@ type AuthenticatedGameMasterLobbyContextProps = {
     signalRConnection: Resource<HubConnection>;
     teamsChat: GameMasterChatWithPlayerResources;
     spyChat: GameMasterSpyChatResources;
+    numberOfUnreadSpyMessages: Accessor<number>;
+    setNumberOfUnreadSpyMessages: Setter<number>;
+    numberOfUnreadTeamsMessages: Accessor<number>;
+    setNumberOfUnreadTeamsMessages: Setter<number>;
     isAuthenticated: true;
 };
 
@@ -59,6 +78,26 @@ function AuthenticatedGameMasterLobbyContextProvider(props: { children: JSXEleme
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
     const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
 
+    const [numberOfUnreadSpyMessages, setNumberOfUnreadSpyMessages] = createSignal(0);
+    const [numberOfUnreadTeamsMessages, setNumberOfUnreadTeamsMessages] = createSignal(0);
+
+    const onPlayerSentToOtherPlayer = () => {
+        if (location.pathname !== Routes.gameMasterLobby.root + "/" + Routes.gameMasterLobby.spyChat) {
+            setNumberOfUnreadSpyMessages((n) => n + 1);
+        }
+    };
+
+    const onPlayerSentToGameMaster = () => {
+        if (location.pathname !== Routes.gameMasterLobby.root + "/" + Routes.gameMasterLobby.teamsChat) {
+            setNumberOfUnreadTeamsMessages((n) => n + 1);
+        }
+    };
+
+    createEffect(() => {
+        signalRConnection()?.on(SignalREvents.playerSentToOtherPlayer, onPlayerSentToOtherPlayer);
+        signalRConnection()?.on(SignalREvents.playerSentToGameMaster, onPlayerSentToGameMaster);
+    });
+
     return (
         <GameMasterLobbyContext.Provider
             value={{
@@ -66,6 +105,10 @@ function AuthenticatedGameMasterLobbyContextProvider(props: { children: JSXEleme
                 signalRConnection,
                 teamsChat,
                 spyChat,
+                numberOfUnreadSpyMessages,
+                numberOfUnreadTeamsMessages,
+                setNumberOfUnreadSpyMessages,
+                setNumberOfUnreadTeamsMessages,
                 isAuthenticated: true,
             }}
         >

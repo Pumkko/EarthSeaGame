@@ -1,5 +1,5 @@
 import Chat from "@components/Chat";
-import { Show } from "solid-js";
+import { Show, onMount } from "solid-js";
 import { useLanguage } from "../../LanguageProvider";
 import { useAuthenticatedGameMasterLobbyContext } from "../GameMasterLobbyContext";
 
@@ -7,6 +7,10 @@ export default function GameMasterLobbyTeamsChat() {
     const context = useAuthenticatedGameMasterLobbyContext();
 
     const language = useLanguage();
+
+    onMount(() => {
+        context.setNumberOfUnreadTeamsMessages(0);
+    });
 
     return (
         <Show when={!!context}>
