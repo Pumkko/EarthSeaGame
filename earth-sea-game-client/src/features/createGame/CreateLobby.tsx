@@ -12,6 +12,7 @@ import { zodValidator } from "@tanstack/zod-form-adapter";
 import axios from "axios";
 import { For, Show } from "solid-js";
 import { z } from "zod";
+import { useLanguage } from "../LanguageProvider";
 
 type CreateLobbyInput = {
     readonly lobbyName: string;
@@ -61,9 +62,11 @@ export default function CreateLobby() {
         validatorAdapter: zodValidator,
     }));
 
+    const language = useLanguage();
+
     return (
         <div class="h-screen bg-submarine bg-cover bg-center flex flex-col items-center">
-            <PageTitle>Create Lobby</PageTitle>
+            <PageTitle>{language().createGame.screenTitle()}</PageTitle>
             <form.Provider>
                 <form
                     class="flex items items-center flex-col w-1/2 text-xl font-bold"
@@ -76,7 +79,7 @@ export default function CreateLobby() {
                     <form.Field
                         name="lobbyName"
                         validators={{
-                            onChange: z.string().min(1, "Game Master name can not be empty"),
+                            onChange: z.string().min(1, language().createGame.gameNameFieldEmptyError()),
                         }}
                         children={(field) => (
                             <>
@@ -86,7 +89,7 @@ export default function CreateLobby() {
                                     value={field().state.value}
                                     onBlur={field().handleBlur}
                                     onInput={(e) => field().handleChange(e.target.value)}
-                                    placeholder="Lobby Name"
+                                    placeholder={language().createGame.gameNameFieldPlaceholder()}
                                 />
 
                                 <For each={field().state.meta.errors}>
@@ -121,7 +124,7 @@ export default function CreateLobby() {
                                 />
                             </svg>
                         </Show>
-                        Submit
+                        {language().createGame.submitButton()}
                     </button>
                 </form>
             </form.Provider>

@@ -21,6 +21,28 @@ export interface Language {
         chatTab: string;
         worldMap: string;
     };
+    createGame: {
+        screenTitle: string;
+        gameNameFieldPlaceholder: string;
+        gameNameFieldEmptyError: string;
+        submitButton: string;
+    };
+    joinGame: {
+        screenTitle: string;
+        labels: {
+            pickNationFieldLabel: string;
+            gameMasterFieldLabel: string;
+            inviteCodeFieldLabel: string;
+        };
+        errors: {
+            emptyGameMasterNameError: string;
+            incorrectFormatInviteCodeError: string;
+            noNationSelectedError: string;
+            unknownError: string;
+        };
+        pickNationFieldDefaultOption: string;
+        submitButton: string;
+    };
     gameMasterLobby: {
         homeTab: string;
         spyChatTab: string;

@@ -2,22 +2,7 @@ import { z } from "zod";
 
 export const NationArray = ["EarthNation", "SeaNation", "EasternIsland"] as const;
 
-export const ENationSchema = z.enum(NationArray, {
-    errorMap: (issue) => {
-        switch (issue.code) {
-            case "invalid_enum_value": {
-                return {
-                    message: "Nation must a known nation",
-                };
-            }
-            default: {
-                return {
-                    message: "Something's wrong though I can't tell what",
-                };
-            }
-        }
-    },
-});
+export const ENationSchema = z.enum(NationArray);
 
 export const NationSchema = z.object({
     name: ENationSchema,

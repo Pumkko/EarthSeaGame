@@ -1,5 +1,6 @@
 import PageTitle from "@components/PageTitle";
 import { Show } from "solid-js";
+import { useLanguage } from "../LanguageProvider";
 import { createJoinLobbyForm } from "./CreateJoinGameForm";
 import GameMasterField from "./GameMasterField";
 import InviteCodeField from "./InviteCodeField";
@@ -8,9 +9,11 @@ import PickNationField from "./PickNationField";
 export default function JoinGame() {
     const { form, joinLobbyMutation } = createJoinLobbyForm();
 
+    const language = useLanguage();
+
     return (
         <div class="h-screen bg-aircraft bg-cover bg-center flex flex-col items-center">
-            <PageTitle>Join Lobby</PageTitle>
+            <PageTitle>{language().joinGame.screenTitle()}</PageTitle>
 
             <form.Provider>
                 <form
@@ -50,7 +53,7 @@ export default function JoinGame() {
                                 />
                             </svg>
                         </Show>
-                        Submit
+                        {language().joinGame.submitButton()}
                     </button>
                 </form>
             </form.Provider>

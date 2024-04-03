@@ -12,6 +12,28 @@ const frDefinition = {
         GameMaster: "Maitre du Jeu",
         SeaNation: "Nation Des Mers",
     },
+    createGame: {
+        screenTitle: "Créer une Partie",
+        gameNameFieldPlaceholder: "Nom de la Partie",
+        gameNameFieldEmptyError: "Le nom de la Partie doit obligatoirement être saisi",
+        submitButton: "Créer",
+    },
+    joinGame: {
+        screenTitle: "Rejoindre une Partie",
+        pickNationFieldDefaultOption: "Choisir",
+        labels: {
+            gameMasterFieldLabel: "Maitre du Jeu",
+            inviteCodeFieldLabel: "Code d'Invitation",
+            pickNationFieldLabel: "Nation",
+        },
+        errors: {
+            emptyGameMasterNameError: "Le nom du Maître du Jeu doit obligatoirement être saisi",
+            incorrectFormatInviteCodeError: "Le code d'invitation n'a pas le bon format",
+            noNationSelectedError: "Une nation doit obligatoirement être choisie",
+            unknownError: "Erreur Inconnue",
+        },
+        submitButton: "Rejoindre",
+    },
     playerLobby: {
         chatTab: "Chat",
         homeTab: "Accueil",
@@ -23,8 +45,8 @@ const frDefinition = {
         teamsChatTab: "Chat",
     },
     startingMenu: {
-        joinGameButton: "Rejoindre un Jeu",
-        myGameButton: "Mon Jeu",
+        joinGameButton: "Rejoindre une Partie",
+        myGameButton: "Ma Partie",
     },
     timelines: {
         detailModalTitle: "En Détail",

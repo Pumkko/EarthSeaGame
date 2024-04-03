@@ -1,23 +1,44 @@
 import FormFieldError from "@components/FormFieldErrror";
+import { NationArray } from "@lib/schemas/GameLobbySchema";
 import { For } from "solid-js";
+import { z } from "zod";
+import { useLanguage } from "../LanguageProvider";
 import { createJoinLobbyForm } from "./CreateJoinGameForm";
-import { ENationSchema } from "@lib/schemas/GameLobbySchema";
 interface PickNationFieldProps {
     form: ReturnType<typeof createJoinLobbyForm>["form"];
 }
 
 export default function PickNationField(props: PickNationFieldProps) {
+    const language = useLanguage();
+
+    const FormNationSchema = z.enum(NationArray, {
+        errorMap: (issue) => {
+            switch (issue.code) {
+                case "invalid_enum_value": {
+                    return {
+                        message: language().joinGame.errors.noNationSelectedError(),
+                    };
+                }
+                default: {
+                    return {
+                        message: language().joinGame.errors.unknownError(),
+                    };
+                }
+            }
+        },
+    });
+
     return (
         <props.form.Field
             name="nation"
             validators={{
-                onChange: ENationSchema,
+                onChange: FormNationSchema,
             }}
             children={(field) => {
                 return (
                     <>
                         <label class="text-white" for={field().name}>
-                            Nation
+                            {language().joinGame.labels.pickNationFieldLabel()}
                         </label>
                         <select
                             class={`text-black rounded p-2 w-1/2 border-2 ${field().state.meta.errors.length > 0 ? "border-red-600" : "border-black"}`}
@@ -26,10 +47,10 @@ export default function PickNationField(props: PickNationFieldProps) {
                             value={field().state.value}
                             onChange={(e) => field().handleChange(e.target.value)}
                         >
-                            <option value="EarthNation">Earth Nation</option>
-                            <option value="SeaNation">Sea Nation</option>
-                            <option value="EasternIsland">Eastern Island</option>
-                            <option value="Unset">Pick One</option>
+                            <option value="EarthNation">{language().messageSender.EarthNation()}</option>
+                            <option value="SeaNation">{language().messageSender.SeaNation()}</option>
+                            <option value="EasternIsland">{language().messageSender.EasternIsland()}</option>
+                            <option value="Unset">{language().joinGame.pickNationFieldDefaultOption()}</option>
                         </select>
                         <For each={field().state.meta.errors}>{(error) => <FormFieldError error={error} />}</For>
                     </>
