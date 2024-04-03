@@ -1,8 +1,24 @@
 import { QueryKeys } from "@lib/QueryClient";
-import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
+import Routes from "@lib/Routes";
+import { SignalREvents } from "@lib/SignalR";
+import { ENationSchema, JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { useLocation } from "@solidjs/router";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Match, Resource, Switch, createContext, createResource, onCleanup, useContext } from "solid-js";
+import {
+    Accessor,
+    JSXElement,
+    Match,
+    Resource,
+    Setter,
+    Switch,
+    createContext,
+    createEffect,
+    createResource,
+    createSignal,
+    onCleanup,
+    useContext,
+} from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
 export type JoinLobbyInput = {
@@ -41,6 +57,8 @@ type AuthenticatedPlayerLobbyContextProps = {
     signalRConnection: Resource<HubConnection>;
     teamsChat: PlayerChatWithOtherPlayersResources;
     isAuthenticated: true;
+    numberOfUnreadMessages: Accessor<number>;
+    setNumberOfUnreadMessages: Setter<number>;
     currentGame: () => JoinGameOutput;
 };
 
@@ -57,8 +75,38 @@ function AuthenticatedPlayerLobbyProvider(props: { children: JSXElement; data: J
     const currentGame = () => props.data;
 
     const [signalRConnection] = createSignalResource(token);
-
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
+    const [numberOfUnreadMessages, setNumberOfUnreadMessages] = createSignal(0);
+
+    const location = useLocation();
+
+    const onPlayerSentToOtherPlayer = (sendingPlayer: string) => {
+        const isValidSendingPlayer = ENationSchema.safeParse(sendingPlayer);
+        if (!isValidSendingPlayer.success) {
+            console.error(isValidSendingPlayer.error);
+            return;
+        }
+        const sendingNation = isValidSendingPlayer.data;
+
+        if (sendingNation === currentGame().nation) {
+            return;
+        }
+
+        if (location.pathname !== Routes.playerLobby.root + "/" + Routes.playerLobby.chat) {
+            setNumberOfUnreadMessages((n) => n + 1);
+        }
+    };
+
+    const onGameMasterSentToPlayer = () => {
+        if (location.pathname !== Routes.playerLobby.root + "/" + Routes.playerLobby.chat) {
+            setNumberOfUnreadMessages((n) => n + 1);
+        }
+    };
+
+    createEffect(() => {
+        signalRConnection()?.on(SignalREvents.gameMasterSentToPlayer, onGameMasterSentToPlayer);
+        signalRConnection()?.on(SignalREvents.playerSentToOtherPlayer, onPlayerSentToOtherPlayer);
+    });
 
     return (
         <PlayerLobbyContext.Provider
@@ -67,6 +115,8 @@ function AuthenticatedPlayerLobbyProvider(props: { children: JSXElement; data: J
                 signalRConnection,
                 teamsChat,
                 isAuthenticated: true,
+                numberOfUnreadMessages,
+                setNumberOfUnreadMessages,
             }}
         >
             {props.children}

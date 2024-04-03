@@ -1,5 +1,5 @@
 import Chat from "@components/Chat";
-import { Show } from "solid-js";
+import { Show, onMount } from "solid-js";
 import { useLanguage } from "../../LanguageProvider";
 import { useAuthenticatedPlayerLobbyContext } from "../PlayerLobbyContext";
 
@@ -9,6 +9,10 @@ export default function PlayerLobbyChat() {
     const currentNation = () => context.currentGame().nation;
 
     const language = useLanguage();
+
+    onMount(() => {
+        context.setNumberOfUnreadMessages(0);
+    });
 
     return (
         <Show when={!!currentNation() && !!context}>

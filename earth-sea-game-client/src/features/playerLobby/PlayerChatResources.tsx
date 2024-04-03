@@ -117,7 +117,6 @@ export function createPlayerChatResources(
      * @returns
      */
     const onPlayerSentToOtherPlayer = (sendingPlayer: string, _: string, message: string) => {
-        console.log(sendingPlayer);
         const isValidSendingPlayer = ENationSchema.safeParse(sendingPlayer);
         if (!isValidSendingPlayer.success) {
             console.error(isValidSendingPlayer.error);
@@ -125,7 +124,7 @@ export function createPlayerChatResources(
         }
         const sendingNation = isValidSendingPlayer.data;
 
-        if (sendingNation === currentGame()?.nation) {
+        if (sendingNation === currentGame().nation) {
             return;
         }
 

@@ -23,9 +23,14 @@ function AuthenticatedPlayerLobby(props: RouteSectionProps) {
                 <div>
                     <ChatMessageSenderI18n sender={currentNation()} />
                 </div>
-                <div>
+                <div class="flex">
                     <NavBarAnchor href={Routes.playerLobby.root}>{language().playerLobby.homeTab()}</NavBarAnchor>
-                    <NavBarAnchor href={Routes.playerLobby.chat}>{language().playerLobby.chatTab()}</NavBarAnchor>
+                    <NavBarAnchor href={Routes.playerLobby.chat}>
+                        <Show when={context.numberOfUnreadMessages() > 0}>
+                            <span class="indicator-item badge">{context.numberOfUnreadMessages()}</span>
+                        </Show>
+                        {language().playerLobby.chatTab()}
+                    </NavBarAnchor>
                 </div>
                 <div>
                     <button onClick={onShowWorldMap}>{language().playerLobby.worldMap()}</button>
