@@ -1,3 +1,4 @@
+import { BrowserAuthError } from "@azure/msal-browser";
 import { QueryClient } from "@tanstack/solid-query";
 import axios, { HttpStatusCode } from "axios";
 import { ZodError } from "zod";
@@ -15,10 +16,10 @@ export const queryClient = new QueryClient({
             refetchOnWindowFocus: false,
             throwOnError: true,
             retry(failureCount, error) {
-                if (error instanceof ZodError) {
+                if (error instanceof ZodError || error instanceof BrowserAuthError) {
                     return false;
                 }
-                return failureCount < 2;
+                return failureCount < 1;
             },
         },
     },

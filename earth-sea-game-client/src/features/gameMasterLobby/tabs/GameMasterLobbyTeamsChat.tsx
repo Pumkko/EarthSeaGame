@@ -1,10 +1,10 @@
 import Chat from "@components/Chat";
 import { Show } from "solid-js";
 import { useLanguage } from "../../LanguageProvider";
-import { useGameMasterLobbyContext } from "../GameMasterLobbyContext";
+import { useAuthenticatedGameMasterLobbyContext } from "../GameMasterLobbyContext";
 
 export default function GameMasterLobbyTeamsChat() {
-    const context = useGameMasterLobbyContext();
+    const context = useAuthenticatedGameMasterLobbyContext();
 
     const language = useLanguage();
 

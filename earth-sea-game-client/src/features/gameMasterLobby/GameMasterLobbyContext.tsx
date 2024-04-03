@@ -1,8 +1,8 @@
 import { QueryKeys } from "@lib/QueryClient";
-import { GameMasterLobby } from "@lib/schemas/GameLobbySchema";
+import { GameLobby, GameMasterLobby } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource, onCleanup, useContext } from "solid-js";
+import { JSXElement, Match, Resource, Switch, createContext, createResource, onCleanup, useContext } from "solid-js";
 import { GameMasterSpyChatResources, createGameMasterSpyChatResources } from "./GameMasterSpyChatResources";
 import { GameMasterChatWithPlayerResources, createGameMasterTeamsChatResources } from "./GameMasterTeamsChatResources";
 
@@ -12,7 +12,7 @@ function createMyLobbyQuery() {
     }));
 }
 
-function createSignalResource(token: () => string | undefined) {
+function createSignalResource(token: () => string) {
     const [signalRConnection] = createResource(token, async (accessToken) => {
         const targetUrl = new URL("hubs/chat", import.meta.env.VITE_API_ROOT_URL);
         const signalRConnection = new HubConnectionBuilder()
@@ -32,37 +32,41 @@ function createSignalResource(token: () => string | undefined) {
     return [signalRConnection];
 }
 
-interface GameMasterLobbyContextProps {
-    query: ReturnType<typeof createMyLobbyQuery>;
-    signalRConnection: Resource<HubConnection | undefined>;
+type AuthenticatedGameMasterLobbyContextProps = {
+    currentGame: () => GameLobby;
+    signalRConnection: Resource<HubConnection>;
     teamsChat: GameMasterChatWithPlayerResources;
     spyChat: GameMasterSpyChatResources;
-    isAuthenticated: () => boolean;
-}
+    isAuthenticated: true;
+};
+
+type UnauthenticatedGameMasterLobbyContextProps = {
+    isAuthenticated: false;
+};
+
+type GameMasterLobbyContextProps =
+    | AuthenticatedGameMasterLobbyContextProps
+    | UnauthenticatedGameMasterLobbyContextProps;
 
 const GameMasterLobbyContext = createContext<GameMasterLobbyContextProps>();
 
-export function GameMasterLobbyContextProvider(props: { children: JSXElement }) {
-    const query = createMyLobbyQuery();
-
-    const token = () => query.data?.accessToken;
-    const gameMaster = () => query.data?.gameLobby.gameMaster;
+function AuthenticatedGameMasterLobbyContextProvider(props: { children: JSXElement; data: GameMasterLobby }) {
+    const token = () => props.data.accessToken;
+    const gameMaster = () => props.data.gameLobby.gameMaster;
 
     const [signalRConnection] = createSignalResource(token);
 
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
     const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
 
-    const isAuthenticated = () => !!token();
-
     return (
         <GameMasterLobbyContext.Provider
             value={{
-                query,
+                currentGame: () => props.data.gameLobby,
                 signalRConnection,
                 teamsChat,
                 spyChat,
-                isAuthenticated,
+                isAuthenticated: true,
             }}
         >
             {props.children}
@@ -70,10 +74,42 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
     );
 }
 
+export function GameMasterLobbyContextProvider(props: { children: JSXElement }) {
+    const query = createMyLobbyQuery();
+
+    return (
+        <Switch>
+            <Match when={query.isSuccess && !!query.data?.accessToken}>
+                <AuthenticatedGameMasterLobbyContextProvider data={query.data!}>
+                    {props.children}
+                </AuthenticatedGameMasterLobbyContextProvider>
+            </Match>
+            <Match when={query.isSuccess && !query.data?.accessToken}>
+                <GameMasterLobbyContext.Provider
+                    value={{
+                        isAuthenticated: false,
+                    }}
+                >
+                    {props.children}
+                </GameMasterLobbyContext.Provider>
+            </Match>
+        </Switch>
+    );
+}
+
 export function useGameMasterLobbyContext() {
     const context = useContext(GameMasterLobbyContext);
     if (!context) {
         throw new Error("no Provider called for GameMasterLobbyContext");
+    }
+
+    return context;
+}
+
+export function useAuthenticatedGameMasterLobbyContext() {
+    const context = useGameMasterLobbyContext();
+    if (!context.isAuthenticated) {
+        throw new Error("no authenticated user in context for GameMasterLobbyContext");
     }
 
     return context;

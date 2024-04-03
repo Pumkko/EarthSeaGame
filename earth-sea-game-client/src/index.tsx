@@ -1,12 +1,13 @@
 /* @refresh reload */
 import { render } from "solid-js/web";
 
+import { msalInstance } from "@lib/AuthConfig";
 import { queryClient } from "@lib/QueryClient";
 import Routes from "@lib/Routes";
 import { EnvironmentSchema } from "@lib/schemas/Environment";
-import { Route, Router } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
 import { QueryClientProvider } from "@tanstack/solid-query";
-import { ErrorBoundary, Suspense, lazy } from "solid-js";
+import { ErrorBoundary, Show, Suspense, lazy } from "solid-js";
 import "./animations/fadeInForward.scss";
 import "./animations/slideInForwardLeft.scss";
 import "./animations/slideInForwardRight.scss";
@@ -88,11 +89,16 @@ render(
                             path={Routes.gameMasterLobby.root}
                             component={(props) => (
                                 <ErrorBoundary fallback={<AppError />}>
-                                    <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
-                                        <GameMasterLobbyContextProvider>
-                                            <GameMasterLobby {...props} />
-                                        </GameMasterLobbyContextProvider>
-                                    </Suspense>
+                                    <Show
+                                        when={msalInstance.getActiveAccount()}
+                                        fallback={<Navigate href={Routes.startingMenu} />}
+                                    >
+                                        <Suspense fallback={<div>Loading Game Master Lobby...</div>}>
+                                            <GameMasterLobbyContextProvider>
+                                                <GameMasterLobby {...props} />
+                                            </GameMasterLobbyContextProvider>
+                                        </Suspense>
+                                    </Show>
                                 </ErrorBoundary>
                             )}
                         >

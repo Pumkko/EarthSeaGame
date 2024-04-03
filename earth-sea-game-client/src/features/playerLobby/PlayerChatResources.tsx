@@ -54,8 +54,8 @@ function createChatResourceFromTable(
 }
 
 export function createPlayerChatResources(
-    signalRConnection: () => HubConnection | undefined,
-    currentGame: () => JoinGameOutput | undefined,
+    signalRConnection: Resource<HubConnection>,
+    currentGame: () => JoinGameOutput,
 ): PlayerChatWithOtherPlayersResources {
     const dexieDb = createMemo(() => {
         const db = new EarthSeaGamePlayerDb();

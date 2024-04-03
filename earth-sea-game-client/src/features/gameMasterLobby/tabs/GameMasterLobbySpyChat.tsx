@@ -1,8 +1,8 @@
 import Chat from "@components/Chat";
 import { Show } from "solid-js";
-import { useGameMasterLobbyContext } from "../GameMasterLobbyContext";
+import { useAuthenticatedGameMasterLobbyContext } from "../GameMasterLobbyContext";
 export default function GameMasterLobbySpyChat() {
-    const context = useGameMasterLobbyContext();
+    const context = useAuthenticatedGameMasterLobbyContext();
 
     return (
         <Show when={!!context}>

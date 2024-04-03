@@ -50,8 +50,8 @@ function createChatResourceFromTable(
 }
 
 export function createGameMasterTeamsChatResources(
-    signalRConnection: () => HubConnection | undefined,
-    gameMaster: () => string | undefined,
+    signalRConnection: Resource<HubConnection>,
+    gameMaster: () => string,
 ): GameMasterChatWithPlayerResources {
     const dexieDb = createMemo(() => {
         const db = new EarthSeaGameMasterDb();
