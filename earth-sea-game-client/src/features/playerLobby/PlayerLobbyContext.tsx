@@ -42,6 +42,7 @@ interface PlayerLobbyContextProps {
     query: ReturnType<typeof createPlayerLobbyQuery>;
     teamsChat: PlayerChatWithOtherPlayersResources;
     currentGame: () => JoinGameOutput | undefined;
+    isAuthenticated: () => boolean;
 }
 
 export const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
@@ -56,6 +57,8 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
 
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 
+    const isAuthenticated = () => !!token();
+
     return (
         <PlayerLobbyContext.Provider
             value={{
@@ -63,6 +66,7 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
                 signalRConnection,
                 teamsChat,
                 currentGame,
+                isAuthenticated,
             }}
         >
             {props.children}

@@ -37,6 +37,7 @@ interface GameMasterLobbyContextProps {
     signalRConnection: Resource<HubConnection | undefined>;
     teamsChat: GameMasterChatWithPlayerResources;
     spyChat: GameMasterSpyChatResources;
+    isAuthenticated: () => boolean;
 }
 
 export const GameMasterLobbyContext = createContext<GameMasterLobbyContextProps>();
@@ -52,6 +53,8 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
     const teamsChat = createGameMasterTeamsChatResources(signalRConnection, gameMaster);
     const spyChat = createGameMasterSpyChatResources(signalRConnection, gameMaster);
 
+    const isAuthenticated = () => !!token();
+
     return (
         <GameMasterLobbyContext.Provider
             value={{
@@ -59,6 +62,7 @@ export function GameMasterLobbyContextProvider(props: { children: JSXElement }) 
                 signalRConnection,
                 teamsChat,
                 spyChat,
+                isAuthenticated,
             }}
         >
             {props.children}
