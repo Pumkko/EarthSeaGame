@@ -2,7 +2,7 @@ import { QueryKeys } from "@lib/QueryClient";
 import { JoinGameOutput } from "@lib/schemas/GameLobbySchema";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { createQuery } from "@tanstack/solid-query";
-import { JSXElement, Resource, createContext, createResource, onCleanup, useContext } from "solid-js";
+import { JSXElement, Match, Resource, Switch, createContext, createResource, onCleanup, useContext } from "solid-js";
 import { PlayerChatWithOtherPlayersResources, createPlayerChatResources } from "./PlayerChatResources";
 
 export type JoinLobbyInput = {
@@ -37,36 +37,36 @@ function createSignalResource(token: () => string | undefined) {
     return [signalRConnection];
 }
 
-interface PlayerLobbyContextProps {
-    signalRConnection: Resource<HubConnection | undefined>;
-    query: ReturnType<typeof createPlayerLobbyQuery>;
+type AuthenticatedPlayerLobbyContextProps = {
+    signalRConnection: Resource<HubConnection>;
     teamsChat: PlayerChatWithOtherPlayersResources;
-    currentGame: () => JoinGameOutput | undefined;
-    isAuthenticated: () => boolean;
-}
+    isAuthenticated: true;
+    currentGame: () => JoinGameOutput;
+};
 
-const PlayerLobbyContext = createContext<PlayerLobbyContextProps>();
+type UnauthenticatedPlayerLobbyContextProps = {
+    isAuthenticated: false;
+};
 
-export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
-    const query = createPlayerLobbyQuery();
+type PlayerLobbyContextProps = AuthenticatedPlayerLobbyContextProps | UnauthenticatedPlayerLobbyContextProps;
 
-    const token = () => query.data?.accessToken;
-    const currentGame = () => query.data ?? undefined;
+const PlayerLobbyContext = createContext<PlayerLobbyContextProps | null>();
+
+function AuthenticatedPlayerLobbyProvider(props: { children: JSXElement; data: JoinGameOutput }) {
+    const token = () => props.data.accessToken;
+    const currentGame = () => props.data;
 
     const [signalRConnection] = createSignalResource(token);
 
     const teamsChat = createPlayerChatResources(signalRConnection, currentGame);
 
-    const isAuthenticated = () => !!token();
-
     return (
         <PlayerLobbyContext.Provider
             value={{
-                query,
+                currentGame,
                 signalRConnection,
                 teamsChat,
-                currentGame,
-                isAuthenticated,
+                isAuthenticated: true,
             }}
         >
             {props.children}
@@ -74,10 +74,40 @@ export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
     );
 }
 
+export function PlayerLobbyContextProvider(props: { children: JSXElement }) {
+    const query = createPlayerLobbyQuery();
+
+    return (
+        <Switch>
+            <Match when={query.isSuccess && !!query.data?.accessToken}>
+                <AuthenticatedPlayerLobbyProvider data={query.data!}>{props.children}</AuthenticatedPlayerLobbyProvider>
+            </Match>
+            <Match when={query.isSuccess && !query.data?.accessToken}>
+                <PlayerLobbyContext.Provider
+                    value={{
+                        isAuthenticated: false,
+                    }}
+                >
+                    {props.children}
+                </PlayerLobbyContext.Provider>
+            </Match>
+        </Switch>
+    );
+}
+
 export function usePlayerLobbyContext() {
     const context = useContext(PlayerLobbyContext);
     if (!context) {
         throw new Error("no Provider called for PlayerLobbyContext");
+    }
+
+    return context;
+}
+
+export function useAuthenticatedPlayerLobbyContext() {
+    const context = usePlayerLobbyContext();
+    if (!context.isAuthenticated) {
+        throw new Error("no authenticated user in context for PlayerLobbyContext");
     }
 
     return context;

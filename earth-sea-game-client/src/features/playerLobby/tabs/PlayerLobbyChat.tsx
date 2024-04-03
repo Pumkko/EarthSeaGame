@@ -1,12 +1,12 @@
 import Chat from "@components/Chat";
 import { Show } from "solid-js";
 import { useLanguage } from "../../LanguageProvider";
-import { usePlayerLobbyContext } from "../PlayerLobbyContext";
+import { useAuthenticatedPlayerLobbyContext } from "../PlayerLobbyContext";
 
 export default function PlayerLobbyChat() {
-    const context = usePlayerLobbyContext();
+    const context = useAuthenticatedPlayerLobbyContext();
 
-    const currentNation = () => context.currentGame()?.nation;
+    const currentNation = () => context.currentGame().nation;
 
     const language = useLanguage();
 
